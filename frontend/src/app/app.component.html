@@ -4,11 +4,11 @@
   <header class="z-20 shrink-0 border-b border-line bg-surface px-4 py-3 md:px-6">
     <div class="flex items-center justify-between gap-3">
       <button class="flex min-w-0 items-center gap-3 text-left" (click)="navigate('home')" aria-label="算法可视化学习平台首页">
-        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-accent/30 font-mono text-lg text-accent" aria-hidden="true"><app-ui-icon name="input" /></span>
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-accent/30 font-mono text-lg text-accent-ink" aria-hidden="true"><app-ui-icon name="input" /></span>
         <span class="min-w-0"><span class="block truncate text-sm font-semibold">算法可视化学习平台</span></span>
       </button>
       <div class="flex shrink-0 items-center gap-2">
-        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-subtle text-sm font-semibold text-accent" aria-hidden="true">{{ auth.avatarInitial() }}</span>
+        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-subtle text-sm font-semibold text-accent-ink" aria-hidden="true">{{ auth.avatarInitial() }}</span>
         <span class="hidden max-w-32 truncate text-sm sm:block" [title]="auth.displayName()">{{ auth.displayName() }}</span>
         <button class="nav-button" (click)="logout()" [attr.aria-label]="'退出 ' + auth.displayName()">退出</button>
       </div>
@@ -29,7 +29,7 @@
       <ng-container *ngIf="store.activePanel() === 'visualizer'">
 
         <div class="flex flex-wrap items-center justify-between gap-4 border-b border-line bg-surface px-6 py-6" *ngIf="selectedEntry() as entry">
-          <div><button class="mb-3 inline-flex items-center gap-2 text-sm text-accent" (click)="browse()"><app-ui-icon name="arrow-left" />算法目录</button><h2 class="text-2xl font-semibold">{{ entry.label }}</h2><p class="mt-1 text-sm text-muted">{{ entry.category === 'Web3D' ? '3D 数据结构' : entry.category }}</p></div>
+          <div><button class="mb-3 inline-flex items-center gap-2 text-sm text-accent-ink" (click)="browse()"><app-ui-icon name="arrow-left" />算法目录</button><h2 class="text-2xl font-semibold">{{ entry.label }}</h2><p class="mt-1 text-sm text-muted">{{ entry.category === 'Web3D' ? '3D 数据结构' : entry.category }}</p></div>
           <button #navigationTrigger class="button-secondary lg:hidden" aria-haspopup="dialog" [attr.aria-expanded]="mobileNavigationOpen" aria-controls="mobile-algorithms" (click)="openNavigation()">选择算法</button>
         </div>
         <!-- Control Panel -->
@@ -65,7 +65,7 @@
 
         <div *ngIf="!store.isLoading() && store.steps().length === 0" class="min-h-80 flex items-center justify-center p-8">
           <div class="text-center text-muted px-4">
-            <span class="mb-4 inline-flex text-accent" aria-hidden="true"><app-ui-icon name="play" /></span>
+            <span class="mb-4 inline-flex text-accent-ink" aria-hidden="true"><app-ui-icon name="play" /></span>
             <p class="text-lg font-medium text-muted mb-1">输入数据后，点击运行</p>
 
           </div>

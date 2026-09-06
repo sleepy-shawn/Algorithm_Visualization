@@ -15,7 +15,8 @@
     --ink: 48 46 42;
     --muted: 112 107 99;
     --line: 222 217 207;
-    --accent: 82 104 95;
+    --accent: 246 210 174;
+    --accent-ink: 121 77 43;
     --on-color: 255 255 255;
     --neutral: 115 111 105;
     --active: 43 99 155;
@@ -52,14 +53,14 @@
 }
 
 @layer components {
-  .button-primary { @apply inline-flex items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 text-sm font-medium text-on-color transition-colors hover:brightness-95 disabled:opacity-50; }
+  .button-primary { @apply inline-flex items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 text-sm font-medium text-accent-ink transition-colors hover:brightness-95 disabled:opacity-50; }
   .button-secondary { @apply inline-flex items-center justify-center gap-2 rounded-md border border-line bg-surface px-4 py-2 text-sm font-medium text-ink hover:bg-subtle; }
-  .eyebrow { @apply text-xs font-medium tracking-widest text-accent; }
+  .eyebrow { @apply text-xs font-medium tracking-widest text-accent-ink; }
   .page-content { @apply mx-auto w-full max-w-6xl px-6 py-8 md:px-8 md:py-12; }
   .section-title { @apply text-xl font-semibold tracking-tight text-ink; }
   .surface-card { @apply rounded-lg border border-line bg-surface; }
   .nav-button { @apply whitespace-nowrap rounded-md px-3 py-2 text-sm text-muted transition-colors hover:bg-subtle hover:text-ink; }
-  .nav-button.is-active { @apply bg-subtle font-semibold text-accent; }
+  .nav-button.is-active { @apply bg-subtle font-semibold text-accent-ink; }
   .catalog-row { @apply grid w-full items-center gap-3 border-b border-line px-6 py-6 text-left transition-colors last:border-0 hover:bg-page; grid-template-columns: minmax(0, 1fr) auto; }
   .workspace { min-width: 0; }
   .workspace > app-control-panel, .workspace > app-input-config, .workspace > app-phase-guide, .workspace > app-complexity-panel { display: block; flex-shrink: 0; }
@@ -84,7 +85,8 @@
   .auth-form { @apply w-full rounded-lg border border-line bg-surface p-6 sm:p-8; }
 }
 
-button.bg-accent, button.bg-active, button.bg-success, button.bg-danger, button.bg-swap, button.bg-compare { color: rgb(var(--on-color)); }
+button.bg-accent { color: rgb(var(--accent-ink)); }
+button.bg-active, button.bg-success, button.bg-danger, button.bg-swap, button.bg-compare { color: rgb(var(--on-color)); }
 button, input, select, .catalog-row, .featured-card {
   transition: color var(--motion-control) var(--ease-out), background-color var(--motion-control) var(--ease-out), border-color var(--motion-control) var(--ease-out), box-shadow var(--motion-control) var(--ease-out);
 }
@@ -93,7 +95,7 @@ button:active:not(:disabled) { filter: brightness(.96); }
 .page-content, .auth-layout { animation: page-enter var(--motion-page) var(--ease-out) both; }
 .featured-card:hover { border-color: rgb(var(--accent) / .55); background: rgb(var(--surface)); box-shadow: 0 4px 16px rgb(var(--ink) / .035); }
 .details-toggle { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 44px; padding: 12px 16px; color: rgb(var(--muted)); font-size: 12px; text-align: left; }
-.details-toggle:hover { color: rgb(var(--accent)); background: rgb(var(--page)); }
+.details-toggle:hover { color: rgb(var(--accent-ink)); background: rgb(var(--page)); }
 .details-toggle app-ui-icon { margin-left: auto; transition: transform var(--motion-page) var(--ease-out); }
 .details-reveal { display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows var(--motion-page) var(--ease-out), visibility var(--motion-page); }
 .details-reveal.is-open { grid-template-rows: 1fr; visibility: visible; }

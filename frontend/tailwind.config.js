@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-const tokens = ['viz-neutral','viz-active','viz-compare','viz-swap','viz-success','viz-pivot','viz-danger', 'page', 'surface', 'subtle', 'ink', 'muted', 'line', 'accent', 'on-color',
+const tokens = ['viz-neutral','viz-active','viz-compare','viz-swap','viz-success','viz-pivot','viz-danger', 'page', 'surface', 'subtle', 'ink', 'muted', 'line', 'accent', 'accent-ink', 'on-color',
   'neutral', 'active', 'success', 'danger', 'compare', 'swap', 'pivot',
   'active-soft', 'success-soft', 'danger-soft', 'compare-soft', 'swap-soft'];
 module.exports = {

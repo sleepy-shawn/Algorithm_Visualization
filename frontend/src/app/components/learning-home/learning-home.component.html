@@ -27,7 +27,7 @@
     <h3 class="section-title mb-6">常用算法</h3>
     <div class="grid gap-4 md:grid-cols-3">
       <button *ngFor="let item of featured; let i = index" (click)="learn.emit(item.id)" class="surface-card featured-card p-6 text-left">
-        <span class="flex items-center justify-between text-accent"><app-ui-icon [name]="item.id === 'binary-search' ? 'search' : 'sort'" /><app-ui-icon name="arrow-right" /></span>
+        <span class="flex items-center justify-between text-accent-ink"><app-ui-icon [name]="item.id === 'binary-search' ? 'search' : 'sort'" /><app-ui-icon name="arrow-right" /></span>
         <h4 class="mt-6 text-lg font-semibold">{{ item.label }}</h4>
         <p class="mt-2 text-sm leading-6 text-muted">{{ descriptions[item.id] }}</p>
         <p class="mt-2 font-mono text-sm text-muted">{{ item.complexity }}</p>
@@ -38,7 +38,7 @@
   <section class="border-t border-line pt-8">
     <h3 class="section-title mb-6">按分类查看</h3>
     <div class="grid grid-cols-2 gap-x-6 sm:grid-cols-4">
-      <button *ngFor="let group of groups" class="flex items-center justify-between gap-2 border-b border-line py-4 text-left text-sm hover:text-accent" (click)="browse.emit(group.category)">
+      <button *ngFor="let group of groups" class="flex items-center justify-between gap-2 border-b border-line py-4 text-left text-sm hover:text-accent-ink" (click)="browse.emit(group.category)">
         <span class="inline-flex items-center gap-3"><app-ui-icon [name]="group.icon" />{{ group.category === 'Web3D' ? '3D 数据结构' : group.category }}</span><span class="font-mono text-xs text-muted">{{ group.items.length }}</span>
       </button>
     </div>

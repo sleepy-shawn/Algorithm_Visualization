@@ -1,6 +1,6 @@
 <main class="auth-layout">
   <section>
-    <div class="mb-8 flex items-center gap-3"><span class="flex h-10 w-10 items-center justify-center rounded-lg border border-accent/30 font-mono text-xl text-accent" aria-hidden="true"><app-ui-icon name="input" /></span><h1 class="text-base font-semibold">算法可视化学习平台</h1></div>
+    <div class="mb-8 flex items-center gap-3"><span class="flex h-10 w-10 items-center justify-center rounded-lg border border-accent/30 font-mono text-xl text-accent-ink" aria-hidden="true"><app-ui-icon name="input" /></span><h1 class="text-base font-semibold">算法可视化学习平台</h1></div>
 
     <h2 class="text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">看懂算法的<br>每一步</h2>
 
@@ -10,8 +10,8 @@
     <h2 id="auth-title" class="text-2xl font-semibold">{{ mode === 'login' ? '欢迎回来' : '创建账号' }}</h2>
 
     <div class="my-6 flex rounded-md bg-subtle p-1" role="group" aria-label="账户操作">
-      <button class="flex-1 rounded px-3 py-2 text-sm" [class.bg-surface]="mode === 'login'" [class.text-accent]="mode === 'login'" [attr.aria-pressed]="mode === 'login'" (click)="switchMode('login')">登录</button>
-      <button class="flex-1 rounded px-3 py-2 text-sm" [class.bg-surface]="mode === 'register'" [class.text-accent]="mode === 'register'" [attr.aria-pressed]="mode === 'register'" (click)="switchMode('register')">注册</button>
+      <button class="flex-1 rounded px-3 py-2 text-sm" [class.bg-surface]="mode === 'login'" [class.text-accent-ink]="mode === 'login'" [attr.aria-pressed]="mode === 'login'" (click)="switchMode('login')">登录</button>
+      <button class="flex-1 rounded px-3 py-2 text-sm" [class.bg-surface]="mode === 'register'" [class.text-accent-ink]="mode === 'register'" [attr.aria-pressed]="mode === 'register'" (click)="switchMode('register')">注册</button>
     </div>
         <form *ngIf="mode === 'login'" (ngSubmit)="submitLogin()" class="space-y-4">
           <div *ngIf="auth.success()" role="status" class="text-sm text-success bg-success-soft border border-success rounded px-3 py-2">

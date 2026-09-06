@@ -262,7 +262,7 @@ curl -X POST http://localhost:8080/api/algorithms/sort \
 
 ## 文档
 
-- [Issue #5 前端交付](docs/issue-5-delivery.md) — 温润配色、统一图标、详情折叠、动效及最新截图
+- [Issue #5 前端交付](docs/issue-5-delivery.md) — 温润淡橙配色、统一图标、详情折叠、动效及最新截图
 
 - [第一周前端交付](docs/frontend-week-one.md) — 浅色视觉规范、精简功能、验证步骤及截图
 
