@@ -2,22 +2,23 @@
 
 > Algorithm Visualization Learning Platform — 交互式算法学习与可视化教学平台
 
-**第七小组项目** | Angular 17 + Spring Boot 3.2 + Three.js + WebRTC + MySQL + Docker
+**第七小组项目** | Angular 17 + Spring Boot 3.2 + Three.js + MySQL + Docker
 
 ---
+
+当前前端精简为首页、算法目录和可视化学习。与 base `fea5eba` 的逐项区别见 [版本差异说明](docs/base-differences.md)。AI 助手、1v1 竞赛、评估测试和历史记录已从前端移除；下文涉及这些功能的 API、配置与设计文档属于保留的后端／历史资料。
+
+与国外开源项目 Algorithm Visualizer 的功能、实现方式和差异程度比较，见 [外部项目对比](docs/algorithm-visualizer-comparison.md)。
 
 ## 功能特性
 
 | 功能 | 说明 |
 |------|------|
-| 🔮 **算法可视化** | 17+ 种算法的分步执行可视化（排序、图搜索、动态规划、回溯、分治） |
+| 🔮 **算法可视化** | 16 个算法／数据结构入口的分步可视化（排序、图搜索、动态规划、回溯、分治） |
 | 📊 **教学阶段引导** | 每种算法的执行过程划分为离散教学阶段，进度条实时展示 |
 | ⚖️ **对比模式** | 同一分类的两个算法并排展示，同步播放对比步数/比较/操作次数 |
-| 📝 **评估测试** | AI 动态出题 + LLM 语义评测，或经典 5 题固定题库 |
-| 🤖 **AI 复杂度分析** | 对任意代码进行时间/空间复杂度分析，支持多轮对话 |
-| 🎮 **1v1 竞赛** | WebRTC 实时对战，算法知识竞速 |
 | 🌀 **3D 可视化** | Three.js 3D 渲染数组、栈、队列、链表、二叉树、B+ 树 |
-| 👤 **用户系统** | 注册/登录、SHA-256 加盐哈希、运行历史记录 |
+| 👤 **用户系统** | 注册/登录、SHA-256 加盐哈希 |
 
 ---
 
@@ -260,6 +261,10 @@ curl -X POST http://localhost:8080/api/algorithms/sort \
 ---
 
 ## 文档
+
+- [Issue #5 前端交付](docs/issue-5-delivery.md) — 温润配色、统一图标、详情折叠、动效及最新截图
+
+- [第一周前端交付](docs/frontend-week-one.md) — 浅色视觉规范、精简功能、验证步骤及截图
 
 - [部署文档](docs/部署文档.md) — Docker + AWS ECS 部署指南
 - [学习引导系统](docs/learning-guidance-system.md) — Phase 教学 + 对比模式 + 评估测试

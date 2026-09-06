@@ -59,3 +59,7 @@ frontend/angular-dev.err
 
 # ===== 项目特定 =====
 // 算法可视化平台报告文档.pdf
+
+# Browser test artifacts (curated delivery screenshots live in docs/)
+frontend/test-results/
+frontend/playwright-report/

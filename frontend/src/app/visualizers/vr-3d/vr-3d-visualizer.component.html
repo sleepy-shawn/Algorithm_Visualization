@@ -1,100 +1,48 @@
-<div class="h-full min-h-0 flex flex-col bg-slate-950 text-white overflow-hidden">
+<div class="w-full min-h-0 flex flex-col bg-page text-ink overflow-hidden">
 
-    <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-700 bg-slate-900">
-        <span class="text-sm text-slate-400 font-semibold">VR/3D 数据结构模式</span>
+    <div class="flex flex-wrap items-center gap-2 px-4 py-3 border-b border-line bg-surface">
 
-        <span class="text-xs text-blue-300">
-            当前结构：{{ currentInfo.title }}
+
+        <span class="text-xs text-active">
+            {{ currentInfo.title }}
         </span>
 
-        <span class="text-xs text-slate-400">
+        <span class="text-xs text-muted">
             {{ operationStatus }}
         </span>
 
-        <span class="ml-auto text-xs text-slate-500">
+        <span class="ml-auto text-xs text-muted">
           鼠标拖拽旋转，滚轮缩放，右键平移
         </span>
     </div>
 
     <div class="flex-1 min-h-0 grid grid-cols-1 xl:grid-cols-3 overflow-hidden">
 
-        <div class="xl:col-span-2 min-h-0 flex items-center justify-center p-6 bg-slate-950">
-            <div class="relative w-full max-w-5xl h-[72vh] max-h-[720px] min-h-[420px] rounded-2xl overflow-hidden border border-slate-700 bg-slate-950 shadow-2xl shadow-blue-950/30">
+        <div class="xl:col-span-2 min-h-0 flex items-start justify-center p-6 bg-page">
+            <div class="relative w-full max-w-5xl h-[420px] sm:h-[60vh] max-h-[720px] min-h-[420px] rounded-lg overflow-hidden border border-line bg-page">
                 <div #canvasContainer class="absolute inset-0"></div>
             </div>
         </div>
 
-        <aside class="border-l border-slate-700 bg-slate-900/90 overflow-auto">
-            <section class="p-4 border-b border-slate-700">
-                <h2 class="text-lg font-bold">Web3D 数据结构学习</h2>
-                <p class="text-sm text-slate-300 leading-6 mt-2">{{ currentInfo.definition }}</p>
-            </section>
+        <aside class="border-l border-line bg-surface overflow-auto">
 
-            <section class="p-4 border-b border-slate-700">
-                <h3 class="text-sm font-semibold text-blue-300 mb-2">结构选择</h3>
-                <div class="grid grid-cols-2 gap-2">
-                    <button
-                            *ngFor="let item of structureOptions"
-                            (click)="selectStructure(item.type)"
-                            [class]="selected() === item.type
-                                ? 'px-2.5 py-2 rounded-md text-xs bg-blue-600 text-white'
-                                : 'px-2.5 py-2 rounded-md text-xs bg-slate-800 text-slate-300 hover:bg-slate-700'">
-                        {{ item.label }}
-                    </button>
-                </div>
-                <div class="mt-3 grid grid-cols-2 gap-2">
-                    <button
-                            (click)="randomData()"
-                            class="rounded-md bg-slate-800 px-3 py-2 text-xs font-medium text-slate-200 hover:bg-slate-700">
-                        随机数据
-                    </button>
+
+            <section class="p-4 border-b border-line">
+                <div class="flex">
                     <button
                             (click)="resetView()"
-                            class="rounded-md bg-slate-800 px-3 py-2 text-xs font-medium text-slate-200 hover:bg-slate-700">
-                        重置视角
+                            class="random-input-button text-xs">
+                        <app-ui-icon name="reset" /> 重置视角
                     </button>
-                </div>
-            </section>
-
-            <section class="p-4 border-b border-slate-700">
-                <h3 class="text-sm font-semibold text-green-300 mb-2">结构特点</h3>
-                <ul class="space-y-1.5 text-sm text-slate-300">
-                    <li *ngFor="let f of currentInfo.features" class="flex gap-2">
-                        <span class="mt-1 h-1.5 w-1.5 rounded-full bg-green-400 shrink-0"></span>
-                        <span>{{ f }}</span>
-                    </li>
-                </ul>
-            </section>
-
-            <section class="p-4 border-b border-slate-700">
-                <h3 class="text-sm font-semibold text-yellow-300 mb-2">核心操作与复杂度</h3>
-                <div class="space-y-2">
-                    <div *ngFor="let op of currentInfo.operations" class="rounded-lg border border-slate-700 bg-slate-800 p-3">
-                        <div class="flex items-center justify-between gap-2 text-sm">
-                            <span class="font-semibold">{{ op.name }}</span>
-                            <span class="font-mono text-purple-300">{{ op.complexity }}</span>
-                        </div>
-                        <p class="text-xs text-slate-400 mt-1">{{ op.description }}</p>
-                        <button
-                                (click)="performOperation(op.name)"
-                                class="mt-2 w-full rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500">
-                            演示操作
-                        </button>
-                    </div>
                 </div>
             </section>
 
             <section class="p-4">
-                <h3 class="text-sm font-semibold text-purple-300 mb-2">典型应用</h3>
-                <div class="flex flex-wrap gap-1.5">
-              <span
-                      *ngFor="let use of currentInfo.useCases"
-                      class="px-2 py-1 rounded bg-slate-800 text-xs text-slate-300">
-                {{ use }}
-              </span>
-                </div>
+              <h3 class="mb-3 text-sm font-medium">操作</h3>
+              <div class="grid grid-cols-2 gap-2">
+                <button *ngFor="let op of currentInfo.operations" (click)="performOperation(op.name)" class="button-secondary text-xs"><app-ui-icon name="play" />{{ op.name }}</button>
+              </div>
             </section>
         </aside>
-
     </div>
 </div>

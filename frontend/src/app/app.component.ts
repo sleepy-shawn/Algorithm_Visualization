@@ -1,6 +1,10 @@
-import { Component, OnInit, computed } from '@angular/core';
+import { UiIconComponent } from './components/ui-icon/ui-icon.component';
+import { Component, computed, effect, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-//import { RouterOutlet } from '@angular/router';
+import { LearningHomeComponent } from './components/learning-home/learning-home.component';
+import { AlgorithmCatalogComponent } from './components/algorithm-catalog/algorithm-catalog.component';
+import { ALGORITHM_GROUPS } from './data/algorithm-catalog';
+import { ActivePanel, AlgorithmId } from './models/algorithm.models';
 import { AlgorithmStore } from './store/algorithm.store';
 import { AuthStore } from './store/auth.store';
 import { AuthComponent } from './components/auth/auth.component';
@@ -15,19 +19,16 @@ import { SearchVisualizerComponent } from './visualizers/search/search-visualize
 import { DpVisualizerComponent } from './visualizers/dp/dp-visualizer.component';
 import { NQueensVisualizerComponent } from './visualizers/n-queens/n-queens-visualizer.component';
 import { DivideConquerVisualizerComponent } from './visualizers/divide-conquer/divide-conquer-visualizer.component';
-import { HistoryPanelComponent } from './components/history-panel/history-panel.component';
-import { AssessmentContainerComponent } from './components/assessment-container/assessment-container.component';
 import { Vr3dVisualizerComponent } from './visualizers/vr-3d/vr-3d-visualizer.component';
-import { AiComplexityDialogComponent } from './components/ai-complexity-dialog/ai-complexity-dialog.component';
-import { CompetitionComponent } from './components/competition/competition.component';
-import { CompetitionStore } from './store/competition.store';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
+    UiIconComponent,
     CommonModule,
-    //RouterOutlet,
+    LearningHomeComponent,
+    AlgorithmCatalogComponent,
     AuthComponent,
     SidebarComponent,
     ControlPanelComponent,
@@ -40,51 +41,92 @@ import { CompetitionStore } from './store/competition.store';
     DpVisualizerComponent,
     NQueensVisualizerComponent,
     DivideConquerVisualizerComponent,
-    HistoryPanelComponent,
-    AssessmentContainerComponent,
     Vr3dVisualizerComponent,
-    AiComplexityDialogComponent,
-    CompetitionComponent,
   ],
   templateUrl: './app.component.html',
 })
-export class AppComponent implements OnInit {
-  tabs = [
-    { id: 'ai-complexity' as const, label: '学习助手', icon: 'AI', type: 'action' as const },
-    { id: 'visualizer' as const, label: '可视化学习', icon: '3D', type: 'panel' as const },
-    { id: 'competition' as const, label: '1v1 竞赛', icon: 'PK', type: 'panel' as const },
-    { id: 'assessment' as const, label: '评估测试', icon: 'Test', type: 'panel' as const },
-    { id: 'history' as const, label: '历史记录', icon: 'Log', type: 'panel' as const },
+export class AppComponent {
+  readonly tabs: { id: ActivePanel; label: string }[] = [
+    { id: 'home', label: '首页' },
+    { id: 'catalog', label: '算法目录' },
+    { id: 'visualizer', label: '可视化学习' },
   ];
-
-  compareMetrics = computed(() => {
-    if (!this.store.compareMode() || this.store.steps().length === 0 || this.store.compareSteps().length === 0) {
-      return null;
+  readonly compareEntryLabel = computed(() => ALGORITHM_GROUPS.flatMap(group => group.items).find(item => item.id === this.store.compareAlgo())?.label ?? this.store.compareAlgo());
+  detailsOpen = false;
+  catalogCategory = '';
+  mobileNavigationOpen = false;
+  @ViewChild('navigationTrigger') navigationTrigger?: ElementRef<HTMLButtonElement>;
+  mobileNavigation?: ElementRef<HTMLElement>;
+  @ViewChild('mobileNavigation') set navigationElement(element: ElementRef<HTMLElement> | undefined) {
+    this.mobileNavigation = element;
+    if (element) queueMicrotask(() => element.nativeElement.querySelector<HTMLButtonElement>('button')?.focus());
+  }
+  @ViewChild('mainContent') mainContent?: ElementRef<HTMLElement>;
+  readonly selectedEntry = computed(() => {
+    for (const group of ALGORITHM_GROUPS) {
+      const item = group.items.find(entry => entry.id === this.store.selectedAlgo());
+      if (item) return { ...item, category: group.category };
     }
-
-    const pLast = this.store.steps()[this.store.steps().length - 1] as unknown as Record<string, number>;
-    const cLast = this.store.compareSteps()[this.store.compareSteps().length - 1] as unknown as Record<string, number>;
-
-    return {
-      primarySteps: this.store.steps().length,
-      compareSteps: this.store.compareSteps().length,
-      primaryComps: pLast['comparisons'] ?? 0,
-      compareComps: cLast['comparisons'] ?? 0,
-      primarySwaps: pLast['swaps'] ?? pLast['backtracks'] ?? 0,
-      compareSwaps: cLast['swaps'] ?? cLast['backtracks'] ?? 0,
-    };
+    return null;
   });
+
+  navigate(panel: ActivePanel): void {
+    this.store.setActivePanel(panel);
+    this.closeNavigation(false);
+    queueMicrotask(() => { this.mainContent?.nativeElement.scrollTo(0, 0); this.mainContent?.nativeElement.focus(); });
+  }
+
+  browse(category = ''): void {
+    this.catalogCategory = category;
+    this.navigate('catalog');
+  }
+
+  learn(id: AlgorithmId): void {
+    this.store.setAlgorithm(id);
+    this.navigate('visualizer');
+  }
+
+  openNavigation(): void {
+    this.mobileNavigationOpen = true;
+  }
+
+  closeNavigation(restoreFocus = true): void {
+    this.mobileNavigationOpen = false;
+    if (restoreFocus) this.navigationTrigger?.nativeElement.focus();
+  }
+
+  @HostListener('window:resize') onResize(): void {
+    if (window.innerWidth >= 1024) this.closeNavigation(false);
+  }
+
+  @HostListener('document:keydown', ['$event']) onKeydown(event: KeyboardEvent): void {
+    if (!this.mobileNavigationOpen) return;
+    if (event.key === 'Escape') { event.preventDefault(); this.closeNavigation(); }
+    if (event.key !== 'Tab') return;
+    const items = this.mobileNavigation?.nativeElement.querySelectorAll<HTMLElement>('button:not([disabled]), [href], input, select, [tabindex="0"]');
+    if (!items?.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  }
 
   constructor(
     public store: AlgorithmStore,
     public auth: AuthStore,
-    public competition: CompetitionStore,
-  ) {}
+  ) {
+    effect(() => {
+      this.store.selectedAlgo();
+      this.store.compareAlgo();
+      this.store.vr3dStructure();
+      this.store.activePanel();
+      this.detailsOpen = false;
+    });
+  }
 
   logout(): void {
-    this.competition.leaveRoom();
+    this.store.setActivePanel('home');
+    this.closeNavigation(false);
     this.auth.logout();
   }
 
-  ngOnInit(): void {}
 }

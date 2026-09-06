@@ -7,12 +7,12 @@ export class ArrayRenderer {
         const center = (values.length - 1) / 2;
 
         values.forEach((value, i) => {
-            const cube = ThreeObjectFactory.createBox(String(value), 0x2563eb);
+            const cube = ThreeObjectFactory.createBox(String(value), 0xb8d8fa);
             cube.userData = {
                 structureType: 'array',
                 value: String(value),
                 index: i,
-                originalColor: 0x2563eb,
+                originalColor: 0xb8d8fa,
             };
             cube.position.set((i - center) * 2, 1, 0);
             ctx.addObject(cube);

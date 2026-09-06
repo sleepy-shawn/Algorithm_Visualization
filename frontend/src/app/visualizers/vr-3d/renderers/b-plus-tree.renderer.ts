@@ -44,10 +44,10 @@ export class BPlusTreeRenderer {
 
         allNodes.forEach(node => {
             const color = node.isLeaf
-                ? 0x10b981
+                ? 0xc5e6cf
                 : node.level === levels.length - 1
-                    ? 0xf59e0b
-                    : 0x3b82f6;
+                    ? 0xfaeaa6
+                    : 0xb8d8fa;
 
             const box = ThreeObjectFactory.createWideBox(node.text, color);
 
@@ -71,7 +71,7 @@ export class BPlusTreeRenderer {
             const arrow = ThreeObjectFactory.createArrow(
                 new THREE.Vector3(from.x + 1.7, from.y - 0.75, from.z),
                 new THREE.Vector3(to.x - 1.7, to.y - 0.75, to.z),
-                0x22d3ee
+                0xcfe1f5
             );
 
             ctx.addObject(arrow);

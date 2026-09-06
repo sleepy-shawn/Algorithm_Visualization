@@ -1,3 +1,4 @@
+import { UiIconComponent } from '../../components/ui-icon/ui-icon.component';
 import { Component, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlgorithmStore } from '../../store/algorithm.store';
@@ -6,7 +7,7 @@ import { DPStep } from '../../models/algorithm.models';
 @Component({
   selector: 'app-dp-visualizer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [UiIconComponent, CommonModule],
   templateUrl: './dp-visualizer.component.html',
 })
 export class DpVisualizerComponent {
@@ -49,13 +50,13 @@ export class DpVisualizerComponent {
 
   cellClass(i: number, w: number): string {
     const s = this.step();
-    if (!s) return 'bg-slate-700';
-    if (s.tracePath?.some(p => p[0] === i && p[1] === w)) return 'bg-yellow-600/60';
+    if (!s) return 'bg-subtle';
+    if (s.tracePath?.some(p => p[0] === i && p[1] === w)) return 'bg-viz-swap';
     if (i === s.currentItem && w === s.currentWeight) {
-      return s.decision === 'take' ? 'bg-green-600' :
-             s.decision === 'skip' ? 'bg-red-600/60' : 'bg-purple-600';
+      return s.decision === 'take' ? 'bg-viz-success text-ink' :
+             s.decision === 'skip' ? 'bg-viz-compare' : 'bg-viz-active text-ink';
     }
-    return 'bg-slate-700';
+    return 'bg-subtle';
   }
 
   trackByRow(i: number) { return i; }

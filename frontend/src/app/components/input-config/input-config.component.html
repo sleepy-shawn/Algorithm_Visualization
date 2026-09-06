@@ -1,227 +1,225 @@
-<div class="bg-slate-800/70 border-b border-slate-700 px-4 py-2 flex flex-wrap items-center gap-x-4 gap-y-2 flex-shrink-0 text-xs">
+<div class="input-config bg-subtle border-b border-line px-4 py-2 flex flex-wrap items-center gap-x-4 gap-y-2 flex-shrink-0 text-xs">
 
   <!-- ===== SORTING ===== -->
   <ng-container *ngIf="category === 'sorting'">
-    <span class="text-slate-400 font-semibold whitespace-nowrap">📊 排序输入</span>
+    <span class="inline-flex items-center gap-2 text-muted font-semibold whitespace-nowrap"><app-ui-icon name="input" /> 排序输入</span>
 
-    <div class="flex items-center gap-1.5">
-      <span class="text-slate-500">数组:</span>
+    <div class="flex items-center gap-2">
+      <span class="text-muted">数组:</span>
       <input
         type="text"
-        [(ngModel)]="sortArrayInput"
+        aria-label="排序数组" [(ngModel)]="sortArrayInput"
         (keyup.enter)="applySortArray()"
         placeholder="如: 64, 34, 25, 12"
-        class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white w-44 focus:outline-none focus:border-blue-500">
+        class="bg-subtle border border-line rounded px-2 py-1 text-ink w-44 focus:outline-none focus:border-active">
       <button (click)="applySortArray()"
-        class="px-2 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white font-medium">确认</button>
+        class="px-2 py-1 bg-accent hover:bg-accent rounded text-on-color font-medium">确认</button>
     </div>
 
-    <div class="w-px h-4 bg-slate-600 hidden sm:block"></div>
+    <div class="w-px h-4 bg-subtle hidden sm:block"></div>
 
-    <div class="flex items-center gap-1.5">
-      <span class="text-slate-500">随机大小:</span>
-      <input type="number" [(ngModel)]="sortSize" min="3" max="30"
-        class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white w-14 focus:outline-none focus:border-blue-500">
+    <div class="flex items-center gap-2">
+      <span class="text-muted">数组长度:</span>
+      <input type="number" aria-label="随机数组大小" [(ngModel)]="sortSize" min="3" max="30"
+        class="bg-subtle border border-line rounded px-2 py-1 text-ink w-14 focus:outline-none focus:border-active">
       <button (click)="randomSortArray()"
-        class="px-2 py-1 bg-slate-600 hover:bg-slate-500 rounded text-white">🎲 随机生成</button>
+        class="random-input-button"><app-ui-icon name="shuffle" /> 随机生成</button>
     </div>
   </ng-container>
 
   <!-- ===== SEARCH ===== -->
   <ng-container *ngIf="category === 'search'">
-    <span class="text-slate-400 font-semibold whitespace-nowrap">🔍 搜索输入</span>
+    <span class="inline-flex items-center gap-2 text-muted font-semibold whitespace-nowrap"><app-ui-icon name="input" /> 搜索输入</span>
 
-    <div class="flex items-center gap-1.5">
-      <span class="text-slate-500">有序数组:</span>
+    <div class="flex items-center gap-2">
+      <span class="text-muted">有序数组:</span>
       <input
         type="text"
-        [(ngModel)]="searchArrayInput"
+        aria-label="有序数组" [(ngModel)]="searchArrayInput"
         (keyup.enter)="applySearch()"
         placeholder="如: 1, 3, 5, 7, 9"
-        class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white w-40 focus:outline-none focus:border-blue-500">
+        class="bg-subtle border border-line rounded px-2 py-1 text-ink w-40 focus:outline-none focus:border-active">
     </div>
 
-    <div class="flex items-center gap-1.5">
-      <span class="text-slate-500">目标值:</span>
+    <div class="flex items-center gap-2">
+      <span class="text-muted">目标值:</span>
       <input
         type="number"
-        [(ngModel)]="searchTargetInput"
+        aria-label="目标值" [(ngModel)]="searchTargetInput"
         (keyup.enter)="applySearch()"
-        class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white w-16 focus:outline-none focus:border-blue-500">
+        class="bg-subtle border border-line rounded px-2 py-1 text-ink w-16 focus:outline-none focus:border-active">
       <button (click)="applySearch()"
-        class="px-2 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white font-medium">确认</button>
+        class="px-2 py-1 bg-accent hover:bg-accent rounded text-on-color font-medium">确认</button>
     </div>
 
     <button (click)="randomSearch()"
-      class="px-2 py-1 bg-slate-600 hover:bg-slate-500 rounded text-white">🎲 随机</button>
+      class="random-input-button"><app-ui-icon name="shuffle" /> 随机生成</button>
   </ng-container>
 
   <!-- ===== GRAPH ===== -->
   <ng-container *ngIf="category === 'graph'">
-    <span class="text-slate-400 font-semibold whitespace-nowrap">🕸 图输入</span>
+    <span class="inline-flex items-center gap-2 text-muted font-semibold whitespace-nowrap"><app-ui-icon name="input" /> 图输入</span>
 
-    <div class="flex items-center gap-1.5">
-      <span class="text-slate-500">节点:</span>
+    <div class="flex items-center gap-2">
+      <span class="text-muted">节点:</span>
       <input
         type="text"
-        [(ngModel)]="nodesInput"
+        aria-label="图节点" [(ngModel)]="nodesInput"
         placeholder="如: A, B, C, D"
-        class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white w-28 focus:outline-none focus:border-blue-500">
-    </div>
-
-    <div class="flex items-center gap-1.5">
-      <span class="text-slate-500">边 (A-B:权重):</span>
-      <input
-        type="text"
-        [(ngModel)]="edgesInput"
-        placeholder="如: A-B:4, B-C:2"
-        class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white w-44 focus:outline-none focus:border-blue-500">
-    </div>
-
-    <div class="flex items-center gap-1.5">
-      <span class="text-slate-500">起点:</span>
-      <input type="text" [(ngModel)]="graphStartInput"
-        class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white w-10 text-center focus:outline-none focus:border-blue-500">
-      <span class="text-slate-500">终点:</span>
-      <input type="text" [(ngModel)]="graphEndInput"
-        class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white w-10 text-center focus:outline-none focus:border-blue-500">
+        class="bg-subtle border border-line rounded px-2 py-1 text-ink w-28 focus:outline-none focus:border-active">
     </div>
 
     <div class="flex items-center gap-2">
-      <label class="flex items-center gap-1 cursor-pointer text-slate-400">
-        <input type="checkbox" [(ngModel)]="isDirected" class="accent-blue-500"> 有向图
+      <span class="text-muted">边 (A-B:权重):</span>
+      <input
+        type="text"
+        aria-label="图的边和权重" [(ngModel)]="edgesInput"
+        placeholder="如: A-B:4, B-C:2"
+        class="bg-subtle border border-line rounded px-2 py-1 text-ink w-44 focus:outline-none focus:border-active">
+    </div>
+
+    <div class="flex items-center gap-2">
+      <span class="text-muted">起点:</span>
+      <input type="text" aria-label="图的起点" [(ngModel)]="graphStartInput"
+        class="bg-subtle border border-line rounded px-2 py-1 text-ink w-10 text-center focus:outline-none focus:border-active">
+      <span class="text-muted">终点:</span>
+      <input type="text" aria-label="图的终点" [(ngModel)]="graphEndInput"
+        class="bg-subtle border border-line rounded px-2 py-1 text-ink w-10 text-center focus:outline-none focus:border-active">
+    </div>
+
+    <div class="flex items-center gap-2">
+      <label class="flex items-center gap-1 cursor-pointer text-muted">
+        <input type="checkbox" aria-label="有向图" [(ngModel)]="isDirected" class="accent-active"> 有向图
       </label>
-      <label class="flex items-center gap-1 cursor-pointer text-slate-400">
-        <input type="checkbox" [(ngModel)]="isWeighted" class="accent-blue-500"> 带权重
+      <label class="flex items-center gap-1 cursor-pointer text-muted">
+        <input type="checkbox" aria-label="带权重" [(ngModel)]="isWeighted" class="accent-active"> 带权重
       </label>
     </div>
 
     <button (click)="applyGraph(true)"
-      class="px-2 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white font-medium">确认</button>
+      class="px-2 py-1 bg-accent hover:bg-accent rounded text-on-color font-medium">确认</button>
     <button (click)="randomGraph()"
-      class="px-2 py-1 bg-slate-600 hover:bg-slate-500 rounded text-white">🎲 随机图</button>
+      class="random-input-button"><app-ui-icon name="shuffle" /> 随机生成</button>
   </ng-container>
 
   <!-- ===== DP ===== -->
   <ng-container *ngIf="category === 'dp'">
-    <span class="text-slate-400 font-semibold whitespace-nowrap">💡 背包输入</span>
+    <span class="inline-flex items-center gap-2 text-muted font-semibold whitespace-nowrap"><app-ui-icon name="input" /> 背包输入</span>
 
-    <div class="flex items-center gap-1.5">
-      <span class="text-slate-500">物品 (名:重:值):</span>
+    <div class="flex items-center gap-2">
+      <span class="text-muted">物品 (名:重:值):</span>
       <input
         type="text"
-        [(ngModel)]="itemsInput"
+        aria-label="背包物品" [(ngModel)]="itemsInput"
         (keyup.enter)="applyDP()"
         placeholder="如: A:2:3, B:3:4"
-        class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white w-52 focus:outline-none focus:border-blue-500">
+        class="bg-subtle border border-line rounded px-2 py-1 text-ink w-52 focus:outline-none focus:border-active">
     </div>
 
-    <div class="flex items-center gap-1.5">
-      <span class="text-slate-500">背包容量:</span>
+    <div class="flex items-center gap-2">
+      <span class="text-muted">背包容量:</span>
       <input
         type="number"
-        [(ngModel)]="capacity"
+        aria-label="背包容量" [(ngModel)]="capacity"
         min="1"
         max="50"
-        class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white w-14 focus:outline-none focus:border-blue-500">
+        class="bg-subtle border border-line rounded px-2 py-1 text-ink w-14 focus:outline-none focus:border-active">
       <button (click)="applyDP()"
-        class="px-2 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white font-medium">确认</button>
+        class="px-2 py-1 bg-accent hover:bg-accent rounded text-on-color font-medium">确认</button>
     </div>
 
     <button (click)="randomDP()"
-      class="px-2 py-1 bg-slate-600 hover:bg-slate-500 rounded text-white">🎲 随机</button>
+      class="random-input-button"><app-ui-icon name="shuffle" /> 随机生成</button>
   </ng-container>
 
   <!-- ===== BACKTRACKING (N-Queens) ===== -->
   <ng-container *ngIf="category === 'backtracking'">
-    <span class="text-slate-400 font-semibold whitespace-nowrap">♟ 皇后设置</span>
+    <span class="inline-flex items-center gap-2 text-muted font-semibold whitespace-nowrap"><app-ui-icon name="input" /> 皇后设置</span>
 
     <div class="flex items-center gap-2">
-      <span class="text-slate-500">N 值:</span>
+      <span class="text-muted">N 值:</span>
       <input
         type="range"
-        [(ngModel)]="queensN"
+        aria-label="皇后数量" [(ngModel)]="queensN"
         min="4"
         max="12"
-        class="w-32 accent-blue-500">
-      <span class="text-white font-mono w-6 text-center">{{ queensN }}</span>
-      <span class="text-slate-500">皇后</span>
+        class="w-32 accent-active">
+      <span class="text-ink font-mono w-6 text-center">{{ queensN }}</span>
+      <span class="text-muted">皇后</span>
       <button (click)="applyQueens()"
-        class="px-2 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white font-medium">确认</button>
+        class="px-2 py-1 bg-accent hover:bg-accent rounded text-on-color font-medium">确认</button>
     </div>
-    <span class="text-slate-500 italic">（N=8 即经典八皇后问题）</span>
   </ng-container>
 
   <!-- ===== DIVIDE & CONQUER ===== -->
   <ng-container *ngIf="category === 'divide-conquer'">
-    <span class="text-slate-400 font-semibold whitespace-nowrap">🌳 分治输入</span>
+    <span class="inline-flex items-center gap-2 text-muted font-semibold whitespace-nowrap"><app-ui-icon name="input" /> 分治输入</span>
 
-    <div class="flex items-center gap-1.5">
-      <span class="text-slate-500">大整数 X:</span>
+    <div class="flex items-center gap-2">
+      <span class="text-muted">大整数 X:</span>
       <input
         type="text"
-        [(ngModel)]="divideX"
+        aria-label="大整数 X" [(ngModel)]="divideX"
         (keyup.enter)="applyDivideConquer()"
         placeholder="如: 12345678"
-        class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white w-36 focus:outline-none focus:border-blue-500">
+        class="bg-subtle border border-line rounded px-2 py-1 text-ink w-36 focus:outline-none focus:border-active">
     </div>
 
-    <div class="flex items-center gap-1.5">
-      <span class="text-slate-500">大整数 Y:</span>
+    <div class="flex items-center gap-2">
+      <span class="text-muted">大整数 Y:</span>
       <input
         type="text"
-        [(ngModel)]="divideY"
+        aria-label="大整数 Y" [(ngModel)]="divideY"
         (keyup.enter)="applyDivideConquer()"
         placeholder="如: 87654321"
-        class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white w-36 focus:outline-none focus:border-blue-500">
+        class="bg-subtle border border-line rounded px-2 py-1 text-ink w-36 focus:outline-none focus:border-active">
       <button (click)="applyDivideConquer()"
-        class="px-2 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white font-medium">确认</button>
+        class="px-2 py-1 bg-accent hover:bg-accent rounded text-on-color font-medium">确认</button>
     </div>
 
     <button (click)="randomDivideConquer()"
-      class="px-2 py-1 bg-slate-600 hover:bg-slate-500 rounded text-white">🎲 随机</button>
+      class="random-input-button"><app-ui-icon name="shuffle" /> 随机生成</button>
 
-    <span class="text-slate-500 italic">使用 Karatsuba 分治乘法生成递归树</span>
   </ng-container>
 
   <!-- ===== VR/3D ===== -->
   <ng-container *ngIf="category === 'vr-3d'">
-    <span class="text-slate-400 font-semibold whitespace-nowrap">🧊 3D 数据结构</span>
+    <span class="inline-flex items-center gap-2 text-muted font-semibold whitespace-nowrap"><app-ui-icon name="input" /> 3D 数据结构</span>
 
-    <div class="flex items-center gap-1.5">
-      <span class="text-slate-500">结构:</span>
+    <div class="flex items-center gap-2">
+      <span class="text-muted">结构:</span>
       <button
         *ngFor="let item of vr3dTypes"
         (click)="selectVr3dStructure(item.id)"
         [class]="store.vr3dStructure() === item.id
-          ? 'px-2 py-1 bg-blue-600 rounded text-white font-medium'
-          : 'px-2 py-1 bg-slate-700 hover:bg-slate-600 rounded text-slate-300'">
+          ? 'px-2 py-1 bg-accent rounded text-on-color font-medium'
+          : 'px-2 py-1 random-input-button'">
         {{ item.label }}
       </button>
     </div>
 
-    <div class="flex items-center gap-1.5">
-      <span class="text-slate-500">数据:</span>
+    <div class="flex items-center gap-2">
+      <span class="text-muted">数据:</span>
       <input
         type="text"
-        [(ngModel)]="vr3dInput"
+        aria-label="数据结构内容" [(ngModel)]="vr3dInput"
         (keyup.enter)="applyVr3dData()"
         placeholder="如: 10, 20, 30, 40"
-        class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white w-80 focus:outline-none focus:border-blue-500">
+        class="bg-subtle border border-line rounded px-2 py-1 text-ink w-52 focus:outline-none focus:border-active">
       <button
         (click)="applyVr3dData()"
-        class="px-2 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white font-medium">
+        class="px-2 py-1 bg-accent hover:bg-accent rounded text-on-color font-medium">
         生成 3D 模型
       </button>
     </div>
 
     <button
       (click)="randomVr3dData()"
-      class="px-2 py-1 bg-slate-600 hover:bg-slate-500 rounded text-white">
-      🎲 随机数据
+      class="random-input-button">
+      <app-ui-icon name="shuffle" /> 随机生成
     </button>
 
-    <span class="text-slate-500 italic">{{ vr3dInputHint }}</span>
+    <span class="text-muted italic">{{ vr3dInputHint }}</span>
   </ng-container>
 
 </div>

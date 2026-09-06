@@ -6,6 +6,8 @@ export class AuthStore {
   private readonly sessionKey = 'algorithm-viz-session';
 
   currentUser = signal<AuthUser | null>(this.loadSession());
+  displayName = computed(() => this.currentUser()?.displayName?.trim() || this.currentUser()?.username || '学习者');
+  avatarInitial = computed(() => Array.from(this.displayName())[0].toLocaleUpperCase());
   isAuthenticated = computed(() => this.currentUser() !== null);
   isLoading = signal(false);
   error = signal<string | null>(null);
@@ -98,7 +100,8 @@ export class AuthStore {
 
     try {
       const user = JSON.parse(raw);
-      return user?.id && user?.username && user?.displayName ? user : null;
+      return user?.id && typeof user?.username === 'string' && user.username.trim()
+        ? { ...user, displayName: typeof user.displayName === 'string' ? user.displayName : '' } : null;
     } catch {
       return null;
     }

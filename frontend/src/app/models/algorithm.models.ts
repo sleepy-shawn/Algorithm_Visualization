@@ -1,3 +1,5 @@
+export type ActivePanel = 'home' | 'catalog' | 'visualizer';
+
 // ===================== COMMON =====================
 export type AlgorithmCategory = 'sorting' | 'graph' | 'search' | 'dp' | 'backtracking' | 'divide-conquer'|'vr-3d';
 
@@ -183,37 +185,6 @@ export interface AlgorithmResponse<T> {
   executionTimeMs: number;
 }
 
-export interface RunHistory {
-  id: number;
-  category: string;
-  algorithm: string;
-  inputData: string;
-  stepCount: number;
-  comparisons: number;
-  swaps: number;
-  executionTimeMs: number;
-  createdAt: string;
-}
-// ===================== ALGORITHM COMPLEXITY Analysis=====================
-export interface AlgorithmComplexityRequest {
-  code: string;
-  language: string;
-  caseType: string;
-  sessionId?: number;
-}
-
-export interface AlgorithmComplexityAnalysis {
-  timeComplexityWorst: string;
-  timeComplexityAverage: string;
-  timeComplexityBest: string;
-  spaceComplexity: string;
-  reasoningSteps: string[];
-  assumptions: string[];
-  optimizationSuggestions: string[];
-  confidence: number;
-  rawText?: string;
-}
-
 // ===================== APP STATE =====================
 export interface AppState {
   category: AlgorithmCategory;
@@ -221,7 +192,6 @@ export interface AppState {
   steps: AnyStep[];
   currentStep: number;
   isPlaying: boolean;
-  speed: number;
   isLoading: boolean;
   error: string | null;
 
@@ -237,76 +207,5 @@ export interface AppState {
   divideX: string;
   divideY: string;
 
-  activePanel: 'visualizer' | 'history' | 'assessment' | 'competition';
-}
-
-// ===================== TEST SCENARIOS =====================
-export type QuestionType = 'value-fill' | 'state-fill' | 'path-fill' | 'table-fill' | 'choice';
-
-export interface TestScenario {
-  id: number;
-  title: string;
-  category: AlgorithmCategory;
-  algorithm: AlgorithmId;
-  questionType: QuestionType;
-  description: string;
-  inputParams: Record<string, unknown>;
-  answer: unknown;
-  options?: string[];
-  explanation: string;
-  targetStepIndex?: number;
-  verifyField?: string;
-}
-
-// ===================== LLM ASSESSMENT =====================
-
-/** 用户友好的题型名称 */
-export type UserQuestionType = 'fill' | 'choice' | 'short-answer';
-
-/** 评估测试配置（用户在设置面板中选择） */
-export interface AssessmentConfig {
-  questionCount: number;
-  categories: AlgorithmCategory[];
-  algorithms: AlgorithmId[];
-  difficulty: 'easy' | 'medium' | 'hard' | 'mixed';
-  mode: 'ai' | 'fixed';
-  questionTypes: UserQuestionType[];
-}
-
-/** LLM 生成的评估题目 */
-export interface AssessmentQuestion {
-  id: number;
-  title: string;
-  category: AlgorithmCategory;
-  algorithm: AlgorithmId;
-  questionType: QuestionType;
-  description: string;
-  inputParams: Record<string, unknown>;
-  answer: unknown;
-  options?: string[];
-  explanation: string;
-  targetStepIndex?: number;
-  verifyField?: string;
-  validated?: boolean;
-}
-
-/** LLM 评测结果 */
-export interface AnswerEvaluationResponse {
-  correct: boolean;
-  feedback: string;
-  correctAnswer: string;
-  confidence: number;
-}
-
-export interface ChatSession {
-  id: number;
-  title: string;
-  createdAt: string;
-}
-
-export interface ChatMessage {
-  id: number;
-  role: 'user' | 'assistant';
-  content: string;
-  createdAt: string;
+  activePanel: ActivePanel;
 }

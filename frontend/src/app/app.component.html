@@ -1,80 +1,37 @@
 <app-auth *ngIf="!auth.isAuthenticated()" />
 
-<div *ngIf="auth.isAuthenticated()" class="h-screen min-h-0 flex flex-col bg-slate-950 text-white overflow-hidden">
-  <header class="flex items-center justify-between px-5 py-3 bg-slate-900 border-b border-slate-700 flex-shrink-0 z-20">
-    <div class="flex items-center gap-3 min-w-0">
-      <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-sm font-bold shrink-0">ALG</div>
-        <!-- 将λ替换为图片
-      <div class="w-8 h-8 rounded-lg flex items-center justify-center">
-        <img
-        class="size-[1.8rem] object-contain"
-        src="/favicon.ico"
-        alt="网站图标"
-        />
-      </div>
-      -->
-      <div class="min-w-0">
-        <h1 class="font-bold text-white leading-none truncate">算法与复杂度可视化学习平台</h1>
-        <p class="text-xs text-slate-500 leading-none mt-0.5">Angular + Spring Boot + Web3D</p>
-      </div>
-    </div>
-
-    <div class="flex items-center gap-3 shrink-0">
-      <nav class="flex gap-1">
-        <button
-          *ngFor="let tab of tabs"
-          (click)="tab.type === 'action' ? store.openAiComplexityDialog() : store.setActivePanel(tab.id)"
-          [class]="tab.type === 'panel' && store.activePanel() === tab.id
-            ? 'px-3 py-1.5 rounded-md text-sm font-medium bg-blue-600 text-white'
-            : tab.type === 'action'
-              ? 'px-3 py-1.5 rounded-md text-sm font-medium bg-purple-600 text-white hover:bg-purple-500'
-              : 'px-3 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800'">
-          {{ tab.icon }} {{ tab.label }}
-        </button>
-      </nav>
-
-      <div class="hidden sm:flex items-center gap-2 border-l border-slate-700 pl-3">
-        <div class="w-7 h-7 rounded bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-blue-300">
-          {{ auth.currentUser()?.displayName?.slice(0, 1) }}
-        </div>
-        <span class="text-sm text-slate-300 max-w-24 truncate">{{ auth.currentUser()?.displayName }}</span>
-      </div>
-
-      <button
-        (click)="logout()"
-        class="px-2.5 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800">
-        退出
+<div *ngIf="auth.isAuthenticated()" class="flex h-dvh min-h-0 flex-col bg-page text-ink">
+  <header class="z-20 shrink-0 border-b border-line bg-surface px-4 py-3 md:px-6">
+    <div class="flex items-center justify-between gap-3">
+      <button class="flex min-w-0 items-center gap-3 text-left" (click)="navigate('home')" aria-label="算法可视化学习平台首页">
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-accent/30 font-mono text-lg text-accent" aria-hidden="true"><app-ui-icon name="input" /></span>
+        <span class="min-w-0"><span class="block truncate text-sm font-semibold">算法可视化学习平台</span></span>
       </button>
+      <div class="flex shrink-0 items-center gap-2">
+        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-subtle text-sm font-semibold text-accent" aria-hidden="true">{{ auth.avatarInitial() }}</span>
+        <span class="hidden max-w-32 truncate text-sm sm:block" [title]="auth.displayName()">{{ auth.displayName() }}</span>
+        <button class="nav-button" (click)="logout()" [attr.aria-label]="'退出 ' + auth.displayName()">退出</button>
+      </div>
     </div>
+    <nav class="mt-3 flex max-w-full gap-1 overflow-x-auto" aria-label="主导航">
+      <button *ngFor="let tab of tabs" class="nav-button" [class.is-active]="store.activePanel() === tab.id" [attr.aria-current]="store.activePanel() === tab.id ? 'page' : null" (click)="tab.id === 'catalog' ? browse() : navigate(tab.id)">{{ tab.label }}</button>
+    </nav>
   </header>
-
-  <!-- Error Banner -->
-  <div *ngIf="store.error()" class="bg-red-900/80 border-b border-red-700 px-5 py-2 text-sm text-red-200 flex items-center justify-between">
-    <span>{{ store.error() }}</span>
-    <button (click)="store.error.set(null)" class="text-red-400 hover:text-white ml-4">关闭</button>
+  <div *ngIf="store.error() && store.activePanel() === 'visualizer'" role="alert" class="flex shrink-0 items-center justify-between gap-3 border-b border-danger/30 bg-danger-soft px-6 py-3 text-sm text-danger">
+    <span>{{ store.error() }}</span><button (click)="store.error.set(null)" class="shrink-0 underline">关闭</button>
   </div>
-
-  <!-- Main layout -->
-  <div class="flex flex-1 overflow-hidden">
-
-    <!-- Sidebar -->
-    <app-sidebar *ngIf="store.activePanel() === 'visualizer' || store.activePanel() === 'competition'" />
-
-    <!-- Content -->
-    <main class="flex-1 flex flex-col overflow-hidden">
-
-      <!-- History Panel -->
-      <app-history-panel *ngIf="store.activePanel() === 'history'" />
-
-      <!-- Assessment Panel -->
-      <app-assessment-container *ngIf="store.activePanel() === 'assessment'" />
-
-      <!-- Competition Panel -->
-      <app-competition *ngIf="store.activePanel() === 'competition'" />
-
+  <div class="flex min-h-0 flex-1">
+    <app-sidebar *ngIf="store.activePanel() === 'visualizer'" class="hidden shrink-0 lg:block" />
+    <main #mainContent tabindex="-1" class="workspace min-w-0 flex-1 overflow-y-auto" aria-label="学习内容">
+      <app-learning-home *ngIf="store.activePanel() === 'home'" (browse)="browse($event)" (learn)="learn($event)" />
+      <app-algorithm-catalog *ngIf="store.activePanel() === 'catalog'" [initialCategory]="catalogCategory" (learn)="learn($event)" />
       <!-- Visualizer -->
       <ng-container *ngIf="store.activePanel() === 'visualizer'">
 
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-line bg-surface px-6 py-6" *ngIf="selectedEntry() as entry">
+          <div><button class="mb-3 inline-flex items-center gap-2 text-sm text-accent" (click)="browse()"><app-ui-icon name="arrow-left" />算法目录</button><h2 class="text-2xl font-semibold">{{ entry.label }}</h2><p class="mt-1 text-sm text-muted">{{ entry.category === 'Web3D' ? '3D 数据结构' : entry.category }}</p></div>
+          <button #navigationTrigger class="button-secondary lg:hidden" aria-haspopup="dialog" [attr.aria-expanded]="mobileNavigationOpen" aria-controls="mobile-algorithms" (click)="openNavigation()">选择算法</button>
+        </div>
         <!-- Control Panel -->
         <app-control-panel />
 
@@ -84,52 +41,41 @@
         <!-- Phase Guide -->
         <app-phase-guide />
 
-        <!-- Compare Metrics -->
-        <div *ngIf="store.compareMode() && compareMetrics() as m" class="px-4 py-2 bg-slate-900/80 border-b border-slate-700 flex-shrink-0">
-          <div class="flex items-center justify-center gap-6 text-xs">
-            <span class="text-blue-400 font-medium">{{ store.selectedAlgo() }}</span>
-            <span class="text-slate-500">步数</span>
-            <span [class]="m.primarySteps <= m.compareSteps ? 'text-green-400' : 'text-red-400'">{{ m.primarySteps }}</span>
-            <span class="text-slate-600">vs</span>
-            <span [class]="m.compareSteps <= m.primarySteps ? 'text-green-400' : 'text-red-400'">{{ m.compareSteps }}</span>
-            <span class="text-slate-500 ml-2">比较</span>
-            <span [class]="m.primaryComps <= m.compareComps ? 'text-green-400' : 'text-red-400'">{{ m.primaryComps }}</span>
-            <span class="text-slate-600">vs</span>
-            <span [class]="m.compareComps <= m.primaryComps ? 'text-green-400' : 'text-red-400'">{{ m.compareComps }}</span>
-            <span class="text-slate-500 ml-2">操作</span>
-            <span [class]="m.primarySwaps <= m.compareSwaps ? 'text-green-400' : 'text-red-400'">{{ m.primarySwaps }}</span>
-            <span class="text-slate-600">vs</span>
-            <span [class]="m.compareSwaps <= m.primarySwaps ? 'text-green-400' : 'text-red-400'">{{ m.compareSwaps }}</span>
-            <span class="text-purple-400 font-medium">{{ store.compareAlgo() }}</span>
+        <section class="algorithm-details border-b border-line bg-surface">
+          <button class="details-toggle" id="algorithm-details-toggle" aria-controls="algorithm-details-content" [attr.aria-expanded]="detailsOpen" (click)="detailsOpen = !detailsOpen">
+            算法详情 <app-ui-icon name="chevron-down" [class.rotate-180]="detailsOpen" />
+          </button>
+          <div id="algorithm-details-content" class="details-reveal" [class.is-open]="detailsOpen" [attr.inert]="detailsOpen ? null : ''" [attr.aria-hidden]="!detailsOpen">
+            <div class="details-inner" role="region" aria-labelledby="algorithm-details-toggle">
+              <app-complexity-panel *ngIf="!store.compareMode()" />
+              <div *ngIf="store.compareMode()" class="grid gap-4 md:grid-cols-2">
+                <section><h3 class="px-4 pb-3 text-sm font-medium">{{ selectedEntry()?.label }}</h3><app-complexity-panel /></section>
+                <section><h3 class="px-4 pb-3 text-sm font-medium">{{ compareEntryLabel() }}</h3><app-complexity-panel source="compare" /></section>
+              </div>
+            </div>
           </div>
-        </div>
-
-        <!-- Complexity Analysis Panel (non-compare mode) -->
-        <app-complexity-panel *ngIf="!store.compareMode()" />
-
-        <!-- AI Complexity Analysis Dialog -->
-        <app-ai-complexity-dialog />
+        </section>
 
         <div *ngIf="store.isLoading()" class="flex-1 min-h-0 flex items-center justify-center">
-          <div class="flex flex-col items-center gap-3 text-slate-400">
-            <div class="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-            <span class="text-sm">正在计算算法步骤...</span>
+          <div class="flex flex-col items-center gap-3 text-muted">
+            <div class="w-8 h-8 border-2 border-active border-t-transparent rounded-full animate-spin"></div>
+            <span class="text-sm">计算中…</span>
           </div>
         </div>
 
-        <div *ngIf="!store.isLoading() && store.steps().length === 0" class="flex-1 min-h-0 flex items-center justify-center overflow-auto">
-          <div class="text-center text-slate-500 px-4">
-            <div class="text-5xl mb-4">3D</div>
-            <p class="text-lg font-medium text-slate-400 mb-1">选择算法或 Web3D 数据结构后点击“运行”</p>
-            <p class="text-sm">平台会返回步骤数据，并展示可视化过程、阶段引导和复杂度信息。</p>
+        <div *ngIf="!store.isLoading() && store.steps().length === 0" class="min-h-80 flex items-center justify-center p-8">
+          <div class="text-center text-muted px-4">
+            <span class="mb-4 inline-flex text-accent" aria-hidden="true"><app-ui-icon name="play" /></span>
+            <p class="text-lg font-medium text-muted mb-1">输入数据后，点击运行</p>
+
           </div>
         </div>
 
         <div
           *ngIf="!store.isLoading() && store.steps().length > 0 && !store.compareMode()"
           [class]="store.category() === 'vr-3d'
-            ? 'flex-1 min-h-0 h-full overflow-hidden'
-            : 'flex flex-col flex-1 min-h-0 overflow-auto'">
+            ? 'visualization-stage flex min-w-0 overflow-hidden'
+            : 'visualization-stage flex flex-col min-w-0 overflow-auto'">
           <app-sorting-visualizer *ngIf="store.category() === 'sorting'" />
           <app-graph-visualizer *ngIf="store.category() === 'graph'" />
           <app-search-visualizer *ngIf="store.category() === 'search'" />
@@ -139,12 +85,12 @@
           <app-vr-3d-visualizer *ngIf="store.category() === 'vr-3d'" />
         </div>
 
-        <div *ngIf="!store.isLoading() && store.steps().length > 0 && store.compareMode()" class="flex flex-1 min-h-0 overflow-hidden">
-          <div class="w-1/2 border-r border-slate-700 flex flex-col overflow-hidden">
-            <div class="px-3 py-1.5 bg-slate-800/60 border-b border-slate-700 text-xs text-blue-400 font-medium text-center flex-shrink-0">
-              {{ store.selectedAlgo() }}
+        <div *ngIf="!store.isLoading() && store.steps().length > 0 && store.compareMode()" class="compare-layout">
+          <div class="min-w-0 border-b border-line md:border-r flex flex-col">
+            <div class="px-3 py-2 bg-subtle border-b border-line text-xs text-active font-medium text-center flex-shrink-0">
+              {{ selectedEntry()?.label }}
             </div>
-            <div class="flex flex-col flex-1 min-h-0 overflow-auto">
+            <div class="compare-visualization">
               <app-sorting-visualizer *ngIf="store.category() === 'sorting'" [source]="'primary'" />
               <app-graph-visualizer *ngIf="store.category() === 'graph'" [source]="'primary'" />
               <app-search-visualizer *ngIf="store.category() === 'search'" [source]="'primary'" />
@@ -153,20 +99,21 @@
             </div>
           </div>
 
-          <div class="w-1/2 flex flex-col overflow-hidden">
-            <div class="px-3 py-1.5 bg-slate-800/60 border-b border-slate-700 text-xs text-purple-400 font-medium text-center flex-shrink-0">
-              {{ store.compareAlgo() }}
+          <div class="min-w-0 flex flex-col">
+            <div *ngIf="store.compareError()" role="alert" class="bg-danger-soft p-4 text-sm text-danger">{{ store.compareError() }}</div>
+            <div class="px-3 py-2 bg-subtle border-b border-line text-xs text-swap font-medium text-center flex-shrink-0">
+              {{ compareEntryLabel() }}
             </div>
-            <div *ngIf="store.compareSteps().length === 0 && !store.compareIsLoading()" class="flex-1 min-h-0 flex items-center justify-center text-slate-500 text-sm">
+            <div *ngIf="store.compareSteps().length === 0 && !store.compareIsLoading()" class="flex-1 min-h-0 flex items-center justify-center text-muted text-sm">
               点击“运行”开始对比
             </div>
             <div *ngIf="store.compareIsLoading()" class="flex-1 min-h-0 flex items-center justify-center">
-              <div class="flex flex-col items-center gap-2 text-slate-400 text-xs">
-                <div class="w-6 h-6 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+              <div class="flex flex-col items-center gap-2 text-muted text-xs">
+                <div class="w-6 h-6 border-2 border-swap border-t-transparent rounded-full animate-spin"></div>
                 <span>计算中...</span>
               </div>
             </div>
-            <div *ngIf="store.compareSteps().length > 0" class="flex flex-col flex-1 min-h-0 overflow-auto">
+            <div *ngIf="store.compareSteps().length > 0" class="compare-visualization">
               <app-sorting-visualizer *ngIf="store.category() === 'sorting'" [source]="'compare'" />
               <app-graph-visualizer *ngIf="store.category() === 'graph'" [source]="'compare'" />
               <app-search-visualizer *ngIf="store.category() === 'search'" [source]="'compare'" />
@@ -177,5 +124,11 @@
         </div>
       </ng-container>
     </main>
+  </div>
+  <div *ngIf="mobileNavigationOpen" class="drawer-backdrop fixed inset-0 z-50 bg-ink/30 lg:hidden" (click)="closeNavigation()">
+    <section #mobileNavigation id="mobile-algorithms" role="dialog" aria-modal="true" aria-label="选择算法" class="drawer-panel flex h-full w-72 max-w-[85vw] flex-col bg-surface shadow-xl" (click)="$event.stopPropagation()">
+      <div class="flex items-center justify-between border-b border-line px-4 py-3"><h2 class="font-semibold">选择算法</h2><button class="playback-button icon-tooltip" data-tooltip="关闭算法导航" (click)="closeNavigation()" aria-label="关闭算法导航"><app-ui-icon name="close" /></button></div>
+      <app-sidebar class="min-h-0 flex-1" (selected)="closeNavigation()" />
+    </section>
   </div>
 </div>

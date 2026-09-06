@@ -37,7 +37,7 @@ export class ThreeObjectFactory {
         const group = new THREE.Group();
 
         const geometry = new THREE.SphereGeometry(0.75, 32, 32);
-        const material = this.createTransparentMaterial(color, 0.4, 0.1);
+        const material = this.createTransparentMaterial(color);
         const mesh = new THREE.Mesh(geometry, material);
         mesh.renderOrder = 1;
         group.add(mesh);
@@ -57,10 +57,15 @@ export class ThreeObjectFactory {
 
         const ctx = canvas.getContext('2d')!;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = '#2b2925';
         ctx.font = 'bold 40px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
+        // Keep labels readable on both the pastel face and the dark scene while rotating.
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 5;
+        ctx.lineJoin = 'round';
+        ctx.strokeText(text, canvas.width / 2, canvas.height / 2);
         ctx.fillText(text, canvas.width / 2, canvas.height / 2);
 
         const texture = new THREE.CanvasTexture(canvas);
@@ -93,15 +98,15 @@ export class ThreeObjectFactory {
 
     private static createTransparentMaterial(
         color: number,
-        opacity = 0.35,
-        emissiveIntensity = 0.12
+        opacity = 0.92,
+        emissiveIntensity = 0.25
     ): THREE.MeshStandardMaterial {
         return new THREE.MeshStandardMaterial({
             color,
             transparent: true,
             opacity,
-            roughness: 0.25,
-            metalness: 0.15,
+            roughness: 0.6,
+            metalness: 0.02,
             emissive: color,
             emissiveIntensity,
             side: THREE.DoubleSide,

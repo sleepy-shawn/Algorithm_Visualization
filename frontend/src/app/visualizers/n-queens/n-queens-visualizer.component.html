@@ -1,52 +1,52 @@
 <div class="flex-1 flex flex-col p-4 overflow-hidden">
   <ng-container *ngIf="step() as s">
 
-    <div class="flex gap-6 flex-1 min-h-0">
+    <div class="flex flex-col lg:flex-row gap-6 flex-1 min-h-0">
 
       <!-- Board -->
-      <div class="flex items-center justify-center flex-1">
-        <div class="inline-block border-2 border-slate-600 rounded overflow-hidden">
+      <div class="min-w-0 overflow-auto flex-1">
+        <div class="inline-block border-2 border-line rounded overflow-hidden">
           <div *ngFor="let r of rows(); trackBy: trackByNum" class="flex">
             <div
               *ngFor="let c of cols(); trackBy: trackByNum"
-              class="w-12 h-12 flex items-center justify-center text-2xl transition-colors duration-200 relative"
+              class="w-12 h-12 shrink-0 flex items-center justify-center text-2xl viz-transition relative"
               [ngClass]="cellClass(r, c)">
               <span *ngIf="hasQueen(r, c)">♛</span>
-              <span *ngIf="isConflict(r, c) && !hasQueen(r, c)" class="text-red-400 text-sm">✗</span>
+              <span *ngIf="isConflict(r, c) && !hasQueen(r, c)" class="text-danger text-sm" aria-label="冲突"><app-ui-icon name="close" /></span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Stats -->
-      <div class="w-44 flex flex-col gap-2 text-xs">
-        <div class="bg-slate-800 rounded-lg p-3 border border-slate-700">
-          <div class="text-slate-500 mb-1">当前行</div>
-          <div class="text-white font-bold text-lg">{{ s.currentRow }}</div>
-        </div>
-        <div class="bg-slate-800 rounded-lg p-3 border border-slate-700">
-          <div class="text-slate-500 mb-1">找到解数</div>
-          <div class="text-green-400 font-bold text-lg">{{ s.solutionsFound }}</div>
-        </div>
-        <div class="bg-slate-800 rounded-lg p-3 border border-slate-700">
-          <div class="text-slate-500 mb-1">回溯次数</div>
-          <div class="text-red-400 font-bold text-lg">{{ s.backtracks }}</div>
+      <div class="w-full lg:w-44 shrink-0 flex flex-col gap-2 text-xs">
+        <div class="bg-subtle rounded-lg p-3 border border-line">
+          <div class="text-muted mb-1">当前行</div>
+          <div class="text-ink font-bold text-lg">{{ s.currentRow }}</div>
         </div>
 
+
+
         <!-- Recent solutions -->
-        <div *ngIf="s.solutions.length > 0" class="bg-slate-800 rounded-lg p-2 border border-slate-700 overflow-y-auto flex-1">
-          <div class="text-slate-500 mb-1">已找到的解</div>
+        <div *ngIf="s.solutions.length > 0" class="bg-subtle rounded-lg p-2 border border-line overflow-y-auto flex-1">
+          <div class="text-muted mb-1">已找到的解</div>
           <div *ngFor="let sol of s.solutions; let si = index; trackBy: trackByNum"
-            class="text-slate-400 font-mono text-xs mb-0.5">
+            class="text-muted font-mono text-xs mb-1">
             #{{ si + 1 }}: [{{ sol.join(',') }}]
           </div>
         </div>
       </div>
     </div>
 
+    <div class="mt-3 flex flex-wrap gap-4 text-xs text-muted" aria-label="棋盘图例">
+      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-success" aria-hidden="true"></span>放置皇后</span>
+      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-danger" aria-hidden="true"></span>位置冲突</span>
+      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-pivot" aria-hidden="true"></span>回溯移除</span>
+    </div>
+
     <!-- Description -->
-    <div class="flex-shrink-0 mt-2 p-3 bg-slate-800/60 rounded-lg border border-slate-700">
-      <p class="text-sm text-slate-200">{{ s.description }}</p>
+    <div class="flex-shrink-0 mt-2 p-3 bg-subtle rounded-lg border border-line">
+      <p class="text-sm text-ink">{{ s.description }}</p>
     </div>
   </ng-container>
 </div>

@@ -1,4 +1,5 @@
-import { Component, computed } from '@angular/core';
+import { UiIconComponent } from '../ui-icon/ui-icon.component';
+import { Component, computed, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlgorithmStore } from '../../store/algorithm.store';
 import { AlgorithmId } from '../../models/algorithm.models';
@@ -7,11 +8,12 @@ import { ALGORITHM_GROUPS } from '../../data/algorithm-catalog';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [UiIconComponent, CommonModule],
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {
   groups = ALGORITHM_GROUPS;
+  @Output() selected = new EventEmitter<void>();
 
   compareSiblings = computed(() => {
     const cat = this.store.category();
@@ -26,6 +28,8 @@ export class SidebarComponent {
 
   select(id: AlgorithmId): void {
     this.store.setAlgorithm(id);
+    this.store.setActivePanel('visualizer');
+    this.selected.emit();
   }
 
   selectCompare(id: AlgorithmId): void {

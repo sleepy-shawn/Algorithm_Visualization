@@ -1,36 +1,7 @@
-<div
-  *ngIf="store.currentPhase() && phases().length > 0"
-  class="px-4 py-2.5 bg-slate-900/80 border-b border-slate-700 flex-shrink-0">
-
-  <div class="flex items-center justify-center gap-0">
-    <ng-container *ngFor="let p of phases(); let i = index; let last = last">
-      <div class="flex flex-col items-center">
-        <div
-          class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300"
-          [ngClass]="i < currentIdx()
-            ? 'bg-green-600 text-white'
-            : i === currentIdx()
-              ? 'bg-blue-600 text-white ring-2 ring-blue-400 ring-offset-1 ring-offset-slate-900'
-              : 'bg-slate-700 text-slate-500'">
-          {{ i < currentIdx() ? '✓' : i + 1 }}
-        </div>
-        <span
-          class="text-[10px] mt-1 whitespace-nowrap transition-colors duration-300"
-          [ngClass]="i <= currentIdx() ? 'text-slate-300' : 'text-slate-600'">
-          {{ p.label }}
-        </span>
-      </div>
-
-      <div
-        *ngIf="!last"
-        class="h-0.5 w-6 sm:w-10 transition-colors duration-300"
-        [ngClass]="i < currentIdx() ? 'bg-green-600' : 'bg-slate-700'">
-      </div>
-    </ng-container>
-  </div>
-
-  <div class="text-center mt-2">
-    <span class="text-xs text-slate-500">当前阶段：</span>
-    <span class="text-xs text-blue-400 font-medium">{{ store.phaseLabel() }}</span>
+<div *ngIf="store.currentPhase() && phases().length > 0" class="phase-strip flex items-center gap-3 border-b border-line px-4 py-3 text-sm">
+  <span class="font-mono text-xs text-muted">{{ currentIdx() + 1 }} / {{ phases().length }}</span>
+  <span class="font-medium text-accent">{{ store.phaseLabel() }}</span>
+  <div class="ml-auto flex gap-1.5" aria-hidden="true">
+    <span *ngFor="let p of phases(); let i = index" class="phase-dot" [class.is-complete]="i < currentIdx()" [class.is-current]="i === currentIdx()"></span>
   </div>
 </div>

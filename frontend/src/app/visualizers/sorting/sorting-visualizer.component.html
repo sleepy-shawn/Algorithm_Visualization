@@ -6,34 +6,30 @@
       <div
         *ngFor="let val of s.array; let i = index; trackBy: trackByIndex"
         class="flex flex-col items-center gap-1 flex-1 max-w-[60px]"
-        style="transition: all 0.15s ease">
-        <span class="text-xs text-slate-400 font-mono">{{ val }}</span>
+        >
+        <span class="text-xs text-muted font-mono">{{ val }}</span>
         <div
-          class="w-full rounded-t transition-all duration-150"
+          class="w-full rounded-t viz-transition"
           [style.height.px]="barHeight(val)"
           [style.background]="barColor(i)">
         </div>
-        <span class="text-xs text-slate-600 font-mono">{{ i }}</span>
+        <span class="text-xs text-muted font-mono">{{ i }}</span>
       </div>
     </div>
 
     <!-- Description -->
-    <div class="flex-shrink-0 mt-2 p-3 bg-slate-800/60 rounded-lg border border-slate-700">
-      <p class="text-sm text-slate-200">{{ s.description }}</p>
-      <div class="flex gap-4 mt-2 text-xs text-slate-500">
-        <span>比较: <strong class="text-yellow-400">{{ s.comparisons }}</strong></span>
-        <span>交换: <strong class="text-red-400">{{ s.swaps }}</strong></span>
-        <span>访问: <strong class="text-blue-400">{{ s.accesses }}</strong></span>
-      </div>
+    <div class="flex-shrink-0 mt-2 p-3 bg-subtle rounded-lg border border-line">
+      <p class="text-sm text-ink">{{ s.description }}</p>
+
     </div>
 
     <!-- Legend -->
-    <div class="flex gap-4 mt-2 text-xs text-slate-500 justify-center">
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-blue-500 inline-block"></span>未排序</span>
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-yellow-500 inline-block"></span>比较中</span>
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-red-500 inline-block"></span>交换中</span>
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-purple-500 inline-block"></span>基准值</span>
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-emerald-500 inline-block"></span>已排序</span>
+    <div class="flex flex-wrap gap-4 mt-2 text-xs text-muted justify-center">
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-neutral inline-block"></span>未排序</span>
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-compare inline-block"></span>比较中</span>
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-swap inline-block"></span>交换中</span>
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-pivot inline-block"></span>基准值</span>
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-success inline-block"></span>已排序</span>
     </div>
   </ng-container>
 </div>

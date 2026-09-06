@@ -6,19 +6,19 @@
       <table class="text-xs font-mono border-collapse">
         <thead>
           <tr>
-            <th class="px-2 py-1 text-slate-500 border border-slate-700 bg-slate-900">i\w</th>
+            <th class="px-2 py-1 text-muted border border-line bg-surface">i\w</th>
             <th *ngFor="let w of s.dp[0]; let wi = index; trackBy: trackByCol"
-              class="px-2 py-1 text-slate-400 border border-slate-700 bg-slate-900 min-w-[32px]">
+              class="px-2 py-1 text-muted border border-line bg-surface min-w-[32px]">
               {{ wi }}
             </th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of s.dp; let ri = index; trackBy: trackByRow">
-            <td class="px-2 py-1 text-slate-400 border border-slate-700 bg-slate-900 font-bold">{{ ri }}</td>
+            <td class="px-2 py-1 text-muted border border-line bg-surface font-bold">{{ ri }}</td>
             <td
               *ngFor="let val of row; let wi = index; trackBy: trackByCol"
-              class="px-2 py-1 border border-slate-700 text-center text-white font-bold transition-colors duration-200"
+              class="px-2 py-1 border border-line text-center text-ink font-bold viz-transition"
               [ngClass]="cellClass(ri, wi)">
               {{ val }}
             </td>
@@ -27,25 +27,32 @@
       </table>
     </div>
 
+    <div class="mb-4 flex flex-wrap gap-4 text-xs text-muted" aria-label="背包表格图例">
+      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-active" aria-hidden="true"></span>正在计算</span>
+      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-success" aria-hidden="true"></span>选取物品</span>
+      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-compare" aria-hidden="true"></span>跳过物品</span>
+      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-swap" aria-hidden="true"></span>回溯路径</span>
+    </div>
+
     <!-- Info -->
     <div class="flex gap-3 mb-3">
-      <div class="bg-slate-800 rounded-lg p-2 border border-slate-700 text-xs">
-        <div class="text-slate-500 mb-1">当前决策</div>
-        <span *ngIf="s.decision === 'take'" class="text-green-400 font-medium">✓ 选取物品 {{ s.currentItem }}</span>
-        <span *ngIf="s.decision === 'skip'" class="text-red-400 font-medium">✗ 跳过物品 {{ s.currentItem }}</span>
-        <span *ngIf="s.decision === 'compare'" class="text-yellow-400 font-medium">⚖ 比较中...</span>
-        <span *ngIf="s.decision === 'init'" class="text-blue-400 font-medium">初始化</span>
-        <span *ngIf="s.decision === null" class="text-slate-400">完成</span>
+      <div class="bg-subtle rounded-lg p-2 border border-line text-xs">
+        <div class="text-muted mb-1">当前决策</div>
+        <span *ngIf="s.decision === 'take'" class="inline-flex items-center gap-1 text-success font-medium"><app-ui-icon name="check" />选取物品 {{ s.currentItem }}</span>
+        <span *ngIf="s.decision === 'skip'" class="text-compare font-medium">↷ 跳过物品 {{ s.currentItem }}</span>
+        <span *ngIf="s.decision === 'compare'" class="text-compare font-medium">⚖ 比较中...</span>
+        <span *ngIf="s.decision === 'init'" class="text-active font-medium">初始化</span>
+        <span *ngIf="s.decision === null" class="text-muted">完成</span>
       </div>
-      <div class="bg-slate-800 rounded-lg p-2 border border-slate-700 text-xs">
-        <div class="text-slate-500 mb-1">最大价值</div>
-        <div class="text-emerald-400 font-bold text-lg">{{ s.totalValue }}</div>
+      <div class="bg-subtle rounded-lg p-2 border border-line text-xs">
+        <div class="text-muted mb-1">最大价值</div>
+        <div class="text-success font-bold text-lg">{{ s.totalValue }}</div>
       </div>
-      <div *ngIf="s.selectedItems.length > 0" class="bg-slate-800 rounded-lg p-2 border border-slate-700 text-xs flex-1">
-        <div class="text-slate-500 mb-1">已选物品</div>
+      <div *ngIf="s.selectedItems.length > 0" class="bg-subtle rounded-lg p-2 border border-line text-xs flex-1">
+        <div class="text-muted mb-1">已选物品</div>
         <div class="flex gap-1 flex-wrap">
           <span *ngFor="let idx of s.selectedItems"
-            class="px-1.5 py-0.5 bg-green-600/30 text-green-400 rounded">
+            class="px-2 py-1 bg-success-soft text-success rounded">
             物品{{ idx + 1 }}
           </span>
         </div>
@@ -53,33 +60,33 @@
     </div>
 
     <!-- Recurrence relation panel -->
-    <div class="mb-3 p-3 bg-slate-900 rounded-lg border border-blue-900/50 text-xs">
+    <div class="mb-3 p-3 bg-surface rounded-lg border border-active text-xs">
       <div class="flex items-center gap-2 mb-2">
-        <span class="text-blue-400 font-semibold">转移方程</span>
-        <span class="text-slate-500">（0/1 背包）</span>
+        <span class="text-active font-semibold">转移方程</span>
+        <span class="text-muted">（0/1 背包）</span>
       </div>
       <!-- Generic formula -->
-      <div class="font-mono text-slate-300 mb-1.5 text-center leading-relaxed bg-slate-800 rounded px-3 py-1.5">
+      <div class="font-mono text-ink mb-2 text-center leading-relaxed bg-subtle rounded px-3 py-2">
         dp[i][w] = dp[i-1][w]，当 w &lt; wᵢ<br>
         dp[i][w] = max(dp[i-1][w],&nbsp; dp[i-1][w-wᵢ] + vᵢ)，当 w ≥ wᵢ
       </div>
       <!-- Current step instantiation -->
-      <div class="font-mono text-yellow-300 text-center mt-1 leading-snug min-h-[1.2em]">
+      <div class="font-mono text-compare text-center mt-1 leading-snug min-h-[1.2em]">
         {{ recurrenceText() }}
       </div>
       <!-- Current item info -->
-      <div *ngIf="currentItemInfo() as item" class="flex gap-4 mt-2 justify-center text-xs text-slate-400">
-        <span>物品: <strong class="text-white">{{ item.name }}</strong></span>
-        <span>重量 wᵢ = <strong class="text-blue-300">{{ item.weight }}</strong></span>
-        <span>价值 vᵢ = <strong class="text-green-300">{{ item.value }}</strong></span>
-        <span>背包容量 W = <strong class="text-purple-300">{{ store.knapsackCap() }}</strong></span>
+      <div *ngIf="currentItemInfo() as item" class="flex flex-wrap gap-4 mt-2 justify-center text-xs text-muted">
+        <span>物品: <strong class="text-ink">{{ item.name }}</strong></span>
+        <span>重量 wᵢ = <strong class="text-active">{{ item.weight }}</strong></span>
+        <span>价值 vᵢ = <strong class="text-success">{{ item.value }}</strong></span>
+        <span>背包容量 W = <strong class="text-swap">{{ store.knapsackCap() }}</strong></span>
       </div>
     </div>
 
     <!-- Description -->
-    <div class="p-3 bg-slate-800/60 rounded-lg border border-slate-700 flex-shrink-0">
-      <p class="text-sm text-slate-200">{{ s.description }}</p>
-      <div class="text-xs text-slate-500 mt-1">子问题计算次数: <strong class="text-yellow-400">{{ s.comparisons }}</strong></div>
+    <div class="p-3 bg-subtle rounded-lg border border-line flex-shrink-0">
+      <p class="text-sm text-ink">{{ s.description }}</p>
+
     </div>
   </ng-container>
 </div>

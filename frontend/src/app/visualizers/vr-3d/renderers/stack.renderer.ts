@@ -6,7 +6,7 @@ export class StackRenderer {
         const values = ctx.data.values.length > 0 ? ctx.data.values : ['10', '20', '30', '40', '50'];
 
         values.forEach((value, i) => {
-            const color = i === values.length - 1 ? 0xfacc15 : 0x22c55e;
+            const color = i === values.length - 1 ? 0xfaeaa6 : 0xc5e6cf;
             const cube = ThreeObjectFactory.createBox(
                 String(value),
                 color

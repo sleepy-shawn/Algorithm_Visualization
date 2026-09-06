@@ -34,7 +34,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     if (operationName === '访问') {
       const index = this.askIndex('请输入要访问的下标', values.length);
       if (index === null) return;
-      await this.highlightByIndex(ctx, index, 0xfacc15, `访问下标 ${index}，时间复杂度 O(1)`);
+      await this.highlightByIndex(ctx, index, 0xfaeaa6, `访问下标 ${index}，时间复杂度 O(1)`);
       return;
     }
 
@@ -44,7 +44,7 @@ export class BasicStructureAnimator implements StructureAnimator {
 
       ctx.announce?.(`顺序查找 ${target}`);
       for (let i = 0; i < values.length; i++) {
-        await this.highlightByIndex(ctx, i, values[i] === target ? 0x22c55e : 0xfacc15);
+        await this.highlightByIndex(ctx, i, values[i] === target ? 0xc5e6cf : 0xfaeaa6);
         if (values[i] === target) {
           ctx.announce?.(`找到 ${target}，位置为 ${i}`);
           return;
@@ -60,7 +60,7 @@ export class BasicStructureAnimator implements StructureAnimator {
       if (!value || index === null) return;
 
       ctx.announce?.(`在下标 ${index} 插入 ${value}，后续元素右移`);
-      await this.pulseFromIndex(ctx, index, 0x38bdf8);
+      await this.pulseFromIndex(ctx, index, 0xb8d8fa);
       values.splice(index, 0, value);
       ctx.updateData({ values });
       return;
@@ -70,7 +70,7 @@ export class BasicStructureAnimator implements StructureAnimator {
       const index = this.askIndex('请输入要删除的下标', values.length);
       if (index === null) return;
 
-      await this.highlightByIndex(ctx, index, 0xef4444, `删除下标 ${index}，后续元素左移`);
+      await this.highlightByIndex(ctx, index, 0xf7c8dc, `删除下标 ${index}，后续元素左移`);
       values.splice(index, 1);
       ctx.updateData({ values });
       return;
@@ -81,8 +81,8 @@ export class BasicStructureAnimator implements StructureAnimator {
       const second = this.askIndex('请输入第二个下标', values.length);
       if (first === null || second === null) return;
 
-      await this.highlightByIndex(ctx, first, 0xf97316);
-      await this.highlightByIndex(ctx, second, 0xf97316, `交换 ${first} 与 ${second}`);
+      await this.highlightByIndex(ctx, first, 0xfad4b4);
+      await this.highlightByIndex(ctx, second, 0xfad4b4, `交换 ${first} 与 ${second}`);
       [values[first], values[second]] = [values[second], values[first]];
       ctx.updateData({ values });
     }
@@ -102,14 +102,14 @@ export class BasicStructureAnimator implements StructureAnimator {
 
     if (operationName === '出栈') {
       if (values.length === 0) return;
-      await this.highlightByIndex(ctx, values.length - 1, 0xef4444, `弹出栈顶元素 ${values.at(-1)}`);
+      await this.highlightByIndex(ctx, values.length - 1, 0xf7c8dc, `弹出栈顶元素 ${values.at(-1)}`);
       values.pop();
       ctx.updateData({ values });
       return;
     }
 
     if (operationName === '查看栈顶') {
-      await this.highlightByIndex(ctx, values.length - 1, 0xfacc15, `栈顶元素是 ${values.at(-1)}`);
+      await this.highlightByIndex(ctx, values.length - 1, 0xfaeaa6, `栈顶元素是 ${values.at(-1)}`);
     }
   }
 
@@ -127,14 +127,14 @@ export class BasicStructureAnimator implements StructureAnimator {
 
     if (operationName === '出队') {
       if (values.length === 0) return;
-      await this.highlightByIndex(ctx, 0, 0xef4444, `队头元素 ${values[0]} 出队`);
+      await this.highlightByIndex(ctx, 0, 0xf7c8dc, `队头元素 ${values[0]} 出队`);
       values.shift();
       ctx.updateData({ values });
       return;
     }
 
     if (operationName === '查看队头') {
-      await this.highlightByIndex(ctx, 0, 0xfacc15, `队头元素是 ${values[0]}`);
+      await this.highlightByIndex(ctx, 0, 0xfaeaa6, `队头元素是 ${values[0]}`);
     }
   }
 
@@ -146,7 +146,7 @@ export class BasicStructureAnimator implements StructureAnimator {
       if (!target) return;
 
       for (let i = 0; i < values.length; i++) {
-        await this.highlightByIndex(ctx, i, values[i] === target ? 0x22c55e : 0xfacc15, `访问节点 ${values[i]}`);
+        await this.highlightByIndex(ctx, i, values[i] === target ? 0xc5e6cf : 0xfaeaa6, `访问节点 ${values[i]}`);
         if (values[i] === target) return;
       }
       ctx.announce?.(`链表中不存在 ${target}`);
@@ -172,7 +172,7 @@ export class BasicStructureAnimator implements StructureAnimator {
         return;
       }
 
-      await this.highlightByIndex(ctx, index, 0xef4444, `删除节点 ${target} 并重连指针`);
+      await this.highlightByIndex(ctx, index, 0xf7c8dc, `删除节点 ${target} 并重连指针`);
       values.splice(index, 1);
       ctx.updateData({ values });
     }
@@ -191,7 +191,7 @@ export class BasicStructureAnimator implements StructureAnimator {
 
       ctx.announce?.(`${label}遍历：${result}`);
       for (const index of order) {
-        await this.highlightByIndex(ctx, index, 0xfacc15, `${label}访问节点 ${values[index]}`);
+        await this.highlightByIndex(ctx, index, 0xfaeaa6, `${label}访问节点 ${values[index]}`);
       }
       ctx.announce?.(`${label}遍历完成：${result}`);
       return;
@@ -207,7 +207,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     for (const index of path) {
       if (!values[index]) continue;
 
-      await this.highlightByIndex(ctx, index, values[index] === target ? 0x22c55e : 0xfacc15, `比较节点 ${values[index]}`);
+      await this.highlightByIndex(ctx, index, values[index] === target ? 0xc5e6cf : 0xfaeaa6, `比较节点 ${values[index]}`);
       if (values[index] === target && operationName === '查找') {
         ctx.announce?.(`找到节点 ${target}`);
         return;
@@ -377,7 +377,7 @@ export class BasicStructureAnimator implements StructureAnimator {
   }
 
   private restoreNodeColor(node: THREE.Group): void {
-    const originalColor = Number(node.userData?.['originalColor'] ?? 0x3b82f6);
+    const originalColor = Number(node.userData?.['originalColor'] ?? 0xb8d8fa);
     this.setNodeColor(node, originalColor);
 
     const mesh = node.children.find(child => (child as THREE.Mesh).isMesh) as THREE.Mesh | undefined;

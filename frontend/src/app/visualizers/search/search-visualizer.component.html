@@ -3,10 +3,10 @@
 
     <!-- Target -->
     <div class="flex items-center gap-3 text-sm">
-      <span class="text-slate-400">目标值:</span>
-      <span class="px-3 py-1 rounded-lg bg-yellow-600/30 text-yellow-400 font-bold font-mono text-lg">{{ s.target }}</span>
-      <span *ngIf="s.found === true"  class="text-green-400 font-medium">✓ 已找到！</span>
-      <span *ngIf="s.found === false" class="text-red-400 font-medium">✗ 未找到</span>
+      <span class="text-muted">目标值:</span>
+      <span class="px-3 py-1 rounded-lg bg-compare-soft text-compare font-bold font-mono text-lg">{{ s.target }}</span>
+      <span *ngIf="s.found === true"  class="inline-flex items-center gap-1 text-success font-medium"><app-ui-icon name="check" />已找到</span>
+      <span *ngIf="s.found === false" class="inline-flex items-center gap-1 text-danger font-medium"><app-ui-icon name="close" />未找到</span>
     </div>
 
     <!-- Array cells -->
@@ -16,37 +16,37 @@
         class="relative flex flex-col items-center gap-1">
         <!-- Pointer labels -->
         <div class="text-xs h-4 text-center">
-          <span *ngIf="i === s.mid" class="text-purple-400 font-mono">mid</span>
+          <span *ngIf="i === s.mid" class="text-swap font-mono">mid</span>
         </div>
 
-        <div class="w-12 h-12 flex items-center justify-center rounded-lg font-mono font-bold text-white transition-all duration-200"
+        <div class="w-12 h-12 flex items-center justify-center rounded-lg font-mono font-bold text-ink viz-transition"
           [ngClass]="cellColor(i)">
           {{ val }}
         </div>
 
-        <div class="text-xs h-4 text-slate-600 font-mono text-center">{{ i }}</div>
+        <div class="text-xs h-4 text-muted font-mono text-center">{{ i }}</div>
         <div class="text-xs h-3 text-center">
-          <span *ngIf="i === s.left"  class="text-yellow-500 font-mono">L</span>
-          <span *ngIf="i === s.right" class="text-yellow-500 font-mono">R</span>
+          <span *ngIf="i === s.left"  class="text-compare font-mono">L</span>
+          <span *ngIf="i === s.right" class="text-compare font-mono">R</span>
         </div>
       </div>
     </div>
 
     <!-- Description -->
-    <div class="w-full max-w-xl p-3 bg-slate-800/60 rounded-lg border border-slate-700">
-      <p class="text-sm text-slate-200 text-center">{{ s.description }}</p>
-      <div class="flex gap-4 mt-2 text-xs text-slate-500 justify-center">
-        <span>比较次数: <strong class="text-yellow-400">{{ s.comparisons }}</strong></span>
-        <span>当前范围: <strong class="text-blue-400">[{{ s.left }}, {{ s.right }}]</strong></span>
+    <div class="w-full max-w-xl p-3 bg-subtle rounded-lg border border-line">
+      <p class="text-sm text-ink text-center">{{ s.description }}</p>
+      <div class="flex flex-wrap gap-4 mt-2 text-xs text-muted justify-center">
+
+        <span>当前范围: <strong class="text-active">[{{ s.left }}, {{ s.right }}]</strong></span>
       </div>
     </div>
 
     <!-- Legend -->
-    <div class="flex gap-4 text-xs text-slate-500">
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-purple-600 inline-block"></span>mid</span>
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-blue-700/60 inline-block"></span>当前范围</span>
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-yellow-600/60 inline-block"></span>L/R 边界</span>
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-green-600 inline-block"></span>找到</span>
+    <div class="flex flex-wrap gap-4 text-xs text-muted">
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-swap inline-block"></span>mid</span>
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-neutral inline-block"></span>当前范围</span>
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-compare inline-block"></span>L/R 边界</span>
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-success inline-block"></span>找到</span>
     </div>
   </ng-container>
 </div>

@@ -1,67 +1,54 @@
-<div class="flex items-center gap-2 px-4 py-2.5 bg-slate-900 border-b border-slate-700 flex-shrink-0">
+<div class="control-bar">
 
   <!-- Run button -->
   <button
     (click)="store.compareMode() ? store.runBothAlgorithms() : store.runAlgorithm()"
+    [attr.aria-label]="store.compareMode() ? '运行对比' : '运行'"
     [disabled]="store.isLoading() || store.compareIsLoading()"
-    class="px-3 py-1.5 rounded bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-sm font-medium flex items-center gap-1.5">
-    ▶ 运行{{ store.compareMode() ? '对比' : '' }}
+    class="px-3 py-2 rounded bg-accent hover:bg-accent disabled:opacity-50 text-sm font-medium flex items-center gap-2">
+    <app-ui-icon name="play" /> 运行{{ store.compareMode() ? '对比' : '' }}
   </button>
 
-  <div class="w-px h-5 bg-slate-700 mx-1"></div>
+  <div class="w-px h-5 bg-line mx-1" aria-hidden="true"></div>
 
   <!-- Playback controls -->
+  <div class="flex items-center gap-1" role="group" aria-label="逐步播放">
   <button (click)="store.setCurrentStep(0)" [disabled]="!store.canBackward()"
-    class="p-1.5 rounded hover:bg-slate-700 disabled:opacity-40 text-slate-300 text-lg leading-none" title="回到开始">⏮</button>
+    class="icon-tooltip playback-button" data-tooltip="回到开始" aria-label="回到开始"><app-ui-icon name="first" /></button>
 
   <button (click)="store.stepBackward()" [disabled]="!store.canBackward()"
-    class="p-1.5 rounded hover:bg-slate-700 disabled:opacity-40 text-slate-300 text-lg leading-none" title="上一步">⏪</button>
+    class="icon-tooltip playback-button" data-tooltip="上一步" aria-label="上一步"><app-ui-icon name="previous" /></button>
 
-  <button (click)="store.togglePlay()" [disabled]="store.steps().length === 0"
-    class="p-1.5 rounded hover:bg-slate-700 disabled:opacity-40 text-slate-300 text-xl leading-none">
-    {{ store.isPlaying() ? '⏸' : '▶' }}
+  <button (click)="store.togglePlay()" [attr.aria-label]="store.isPlaying() ? '暂停播放' : '开始播放'" [disabled]="store.steps().length === 0"
+    class="icon-tooltip playback-button bg-subtle" [attr.data-tooltip]="store.isPlaying() ? '暂停播放' : '开始播放'">
+    <app-ui-icon [name]="store.isPlaying() ? 'pause' : 'play'" />
   </button>
 
   <button (click)="store.stepForward()" [disabled]="!store.canForward()"
-    class="p-1.5 rounded hover:bg-slate-700 disabled:opacity-40 text-slate-300 text-lg leading-none" title="下一步">⏩</button>
+    class="icon-tooltip playback-button" data-tooltip="下一步" aria-label="下一步"><app-ui-icon name="next" /></button>
 
   <button (click)="store.setCurrentStep(store.totalSteps() - 1)" [disabled]="!store.canForward()"
-    class="p-1.5 rounded hover:bg-slate-700 disabled:opacity-40 text-slate-300 text-lg leading-none" title="跳到最后">⏭</button>
-
-  <div class="w-px h-5 bg-slate-700 mx-1"></div>
-
-  <!-- Speed -->
-  <span class="text-xs text-slate-500">速度</span>
-  <div class="flex gap-1">
-    <button
-      *ngFor="let opt of speedOptions"
-      (click)="onSpeedChange(opt.value)"
-      [class]="store.speed() === opt.value
-        ? 'px-2 py-0.5 rounded text-xs bg-blue-600 text-white'
-        : 'px-2 py-0.5 rounded text-xs bg-slate-700 text-slate-300 hover:bg-slate-600'">
-      {{ opt.label }}
-    </button>
+    class="icon-tooltip playback-button" data-tooltip="跳到最后" aria-label="跳到最后"><app-ui-icon name="last" /></button>
   </div>
 
-  <div class="w-px h-5 bg-slate-700 mx-1"></div>
+  <button (click)="store.reset(); store.compareReset()" class="icon-tooltip playback-button ml-auto" aria-label="重置" data-tooltip="重置">
+    <app-ui-icon name="reset" />
+  </button>
 
   <!-- Step slider + counter -->
-  <div class="flex items-center gap-2 flex-1 min-w-0">
+  <div class="control-progress flex items-center gap-2 min-w-0">
     <input
       type="range"
       min="0"
-      [max]="store.totalSteps() - 1"
+      [max]="store.totalSteps() > 0 ? store.totalSteps() - 1 : 0"
+      aria-label="算法执行进度"
       [value]="store.currentStep()"
       (input)="onSliderChange($event)"
       [disabled]="store.steps().length === 0"
-      class="flex-1 accent-blue-500 disabled:opacity-40 cursor-pointer">
-    <span class="text-xs text-slate-400 whitespace-nowrap font-mono">
+      class="flex-1 accent-active disabled:opacity-40 cursor-pointer">
+    <span class="text-xs text-muted whitespace-nowrap font-mono">
       {{ store.steps().length > 0 ? (store.currentStep() + 1) + ' / ' + store.totalSteps() : '—' }}
     </span>
   </div>
 
-  <!-- Reset -->
-  <button (click)="store.reset()" class="px-2 py-1.5 rounded hover:bg-slate-700 text-slate-400 hover:text-white text-xs">
-    重置
-  </button>
 </div>
