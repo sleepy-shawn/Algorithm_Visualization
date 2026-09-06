@@ -53,6 +53,11 @@
 }
 
 @layer components {
+  /* Show the square crest at the left of the supplied, unchanged college wordmark. */
+  .college-emblem { display: block; flex-shrink: 0; width: 36px; height: 36px; overflow: hidden; }
+  .college-emblem-large { width: 40px; height: 40px; }
+  .college-emblem img { display: block; width: auto; height: 100%; max-width: none; }
+
   .button-primary { @apply inline-flex items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 text-sm font-medium text-accent-ink transition-colors hover:brightness-95 disabled:opacity-50; }
   .button-secondary { @apply inline-flex items-center justify-center gap-2 rounded-md border border-line bg-surface px-4 py-2 text-sm font-medium text-ink hover:bg-subtle; }
   .eyebrow { @apply text-xs font-medium tracking-widest text-accent-ink; }

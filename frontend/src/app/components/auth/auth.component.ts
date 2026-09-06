@@ -1,4 +1,3 @@
-import { UiIconComponent } from '../ui-icon/ui-icon.component';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,7 +6,7 @@ import { AuthStore } from '../../store/auth.store';
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [UiIconComponent, CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './auth.component.html',
 })
 export class AuthComponent {
