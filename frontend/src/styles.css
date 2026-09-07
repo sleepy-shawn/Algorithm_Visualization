@@ -11,10 +11,10 @@
     --ease-out: cubic-bezier(.2, .7, .2, 1);
     --page: 247 245 240;
     --surface: 255 254 251;
-    --subtle: 238 234 226;
+    --subtle: 243 242 238;
     --ink: 48 46 42;
     --muted: 112 107 99;
-    --line: 222 217 207;
+    --line: 218 219 214;
     --accent: 246 210 174;
     --accent-ink: 121 77 43;
     --on-color: 255 255 255;
@@ -25,18 +25,18 @@
     --compare: 144 96 14;
     --swap: 123 79 157;
     --pivot: 35 113 119;
-    --viz-neutral: 207 225 245;
-    --viz-active: 184 216 250;
-    --viz-compare: 250 234 166;
-    --viz-swap: 247 200 220;
-    --viz-success: 197 230 207;
-    --viz-pivot: 250 212 180;
-    --viz-danger: 247 200 220;
-    --active-soft: 234 241 248;
-    --success-soft: 232 242 236;
-    --danger-soft: 251 237 234;
-    --compare-soft: 249 241 221;
-    --swap-soft: 242 236 248;
+    --viz-neutral: 223 234 245;
+    --viz-active: 201 223 241;
+    --viz-compare: 255 240 190;
+    --viz-swap: 228 215 236;
+    --viz-success: 227 239 223;
+    --viz-pivot: 248 214 175;
+    --viz-danger: 246 213 207;
+    --active-soft: 237 244 249;
+    --success-soft: 239 246 237;
+    --danger-soft: 252 238 235;
+    --compare-soft: 253 248 228;
+    --swap-soft: 245 240 248;
   }
   * { box-sizing: border-box; }
   html, body { min-height: 100%; margin: 0; padding: 0; }
