@@ -1,19 +1,19 @@
 <app-auth *ngIf="!auth.isAuthenticated()" />
 
 <div *ngIf="auth.isAuthenticated()" class="flex h-dvh min-h-0 flex-col bg-page text-ink">
-  <header class="z-20 shrink-0 border-b border-line bg-surface px-4 py-3 md:px-6">
-    <div class="flex items-center justify-between gap-3">
-      <button class="flex min-w-0 items-center gap-3 text-left" (click)="navigate('home')" aria-label="算法可视化学习平台首页">
+  <header class="app-header z-20 shrink-0">
+    <div class="header-identity-row">
+      <button class="brand-button flex min-w-0 items-center gap-3 text-left" (click)="navigate('home')" aria-label="算法可视化学习平台首页">
         <span class="college-emblem"><img src="assets/branding/college-logo.png" width="514" height="84" alt="计算机与人工智能学院院徽"></span>
         <span class="min-w-0"><span class="block truncate text-sm font-semibold">算法可视化学习平台</span></span>
       </button>
-      <div class="flex shrink-0 items-center gap-2">
+      <div class="account-menu flex shrink-0 items-center gap-2">
         <span class="flex h-8 w-8 items-center justify-center rounded-full bg-subtle text-sm font-semibold text-accent-ink" aria-hidden="true">{{ auth.avatarInitial() }}</span>
         <span class="hidden max-w-32 truncate text-sm sm:block" [title]="auth.displayName()">{{ auth.displayName() }}</span>
         <button class="nav-button" (click)="logout()" [attr.aria-label]="'退出 ' + auth.displayName()">退出</button>
       </div>
     </div>
-    <nav class="mt-3 flex max-w-full gap-1 overflow-x-auto" aria-label="主导航">
+    <nav class="main-nav flex max-w-full gap-1 overflow-x-auto" aria-label="主导航">
       <button *ngFor="let tab of tabs" class="nav-button" [class.is-active]="store.activePanel() === tab.id" [attr.aria-current]="store.activePanel() === tab.id ? 'page' : null" (click)="tab.id === 'catalog' ? browse() : navigate(tab.id)">{{ tab.label }}</button>
     </nav>
   </header>
@@ -29,7 +29,7 @@
       <ng-container *ngIf="store.activePanel() === 'visualizer'">
 
         <div class="flex flex-wrap items-center justify-between gap-4 border-b border-line bg-surface px-6 py-6" *ngIf="selectedEntry() as entry">
-          <div><button class="mb-3 inline-flex items-center gap-2 text-sm text-accent-ink" (click)="browse()"><app-ui-icon name="arrow-left" />算法目录</button><h2 class="text-2xl font-semibold">{{ entry.label }}</h2><p class="mt-1 text-sm text-muted">{{ entry.category === 'Web3D' ? '3D 数据结构' : entry.category }}</p></div>
+          <div><button class="mb-3 inline-flex items-center gap-2 text-sm text-accent-ink" (click)="browse()"><app-ui-icon name="arrow-left" />算法目录</button><h2 class="learning-title">{{ entry.label }}</h2><p class="mt-1 text-sm text-muted">{{ entry.category === 'Web3D' ? '3D 数据结构' : entry.category }}</p></div>
           <button #navigationTrigger class="button-secondary lg:hidden" aria-haspopup="dialog" [attr.aria-expanded]="mobileNavigationOpen" aria-controls="mobile-algorithms" (click)="openNavigation()">选择算法</button>
         </div>
         <!-- Control Panel -->

@@ -23,6 +23,7 @@ async function session(page: Page, displayName = user.displayName) {
   await page.goto('/');
 }
 async function capture(page: Page, name: string) {
+  await page.evaluate(() => document.fonts.ready);
   if (!name.startsWith('tooltip')) await page.mouse.move(0, 0);
   await page.screenshot({ path: resolve(screenshotDir, `${name}.png`), fullPage: true, animations: 'disabled' });
 }
@@ -271,4 +272,31 @@ test('reduced motion keeps navigation, expansion, and rapid steps usable', async
   await expect(page.getByRole('slider', { name: '算法执行进度' })).toHaveValue('4');
   expect(await page.locator('app-sorting-visualizer .viz-transition').first().evaluate(e => getComputedStyle(e).transitionDuration)).toBe('0s');
   await noOverflow(page);
+});
+
+
+test('home exchange is reversible, keyboard accessible, and follows reduced motion', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 1000 });
+  await session(page);
+  await page.evaluate(() => document.fonts.ready);
+  expect(await page.evaluate(() => document.fonts.check('48px "WenKai Display"', '看懂算法的每一步'))).toBeTruthy();
+  const diagram = page.locator('.swap-bars');
+  await expect(diagram).toHaveAttribute('aria-label', /16、28、20、10、32/);
+  const action = page.getByRole('button', { name: '交换 28 和 20' });
+  await action.focus();
+  await page.keyboard.press('Enter');
+  await expect(diagram).toHaveAttribute('aria-label', /16、20、28、10、32/);
+  await expect(page.locator('.swap-caption [role="status"]')).toContainText('换个位置');
+  await noOverflow(page);
+  await capture(page, 'home-exchange-390');
+  await page.getByRole('button', { name: '还原交换示例' }).click();
+  await expect(diagram).toHaveAttribute('aria-label', /16、28、20、10、32/);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.getByRole('button', { name: '交换 28 和 20' }).click();
+  await expect(page.locator('.demo-bar').nth(1)).toHaveCSS('transition-duration', '0s');
+  for (let i = 0; i < 4; i++) await page.locator('.swap-action').click();
+  await expect(diagram).toHaveAttribute('aria-label', /16、20、28、10、32/);
+  await page.getByRole('navigation').getByRole('button', { name: '算法目录', exact: true }).click();
+  await page.getByRole('navigation').getByRole('button', { name: '首页', exact: true }).click();
+  await expect(diagram).toHaveAttribute('aria-label', /16、28、20、10、32/);
 });

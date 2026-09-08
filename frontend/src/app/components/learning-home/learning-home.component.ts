@@ -13,10 +13,11 @@ import { AlgorithmId } from '../../models/algorithm.models';
 export class LearningHomeComponent {
   readonly groups = ALGORITHM_GROUPS;
   readonly entryCount = ALGORITHM_GROUPS.reduce((count, group) => count + group.items.length, 0);
-  readonly exampleSteps = [
-    { label: '比较', values: [16, 28, 20, 10, 32], highlight: 'bg-viz-compare' },
-    { label: '交换', values: [16, 20, 28, 10, 32], highlight: 'bg-viz-swap' },
-  ];
+  readonly exampleValues = [16, 28, 20, 10, 32];
+  swapped = false;
+  position(index: number): number {
+    return this.swapped && (index === 1 || index === 2) ? 3 - index : index;
+  }
   readonly descriptions: Partial<Record<AlgorithmId, string>> = {
     'bubble-sort': '相邻比较，逐个交换',
     'quick-sort': '选定基准，分区排序',

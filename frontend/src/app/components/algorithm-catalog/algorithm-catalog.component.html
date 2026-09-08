@@ -1,15 +1,15 @@
-<div class="page-content">
+<div class="page-content catalog-page">
 
-  <h2 class="text-3xl font-semibold tracking-tight md:text-4xl">算法目录</h2>
+  <h2 class="page-title">算法目录</h2>
 
   <div class="mt-8 grid gap-4 sm:grid-cols-[1fr_200px]">
     <div><label for="catalog-search" class="mb-2 block text-sm font-medium">搜索算法</label><input id="catalog-search" type="search" [ngModel]="query()" (ngModelChange)="query.set($event)" placeholder="搜索名称，如：排序、BFS" class="w-full rounded-md border border-line bg-surface px-4 py-3 text-sm"></div>
     <div><label for="catalog-category" class="mb-2 block text-sm font-medium">算法分类</label><select id="catalog-category" [ngModel]="category()" (ngModelChange)="category.set($event)" class="w-full rounded-md border border-line bg-surface px-4 py-3 text-sm"><option value="">全部分类</option><option *ngFor="let group of groups" [value]="group.category">{{ group.category === 'Web3D' ? '3D 数据结构' : group.category }}</option></select></div>
   </div>
   <div class="my-6 flex items-center justify-between gap-3 text-sm text-muted"><p role="status">{{ filtered().length }} 个算法</p><button *ngIf="query() || category()" (click)="clear()" class="text-accent-ink underline underline-offset-4">清除筛选</button></div>
-  <div class="surface-card overflow-hidden">
+  <div class="catalog-list">
     <button *ngFor="let item of filtered()" (click)="learn.emit(item.id)" class="catalog-row">
-      <div class="min-w-0"><h3 class="font-semibold">{{ item.label }}</h3><p class="mt-1 text-xs text-muted">{{ item.category === 'Web3D' ? '3D 数据结构' : item.category }} <span class="mx-2" aria-hidden="true">·</span><span class="font-mono">{{ item.complexity }}</span></p></div>
+      <div class="min-w-0"><h3 class="catalog-title">{{ item.label }}</h3><p class="mt-1 text-xs text-muted">{{ item.category === 'Web3D' ? '3D 数据结构' : item.category }} <span class="mx-2" aria-hidden="true">·</span><span class="font-mono">{{ item.complexity }}</span></p></div>
       <span class="text-accent-ink"><app-ui-icon name="arrow-right" /></span>
     </button>
     <div *ngIf="filtered().length === 0" class="px-6 py-16 text-center"><h3 class="text-lg font-semibold">没有找到匹配的算法</h3><p class="mt-2 text-sm text-muted">试试其他关键词，或清除分类筛选。</p><button class="button-secondary mt-6" (click)="clear()">查看全部算法</button></div>

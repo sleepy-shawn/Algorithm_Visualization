@@ -1,45 +1,43 @@
-<div class="page-content">
-  <section class="grid items-center gap-12 border-b border-line pb-12 pt-4 md:grid-cols-[1.3fr_1fr] md:pb-12">
-    <div>
-
-      <h2 class="text-4xl font-semibold leading-tight tracking-tight md:text-5xl">看懂算法的<br>每一步</h2>
-      <p class="mt-6 max-w-md text-base leading-8 text-muted">{{ entryCount }} 个算法与数据结构演示</p>
-      <div class="mt-8 flex flex-wrap gap-3">
+<div class="page-content home-page">
+  <section class="home-hero">
+    <div class="hero-copy">
+      <p class="hero-count"><span class="math-type">{{ entryCount }}</span> 个算法与数据结构演示</p>
+      <h2 class="display-title">看懂算法的<br><span class="title-underline">每一步<svg viewBox="0 0 240 14" aria-hidden="true"><path d="M3 9 Q 94 0 237 7 M19 13 Q 135 5 217 11" /></svg></span></h2>
+      <div class="mt-8 flex flex-wrap items-center gap-4">
         <button class="button-primary" (click)="browse.emit('')">浏览算法目录 <app-ui-icon name="arrow-right" /></button>
-        <button class="button-secondary" (click)="learn.emit('bubble-sort')">从冒泡排序开始</button>
+        <button class="text-link" (click)="learn.emit('bubble-sort')">从冒泡排序开始 <app-ui-icon name="arrow-right" /></button>
       </div>
     </div>
-    <div class="surface-card p-6 md:p-8" role="img" aria-label="冒泡排序的一次交换：16、28、20、10、32，比较 28 和 20 后交换为 16、20、28、10、32。数组尚未排完。">
-      <div class="flex items-center justify-between gap-3 text-xs text-muted"><span>冒泡排序</span><span>一次相邻交换</span></div>
-      <div *ngFor="let step of exampleSteps; let index = index" class="mt-6 flex items-end gap-4 border-b border-line pb-3" aria-hidden="true">
-        <div class="shrink-0 pb-2 text-xs text-muted"><span class="mb-1 block font-mono">0{{ index + 1 }}</span>{{ step.label }}</div>
-        <div class="flex h-24 flex-1 items-end justify-center gap-2 sm:gap-3">
-          <div *ngFor="let value of step.values; let i = index" class="relative w-8 rounded-t sm:w-9" [style.height.px]="value * 2" [ngClass]="i === 1 || i === 2 ? step.highlight : 'bg-viz-neutral'">
-            <span class="absolute -top-6 left-0 w-full text-center font-mono text-xs text-ink">{{ value }}</span>
-          </div>
+    <figure class="swap-playground" aria-label="冒泡排序的一次相邻交换">
+      <figcaption class="flex items-center justify-between gap-3 text-sm text-muted"><span>冒泡排序</span><span class="math-type">28 &gt; 20</span></figcaption>
+      <div class="swap-bars" role="img" [attr.aria-label]="swapped ? '16、20、28、10、32，已交换，数组尚未排完' : '16、28、20、10、32，等待交换 28 和 20'">
+        <div *ngFor="let value of exampleValues; let i = index" class="demo-bar" [class.is-pair]="i === 1 || i === 2" [class.is-swapped]="swapped" [style.height.px]="value * 4" [style.left.%]="position(i) * 20" [style.transform]="'rotate(' + (i % 2 === 0 ? -2 : 2) + 'deg)'">
+          <span class="math-type">{{ value }}</span>
         </div>
       </div>
-      <p class="mt-6 text-sm leading-6">28 比 20 大，交换这两个数。</p>
-
-    </div>
+      <div class="swap-caption">
+        <p class="hand-note" role="status">{{ swapped ? '换个位置，就近了一步。' : '大的数，往右走一步。' }}</p>
+        <button class="swap-action" (click)="swapped = !swapped" [attr.aria-label]="swapped ? '还原交换示例' : '交换 28 和 20'">{{ swapped ? '还原' : '交换一下' }} <app-ui-icon [name]="swapped ? 'reset' : 'arrow-right'" /></button>
+      </div>
+      <p class="mt-4 text-xs text-muted">{{ swapped ? '这是一次相邻交换，数组尚未排完。' : '比较 28 和 20，试着交换它们。' }}</p>
+    </figure>
   </section>
-  <section class="py-12">
-    <h3 class="section-title mb-6">常用算法</h3>
-    <div class="grid gap-4 md:grid-cols-3">
-      <button *ngFor="let item of featured; let i = index" (click)="learn.emit(item.id)" class="surface-card featured-card p-6 text-left">
-        <span class="flex items-center justify-between text-accent-ink"><app-ui-icon [name]="item.id === 'binary-search' ? 'search' : 'sort'" /><app-ui-icon name="arrow-right" /></span>
-        <h4 class="mt-6 text-lg font-semibold">{{ item.label }}</h4>
-        <p class="mt-2 text-sm leading-6 text-muted">{{ descriptions[item.id] }}</p>
-        <p class="mt-2 font-mono text-sm text-muted">{{ item.complexity }}</p>
-
+  <section class="featured-section">
+    <h3 class="section-title">常用算法</h3>
+    <div class="featured-grid">
+      <button *ngFor="let item of featured; let i = index" (click)="learn.emit(item.id)" class="featured-card text-left">
+        <span class="feature-top"><span class="math-type feature-number">0{{ i + 1 }}</span><app-ui-icon [name]="item.id === 'binary-search' ? 'search' : 'sort'" /></span>
+        <h4 class="feature-title">{{ item.label }}</h4>
+        <p class="mt-2 text-sm text-muted">{{ descriptions[item.id] }}</p>
+        <span class="mt-6 flex items-center justify-between"><span class="math-type text-muted">{{ item.complexity }}</span><app-ui-icon name="arrow-right" /></span>
       </button>
     </div>
   </section>
-  <section class="border-t border-line pt-8">
+  <section class="category-section">
     <h3 class="section-title mb-6">按分类查看</h3>
     <div class="grid grid-cols-2 gap-x-6 sm:grid-cols-4">
-      <button *ngFor="let group of groups" class="flex items-center justify-between gap-2 border-b border-line py-4 text-left text-sm hover:text-accent-ink" (click)="browse.emit(group.category)">
-        <span class="inline-flex items-center gap-3"><app-ui-icon [name]="group.icon" />{{ group.category === 'Web3D' ? '3D 数据结构' : group.category }}</span><span class="font-mono text-xs text-muted">{{ group.items.length }}</span>
+      <button *ngFor="let group of groups" class="category-link flex items-center justify-between gap-2 border-b border-line py-4 text-left text-sm hover:text-accent-ink" (click)="browse.emit(group.category)">
+        <span class="inline-flex items-center gap-3"><app-ui-icon [name]="group.icon" />{{ group.category === 'Web3D' ? '3D 数据结构' : group.category }}</span><span class="math-type text-xs text-muted">{{ group.items.length }}</span>
       </button>
     </div>
   </section>
