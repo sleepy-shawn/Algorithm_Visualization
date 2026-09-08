@@ -2,15 +2,26 @@ import { Component, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlgorithmStore } from '../../store/algorithm.store';
 import { NQueensStep } from '../../models/algorithm.models';
+import { CodePanelComponent } from '../../components/code-panel/code-panel.component';
 
 @Component({
   selector: 'app-n-queens-visualizer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CodePanelComponent],
   templateUrl: './n-queens-visualizer.component.html',
 })
 export class NQueensVisualizerComponent {
   @Input() source: 'primary' | 'compare' = 'primary';
+
+  /** 与 BacktrackingService.nQueens() 的 codeLine 1-6 对应。 */
+  readonly pseudoCode = [
+    '初始化空棋盘，从第 0 行开始',
+    'if row == n: 记录一个解',
+    '依次尝试当前行的每一列',
+    '若安全，在该位置放置皇后并递归下一行',
+    '撤销皇后，继续尝试下一列',
+    '输出全部解，算法完成',
+  ];
 
   step = computed(() => {
     const data = this.source === 'primary'

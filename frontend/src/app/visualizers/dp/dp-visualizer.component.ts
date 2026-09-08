@@ -2,15 +2,26 @@ import { Component, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlgorithmStore } from '../../store/algorithm.store';
 import { DPStep } from '../../models/algorithm.models';
+import { CodePanelComponent } from '../../components/code-panel/code-panel.component';
 
 @Component({
   selector: 'app-dp-visualizer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CodePanelComponent],
   templateUrl: './dp-visualizer.component.html',
 })
 export class DpVisualizerComponent {
   @Input() source: 'primary' | 'compare' = 'primary';
+
+  /** 与 DPService.generateSteps() 的 codeLine 1-6 对应。 */
+  readonly pseudoCode = [
+    '初始化 dp[0..n][0..capacity] = 0',
+    '遍历每一个物品 i 和容量 w',
+    'if weight[i] > w: dp[i][w] = dp[i - 1][w]',
+    '比较“取”与“不取”两种价值',
+    'dp[i][w] = max(不取, 取)',
+    '从 dp[n][capacity] 回溯选中的物品',
+  ];
 
   step = computed(() => {
     const data = this.source === 'primary'

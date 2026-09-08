@@ -2,15 +2,26 @@ import { Component, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlgorithmStore } from '../../store/algorithm.store';
 import { SearchStep } from '../../models/algorithm.models';
+import { CodePanelComponent } from '../../components/code-panel/code-panel.component';
 
 @Component({
   selector: 'app-search-visualizer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CodePanelComponent],
   templateUrl: './search-visualizer.component.html',
 })
 export class SearchVisualizerComponent {
   @Input() source: 'primary' | 'compare' = 'primary';
+
+  /** 与 SearchService.binarySearch() 的 codeLine 1-6 对应。 */
+  readonly pseudoCode = [
+    'left = 0; right = array.length - 1',
+    'mid = (left + right) / 2',
+    'if array[mid] == target: return mid',
+    'if array[mid] < target: left = mid + 1',
+    'else: right = mid - 1',
+    'return -1',
+  ];
 
   step = computed(() => {
     const data = this.source === 'primary'

@@ -1,0 +1,12 @@
+<section class="p-3 bg-slate-900 rounded-lg border border-slate-700 overflow-x-auto">
+  <div class="text-xs font-semibold text-slate-300 mb-2">{{ title }}</div>
+  <div
+    *ngFor="let line of lines; let i = index; trackBy: trackByIndex"
+    class="grid grid-cols-[2rem_1fr] gap-2 rounded px-2 py-1 font-mono text-xs leading-5 transition-colors duration-150"
+    [class.bg-blue-600]="currentLine === i + 1"
+    [class.text-white]="currentLine === i + 1"
+    [class.text-slate-400]="currentLine !== i + 1">
+    <span class="select-none text-right" [class.text-blue-200]="currentLine === i + 1" [class.text-slate-600]="currentLine !== i + 1">{{ i + 1 }}</span>
+    <code class="whitespace-pre">{{ line }}</code>
+  </div>
+</section>

@@ -2,11 +2,12 @@ import { Component, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlgorithmStore } from '../../store/algorithm.store';
 import { SortStep } from '../../models/algorithm.models';
+import { CodePanelComponent } from '../../components/code-panel/code-panel.component';
 
 @Component({
   selector: 'app-sorting-visualizer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CodePanelComponent],
   templateUrl: './sorting-visualizer.component.html',
 })
 export class SortingVisualizerComponent {

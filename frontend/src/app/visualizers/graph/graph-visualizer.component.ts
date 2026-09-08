@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AlgorithmStore } from '../../store/algorithm.store';
 import { GraphStep, GraphNode, GraphEdge } from '../../models/algorithm.models';
+import { CodePanelComponent } from '../../components/code-panel/code-panel.component';
 
 interface RenderEdge extends GraphEdge {
   x1: number; y1: number; x2: number; y2: number;
@@ -13,11 +14,20 @@ interface RenderNode extends GraphNode { state: string; }
 @Component({
   selector: 'app-graph-visualizer',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CodePanelComponent],
   templateUrl: './graph-visualizer.component.html',
 })
 export class GraphVisualizerComponent {
   @Input() source: 'primary' | 'compare' = 'primary';
+
+  /** 与 GraphService.dijkstra() 的 codeLine 1-5 对应。 */
+  readonly dijkstraPseudoCode = [
+    '初始化：dist[start] = 0，其余节点距离为 ∞',
+    '选择距离最小的未访问节点 u',
+    '遍历 u 的每一条相邻边 (u, v)',
+    '若经过 u 更短：更新 dist[v] 与前驱节点',
+    '从终点沿前驱节点回溯最短路径',
+  ];
   newNodeId = '';
   newEdgeFrom = '';
   newEdgeTo = '';
@@ -38,6 +48,12 @@ export class GraphVisualizerComponent {
       : this.store.compareCurrentStepData();
     return data as GraphStep | null;
   });
+
+  algorithmId = computed(() =>
+    this.source === 'primary' ? this.store.selectedAlgo() : this.store.compareAlgo()
+  );
+
+  isDijkstra = computed(() => this.algorithmId() === 'dijkstra');
 
   nodes = computed<RenderNode[]>(() => {
     const s = this.step();
