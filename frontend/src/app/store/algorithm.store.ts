@@ -303,6 +303,7 @@ export class AlgorithmStore {
   constructor(private svc: AlgorithmService) {}
 
   setAlgorithm(id: AlgorithmId): void {
+    this.stopPlay();
     this.selectedAlgo.set(id);
     this.category.set(ALGORITHM_CATEGORY[id] ?? 'sorting');
     this.steps.set([]);
@@ -376,10 +377,12 @@ export class AlgorithmStore {
   }
 
   stepForward(): void {
+    this.stopPlay();
     if (this.canForward()) this.currentStep.update(step => step + 1);
   }
 
   stepBackward(): void {
+    this.stopPlay();
     if (this.canBackward()) this.currentStep.update(step => step - 1);
   }
 
@@ -404,7 +407,9 @@ export class AlgorithmStore {
     this.isPlaying.set(true);
     this.playTimer = setInterval(() => {
       if (this.canForward()) {
-        this.stepForward();
+        // Do not call stepForward here: that method intentionally pauses for
+        // a user-initiated single-step action.
+        this.currentStep.update(step => step + 1);
       } else {
         this.stopPlay();
       }
