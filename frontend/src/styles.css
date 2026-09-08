@@ -182,9 +182,10 @@ button:active:not(:disabled) { filter: brightness(.96); }
 .featured-card:hover { background: rgb(var(--viz-neutral) / .75); box-shadow: none; }
 .featured-card:nth-child(2):hover { background: rgb(var(--viz-pivot) / .65); }
 .featured-card:nth-child(3):hover { background: rgb(var(--viz-success)); }
-.feature-top { display: flex; align-items: center; justify-content: space-between; color: rgb(var(--accent-ink)); }
+.feature-top { display: flex; align-items: flex-start; justify-content: space-between; color: rgb(var(--accent-ink)); }
+.algorithm-illustration { display: block; width: 128px; height: 112px; object-fit: contain; flex-shrink: 0; pointer-events: none; }
 .feature-number { font-size: 28px; font-style: italic; }
-.feature-title { font-size: 28px; margin-top: 24px; }
+.feature-title { font-size: 28px; margin-top: 12px; }
 .category-section { padding-top: 24px; border-top: 1px solid rgb(var(--line)); }
 .category-link app-ui-icon { color: rgb(var(--accent-ink)); }
 .page-title { font-size: clamp(40px, 4vw, 56px); line-height: 1.3; }

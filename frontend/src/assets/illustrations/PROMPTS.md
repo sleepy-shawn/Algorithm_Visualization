@@ -1,0 +1,16 @@
+# 算法卡片插画
+
+2026-09-08，使用内置 image_gen 生成的三张原创卡通插画。完整 PNG 保留透明通道；用于首页装饰，不替代教学图形和可访问的文字名称。运行时不连接外部图片服务。
+
+## [quick-sort.png](quick-sort.png)
+
+Use case: illustration-story. Asset type: one small cartoon spot illustration for an elegant Chinese algorithm-learning website card. Create an original charming flat editorial cartoon, gentle hand-drawn charcoal outlines, rounded slightly imperfect silhouettes, sparse details, refined not babyish. Palette ONLY soft apricot #F8D6AF, powder blue #DFEAF5, butter yellow #FFF0BE, pale lavender #E4D7EC, sage #E3EFDF and charcoal #302E2A. Truly transparent background with alpha, no white panel, no checkerboard, no drop shadow. Centered compact composition occupying 80% of a square canvas, legible at 100px. No letters, numbers, text, watermark, branding, border or scene background. Subject: quick sort as a thoughtful apricot rounded rectangular block character acting as a pivot in the center, with two simple arms gently arranging two smaller powder-blue blocks to its left and two taller sage blocks to its right. Tiny dot eyes and a quiet playful smile. Clear sorting metaphor, 5 blocks total, no extra accessories.
+
+## [bubble-sort.png](bubble-sort.png)
+
+Use case: illustration-story. Asset type: one small cartoon spot illustration for an elegant Chinese algorithm-learning website card. Create an original charming flat editorial cartoon, gentle hand-drawn charcoal outlines, rounded slightly imperfect silhouettes, sparse details, refined not babyish. Palette ONLY soft apricot #F8D6AF, powder blue #DFEAF5, butter yellow #FFF0BE, pale lavender #E4D7EC, sage #E3EFDF and charcoal #302E2A. Truly transparent background with alpha, no white panel, no checkerboard, no drop shadow. Centered compact composition occupying 80% of a square canvas, legible at 100px. No letters, numbers, text, watermark, branding, border or scene background. Subject: bubble sort as two friendly rounded bar characters, one tall butter-yellow bar and one short lavender bar, swapping places with a single curved apricot swoosh above them. Small dot eyes and cheerful understated expressions, little relaxed arms. Add one small stationary powder-blue bar to ground the sorting metaphor. Three blocks only, spacious silhouette.
+
+## [binary-search.png](binary-search.png)
+
+Use case: illustration-story. Asset type: one small cartoon spot illustration for an elegant Chinese algorithm-learning website card. Create an original charming flat editorial cartoon, gentle hand-drawn charcoal outlines, rounded slightly imperfect silhouettes, sparse details, refined not babyish. Palette ONLY soft apricot #F8D6AF, powder blue #DFEAF5, butter yellow #FFF0BE, pale lavender #E4D7EC, sage #E3EFDF and charcoal #302E2A. Truly transparent background with alpha, no white panel, no checkerboard, no drop shadow. Centered compact composition occupying 80% of a square canvas, legible at 100px. No letters, numbers, text, watermark, branding, border or scene background. Subject: binary search as a friendly apricot magnifying glass character peering at the middle lavender block in a neat row of five rounded powder-blue blocks. Tiny dot eyes on the glass rim, subtle smile, the middle block slightly enlarged inside the clear lens. Simple clean silhouette and an inquisitive personality.
+

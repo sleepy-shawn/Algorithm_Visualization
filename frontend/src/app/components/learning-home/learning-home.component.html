@@ -26,7 +26,7 @@
     <h3 class="section-title">常用算法</h3>
     <div class="featured-grid">
       <button *ngFor="let item of featured; let i = index" (click)="learn.emit(item.id)" class="featured-card text-left">
-        <span class="feature-top"><span class="math-type feature-number">0{{ i + 1 }}</span><app-ui-icon [name]="item.id === 'binary-search' ? 'search' : 'sort'" /></span>
+        <span class="feature-top"><span class="math-type feature-number">0{{ i + 1 }}</span><img class="algorithm-illustration" [src]="'assets/illustrations/' + item.id + '.png'" width="128" height="112" alt="" loading="lazy" decoding="async"></span>
         <h4 class="feature-title">{{ item.label }}</h4>
         <p class="mt-2 text-sm text-muted">{{ descriptions[item.id] }}</p>
         <span class="mt-6 flex items-center justify-between"><span class="math-type text-muted">{{ item.complexity }}</span><app-ui-icon name="arrow-right" /></span>

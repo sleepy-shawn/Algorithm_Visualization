@@ -66,7 +66,11 @@ for (const width of [390, 768, 1440]) {
     await page.setViewportSize({ width, height: 1000 });
     await session(page);
     await noOverflow(page);
+    await page.locator('.algorithm-illustration').evaluateAll(images => Promise.all(images.map(image => (image as HTMLImageElement).decode())));
     await capture(page, `home-${width}`);
+    await page.locator('.featured-section').scrollIntoViewIfNeeded();
+    await noOverflow(page);
+    await capture(page, `home-cartoons-${width}`);
     await page.getByRole('button', { name: '浏览算法目录' }).click();
     await page.getByLabel('搜索算法').fill('BFS');
     await expect(page.locator('.catalog-row')).toHaveCount(1);
