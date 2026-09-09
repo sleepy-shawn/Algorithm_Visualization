@@ -157,6 +157,9 @@ algorithm-viz-platform/
 | `/api/algorithms/verify-step` | POST | 步骤验证 |
 | `/api/algorithms/history` | GET | 运行历史 |
 | `/api/algorithms/health` | GET | 健康检查 |
+| `/api/algorithms/trace` | POST | 统一算法执行轨迹、状态快照与错误解释 |
+| `/api/algorithms/compare` | POST | 同输入下的算法指标与复杂度对比 |
+| `/api/algorithms/trace/supported` | GET | 获取轨迹接口支持的算法列表 |
 
 ### 认证
 
@@ -264,6 +267,7 @@ curl -X POST http://localhost:8080/api/algorithms/sort \
 - [部署文档](docs/部署文档.md) — Docker + AWS ECS 部署指南
 - [学习引导系统](docs/learning-guidance-system.md) — Phase 教学 + 对比模式 + 评估测试
 - [AI 助手设计](docs/ai助手.md) — AI 复杂度分析功能说明
+- [算法执行轨迹与对比 API](docs/algorithm-trace-api.md) — 统一步骤协议、错误格式与最小调用示例
 - [综合项目文档](docs/comprehensive-project-documentation.md) — 完整技术文档
 
 ---
