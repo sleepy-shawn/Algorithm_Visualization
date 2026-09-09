@@ -32,7 +32,7 @@ async function noOverflow(page: Page) {
   expect(await page.locator('main').last().evaluate(element => element.scrollWidth <= element.clientWidth)).toBeTruthy();
 }
 async function learn(page: Page, name: string) {
-  await page.getByRole('navigation').getByRole('button', { name: '算法目录', exact: true }).click();
+  await page.getByRole('navigation').getByRole('button', { name: '目录', exact: true }).click();
   await page.getByLabel('搜索算法').fill(name);
   await page.locator('.catalog-row').first().click();
   await expect(page.getByRole('heading', { name, exact: true })).toBeVisible();
@@ -82,15 +82,12 @@ for (const width of [390, 768, 1440]) {
     await capture(page, `catalog-${width}`);
     await page.getByLabel('搜索算法').fill('冒泡排序');
     await page.locator('.catalog-row').click();
-    if (width < 1024) {
-      await page.getByRole('button', { name: '选择算法', exact: true }).click();
-      await expect(page.getByRole('dialog', { name: '选择算法' })).toBeVisible();
-      await expect(page.getByRole('button', { name: '关闭算法导航' })).toBeFocused();
-      await page.keyboard.press('Shift+Tab');
-      await expect(page.getByRole('dialog', { name: '选择算法' }).getByRole('button').last()).toBeFocused();
-      await page.keyboard.press('Escape');
-      await expect(page.getByRole('button', { name: '选择算法', exact: true })).toBeFocused();
-    }
+    await page.getByRole('button', { name: '排序', exact: true }).click();
+    await expect(page.locator('.algorithm-dropdown')).toBeVisible();
+    await page.keyboard.press('Tab');
+    await expect(page.locator('.algorithm-dropdown button').first()).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('button', { name: '排序', exact: true })).toBeFocused();
     await page.getByLabel('排序数组', { exact: true }).fill('5,3,1,4,2');
     await page.getByRole('button', { name: '确认', exact: true }).click();
     await page.getByRole('button', { name: '运行', exact: true }).click();
@@ -114,6 +111,7 @@ test('real quick sort, binary search, comparison, and request failure', async ({
   await learn(page, '快速排序');
   await page.getByRole('button', { name: '运行', exact: true }).click();
   await expect(page.locator('app-sorting-visualizer')).toBeVisible();
+  await page.getByRole('button', { name: '对比', exact: true }).click();
   await page.getByRole('button', { name: '对比模式', exact: false }).click();
   await page.getByRole('group', { name: '对比算法', exact: true }).getByRole('button', { name: '冒泡排序', exact: true }).click();
   await page.getByRole('button', { name: '运行对比', exact: true }).click();
@@ -145,7 +143,7 @@ test('real quick sort, binary search, comparison, and request failure', async ({
 test('account fallback and simplified navigation', async ({ page }) => {
   await session(page, '');
   await expect(page.getByTitle(username, { exact: true })).toBeVisible();
-  await expect(page.getByRole('navigation').getByRole('button')).toHaveText(['首页', '算法目录', '可视化学习']);
+  await expect(page.getByRole('navigation').getByRole('button')).toHaveText(['首页', '目录', '学习']);
   await expect(page.locator('app-ai-complexity-dialog, app-competition, app-assessment-container, app-history-panel')).toHaveCount(0);
   await learn(page, '冒泡排序');
   await expect(page.locator('app-control-panel')).not.toContainText('速度');
@@ -221,13 +219,14 @@ test('details are optional, follow the current step, and reset on algorithm chan
   await page.getByRole('button', { name: '跳到最后' }).click();
   await expect(page.locator('app-sorting-visualizer')).not.toContainText('比较:');
   await capture(page, 'details-1440');
+  await page.getByRole('button', { name: '搜索', exact: true }).click();
   await page.locator('app-sidebar').getByRole('button', { name: '二分查找', exact: true }).click();
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   await expect(details).not.toBeVisible();
   await toggle.click();
   await expect(details).toContainText('O(log n)');
   await page.getByRole('navigation').getByRole('button', { name: '首页', exact: true }).click();
-  await page.getByRole('navigation').getByRole('button', { name: '可视化学习', exact: true }).click();
+  await page.getByRole('navigation').getByRole('button', { name: '学习', exact: true }).click();
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
 });
 
@@ -265,10 +264,10 @@ test('reduced motion keeps navigation, expansion, and rapid steps usable', async
   await expect(page.getByText('空间复杂度', { exact: true })).toBeVisible();
   await toggle.click();
   await expect(page.locator('#algorithm-details-content')).not.toBeVisible();
-  await page.getByRole('button', { name: '选择算法', exact: true }).click();
-  expect(await page.locator('.drawer-panel').evaluate(e => getComputedStyle(e).animationName)).toBe('none');
+  await page.getByRole('button', { name: '排序', exact: true }).click();
+  expect(await page.locator('.algorithm-dropdown').evaluate(e => getComputedStyle(e).animationName)).toBe('none');
   await page.keyboard.press('Escape');
-  await expect(page.getByRole('button', { name: '选择算法', exact: true })).toBeFocused();
+  await expect(page.getByRole('button', { name: '排序', exact: true })).toBeFocused();
   await page.getByRole('button', { name: '运行', exact: true }).click();
   const next = page.getByRole('button', { name: '下一步', exact: true });
   await expect(next).toBeEnabled();
@@ -300,7 +299,7 @@ test('home exchange is reversible, keyboard accessible, and follows reduced moti
   await expect(page.locator('.demo-bar').nth(1)).toHaveCSS('transition-duration', '0s');
   for (let i = 0; i < 4; i++) await page.locator('.swap-action').click();
   await expect(diagram).toHaveAttribute('aria-label', /16、20、28、10、32/);
-  await page.getByRole('navigation').getByRole('button', { name: '算法目录', exact: true }).click();
+  await page.getByRole('navigation').getByRole('button', { name: '目录', exact: true }).click();
   await page.getByRole('navigation').getByRole('button', { name: '首页', exact: true }).click();
   await expect(diagram).toHaveAttribute('aria-label', /16、28、20、10、32/);
 });

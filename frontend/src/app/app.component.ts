@@ -1,7 +1,7 @@
 import { DisplayPreferencesComponent } from './components/display-preferences/display-preferences.component';
 import { TranslatePipe } from './i18n/translate.pipe';
 import { UiIconComponent } from './components/ui-icon/ui-icon.component';
-import { Component, computed, effect, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, computed, effect, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LearningHomeComponent } from './components/learning-home/learning-home.component';
 import { AlgorithmCatalogComponent } from './components/algorithm-catalog/algorithm-catalog.component';
@@ -50,19 +50,12 @@ import { Vr3dVisualizerComponent } from './visualizers/vr-3d/vr-3d-visualizer.co
 export class AppComponent {
   readonly tabs: { id: ActivePanel; label: string }[] = [
     { id: 'home', label: '首页' },
-    { id: 'catalog', label: '算法目录' },
-    { id: 'visualizer', label: '可视化学习' },
+    { id: 'catalog', label: '目录' },
+    { id: 'visualizer', label: '学习' },
   ];
   readonly compareEntryLabel = computed(() => ALGORITHM_GROUPS.flatMap(group => group.items).find(item => item.id === this.store.compareAlgo())?.label ?? this.store.compareAlgo());
   detailsOpen = false;
   catalogCategory = '';
-  mobileNavigationOpen = false;
-  @ViewChild('navigationTrigger') navigationTrigger?: ElementRef<HTMLButtonElement>;
-  mobileNavigation?: ElementRef<HTMLElement>;
-  @ViewChild('mobileNavigation') set navigationElement(element: ElementRef<HTMLElement> | undefined) {
-    this.mobileNavigation = element;
-    if (element) queueMicrotask(() => element.nativeElement.querySelector<HTMLButtonElement>('button')?.focus());
-  }
   @ViewChild('mainContent') mainContent?: ElementRef<HTMLElement>;
   readonly selectedEntry = computed(() => {
     for (const group of ALGORITHM_GROUPS) {
@@ -74,7 +67,6 @@ export class AppComponent {
 
   navigate(panel: ActivePanel): void {
     this.store.setActivePanel(panel);
-    this.closeNavigation(false);
     queueMicrotask(() => { this.mainContent?.nativeElement.scrollTo(0, 0); this.mainContent?.nativeElement.focus(); });
   }
 
@@ -86,30 +78,6 @@ export class AppComponent {
   learn(id: AlgorithmId): void {
     this.store.setAlgorithm(id);
     this.navigate('visualizer');
-  }
-
-  openNavigation(): void {
-    this.mobileNavigationOpen = true;
-  }
-
-  closeNavigation(restoreFocus = true): void {
-    this.mobileNavigationOpen = false;
-    if (restoreFocus) this.navigationTrigger?.nativeElement.focus();
-  }
-
-  @HostListener('window:resize') onResize(): void {
-    if (window.innerWidth >= 1024) this.closeNavigation(false);
-  }
-
-  @HostListener('document:keydown', ['$event']) onKeydown(event: KeyboardEvent): void {
-    if (!this.mobileNavigationOpen) return;
-    if (event.key === 'Escape') { event.preventDefault(); this.closeNavigation(); }
-    if (event.key !== 'Tab') return;
-    const items = this.mobileNavigation?.nativeElement.querySelectorAll<HTMLElement>('button:not([disabled]), [href], input, select, [tabindex="0"]');
-    if (!items?.length) return;
-    const first = items[0], last = items[items.length - 1];
-    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   }
 
   constructor(
@@ -127,7 +95,6 @@ export class AppComponent {
 
   logout(): void {
     this.store.setActivePanel('home');
-    this.closeNavigation(false);
     this.auth.logout();
   }
 

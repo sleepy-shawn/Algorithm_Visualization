@@ -21,16 +21,15 @@
     <span>{{ (store.error()) | t }}</span><button (click)="store.error.set(null)" class="shrink-0 underline">{{ '关闭' | t }}</button>
   </div>
   <div class="flex min-h-0 flex-1">
-    <app-sidebar *ngIf="store.activePanel() === 'visualizer'" class="hidden shrink-0 lg:block" />
     <main #mainContent tabindex="-1" class="workspace min-w-0 flex-1 overflow-y-auto" [attr.aria-label]="'学习内容' | t">
       <app-learning-home *ngIf="store.activePanel() === 'home'" (browse)="browse($event)" (learn)="learn($event)" />
       <app-algorithm-catalog *ngIf="store.activePanel() === 'catalog'" [initialCategory]="catalogCategory" (learn)="learn($event)" />
       <!-- Visualizer -->
       <ng-container *ngIf="store.activePanel() === 'visualizer'">
 
-        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-line bg-surface px-6 py-6" *ngIf="selectedEntry() as entry">
-          <div><button class="mb-3 inline-flex items-center gap-2 text-sm text-accent-ink" (click)="browse()"><app-ui-icon name="arrow-left" />{{ '算法目录' | t }}</button><h2 class="learning-title">{{ (entry.label) | t }}</h2><p class="mt-1 text-sm text-muted">{{ (entry.category === 'Web3D' ? '3D 数据结构' : entry.category) | t }}</p></div>
-          <button #navigationTrigger class="button-secondary lg:hidden" aria-haspopup="dialog" [attr.aria-expanded]="mobileNavigationOpen" aria-controls="mobile-algorithms" (click)="openNavigation()">{{ '选择算法' | t }}</button>
+        <app-sidebar />
+        <div class="learning-heading" *ngIf="selectedEntry() as entry">
+          <h2 class="learning-title">{{ entry.label | t }}</h2>
         </div>
         <!-- Control Panel -->
         <app-control-panel />
@@ -124,11 +123,5 @@
         </div>
       </ng-container>
     </main>
-  </div>
-  <div *ngIf="mobileNavigationOpen" class="drawer-backdrop fixed inset-0 z-50 bg-ink/30 lg:hidden" (click)="closeNavigation()">
-    <section #mobileNavigation id="mobile-algorithms" role="dialog" aria-modal="true" [attr.aria-label]="'选择算法' | t" class="drawer-panel flex h-full w-72 max-w-[85vw] flex-col bg-surface shadow-xl" (click)="$event.stopPropagation()">
-      <div class="flex items-center justify-between border-b border-line px-4 py-3"><h2 class="font-semibold">{{ '选择算法' | t }}</h2><button class="playback-button icon-tooltip" [attr.data-tooltip]="'关闭算法导航' | t" (click)="closeNavigation()" [attr.aria-label]="'关闭算法导航' | t"><app-ui-icon name="close" /></button></div>
-      <app-sidebar class="min-h-0 flex-1" (selected)="closeNavigation()" />
-    </section>
   </div>
 </div>

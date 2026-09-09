@@ -1,5 +1,14 @@
 // English presentation strings. Stable IDs and user input remain unchanged.
 export const ENGLISH: Record<string, string> = {
+  "目录": "Explore",
+  "学习": "Learn",
+  "排序": "Sort",
+  "搜索": "Search",
+  "贪心": "Greedy",
+  "图": "Graphs",
+  "回溯": "Backtrack",
+  "分治": "Divide",
+  "对比": "Compare",
   "看懂算法的": "Understand algorithms",
   "每一步": "step by step",
   "个算法与数据结构演示": "algorithm & data structure demos",
@@ -95,7 +104,6 @@ export const ENGLISH: Record<string, string> = {
   "运行": "Run",
   "运行对比": "Run comparison",
   "运行{0}": "Run {0}",
-  "对比": "comparison",
   "对比模式": "Compare mode",
   "对比算法": "Compare algorithm",
   "当前分类暂无可对比算法": "No comparable algorithm in this category",

@@ -76,7 +76,7 @@ test('English stages cover every visualization type', async ({page}) => {
   await page.getByRole('button',{name:'Switch to dark theme'}).click();
   for (const name of ['Quick sort','Merge sort','Heap sort','Insertion sort','Binary search','Breadth-first search (BFS)','Depth-first search (DFS)','Dijkstra shortest path','Prim minimum spanning tree','Kruskal minimum spanning tree','A* search','0/1 knapsack','N-queens','Karatsuba multiplication','3D data structures']) {
     await page.setViewportSize({width:1440,height:1000});
-    await page.getByRole('navigation').getByRole('button',{name:'Algorithms',exact:true}).click();
+    await page.getByRole('navigation').getByRole('button',{name:'Explore',exact:true}).click();
     await page.getByLabel('Search algorithms',{exact:true}).fill(name);
     await page.locator('.catalog-row').click();
     await page.getByRole('button',{name:'Run',exact:true}).click();
@@ -123,9 +123,10 @@ test('English native 3D prompts and comparison retain their operation IDs', asyn
   });
   await page.getByRole('button',{name:'Access',exact:true}).click(); await dialogHandled;
   await expect(page.locator('app-vr-3d-visualizer')).toContainText('Access index 0; time complexity O(1).');
-  await page.getByRole('navigation').getByRole('button',{name:'Algorithms',exact:true}).click();
+  await page.getByRole('navigation').getByRole('button',{name:'Explore',exact:true}).click();
   await page.getByLabel('Search algorithms',{exact:true}).fill('Quick sort');
   await page.locator('.catalog-row').click();
+  await page.getByRole('button',{name:'Compare',exact:true}).click();
   await page.getByRole('button',{name:'Compare mode',exact:true}).click();
   await page.getByRole('group',{name:'Compare algorithm',exact:true}).getByRole('button',{name:'Bubble sort',exact:true}).click();
   await page.getByRole('button',{name:'Run comparison',exact:true}).click();

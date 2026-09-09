@@ -1,51 +1,35 @@
-<aside class="w-full lg:w-56 h-full bg-surface border-r border-line flex flex-col overflow-hidden">
-  <div class="px-3 py-3 text-xs font-semibold text-muted uppercase tracking-wider border-b border-line flex-shrink-0">
-    {{ '学习内容' | t }}
-  </div>
-
-  <div class="flex-1 overflow-y-auto py-2 min-h-0">
-    <div *ngFor="let group of groups" class="mb-1">
-      <div class="px-3 py-2 text-xs font-semibold text-muted flex items-center gap-2">
-        <app-ui-icon [name]="group.icon" />
-        <span>{{ (group.category === 'Web3D' ? '3D 数据结构' : group.category) | t }}</span>
+<div class="algorithm-navigation" role="group" [attr.aria-label]="'算法分类' | t">
+  <div class="algorithm-navigation-row">
+    <div *ngFor="let group of groups; let index = index" class="algorithm-navigation-item">
+      <button class="category-trigger" [class.is-active]="activeGroup() === group.category"
+        [attr.aria-expanded]="openGroup === group.category" [attr.aria-controls]="'algorithm-group-' + index"
+        (click)="toggle(group.category, $event)">
+        {{ shortNames[group.category] | t }}
+        <app-ui-icon name="chevron-down" [class.rotate-180]="openGroup === group.category" />
+      </button>
+      <div *ngIf="openGroup === group.category" class="algorithm-dropdown" [id]="'algorithm-group-' + index"
+        role="group" [attr.aria-label]="shortNames[group.category] | t">
+        <button *ngFor="let item of group.items" class="algorithm-option" (click)="select(item.id)"
+          [attr.aria-current]="store.selectedAlgo() === item.id ? 'true' : null">
+          {{ item.label | t }}<app-ui-icon name="arrow-right" />
+        </button>
       </div>
-
-      <button
-        *ngFor="let item of group.items"
-        (click)="select(item.id)"
-        [attr.aria-current]="store.selectedAlgo() === item.id ? 'true' : null"
-        [class]="store.selectedAlgo() === item.id
-          ? 'block w-full pl-4 pr-2 py-2 text-left text-sm bg-active-soft text-active border-l-2 border-active'
-          : 'block w-full pl-4 pr-2 py-2 text-left text-sm text-muted hover:text-ink hover:bg-subtle border-l-2 border-transparent'">
-        <div class="font-medium leading-none truncate">{{ (item.label) | t }}</div>
-
-      </button>
     </div>
-  </div>
-
-  <div class="border-t border-line px-3 py-2 flex-shrink-0">
-    <button
-      (click)="store.toggleCompareMode()"
-      [class]="store.compareMode()
-        ? 'w-full px-3 py-2 rounded text-xs font-medium bg-swap-soft text-swap border border-swap flex items-center gap-2 justify-center'
-        : 'w-full px-3 py-2 rounded text-xs font-medium text-muted hover:text-ink hover:bg-subtle border border-line flex items-center gap-2 justify-center'">
-      <span>{{ '对比模式' | t }}</span>
-      <span *ngIf="store.compareMode()" class="text-swap">{{ '已开启' | t }}</span>
-    </button>
-
-    <div *ngIf="store.compareMode()" class="mt-2" role="group" [attr.aria-label]="'对比算法' | t">
-      <div class="text-xs text-muted uppercase tracking-wider mb-2 px-1">{{ '对比算法' | t }}</div>
-      <button
-        *ngFor="let item of compareSiblings()"
-        (click)="selectCompare(item.id)"
-        [class]="store.compareAlgo() === item.id
-          ? 'w-full text-left px-3 py-2 text-xs rounded bg-swap-soft text-swap border-l-2 border-swap'
-          : 'w-full text-left px-3 py-2 text-xs rounded text-muted hover:text-ink hover:bg-subtle border-l-2 border-transparent'">
-        {{ (item.label) | t }}
+    <div class="algorithm-navigation-item compare-navigation">
+      <button class="category-trigger" [class.is-active]="store.compareMode()"
+        [attr.aria-expanded]="openGroup === 'compare'" aria-controls="compare-options" (click)="toggle('compare', $event)">
+        {{ '对比' | t }}<app-ui-icon name="chevron-down" [class.rotate-180]="openGroup === 'compare'" />
       </button>
-      <div *ngIf="compareSiblings().length === 0" class="text-xs text-muted px-1">
-        {{ '当前分类暂无可对比算法' | t }}
+      <div *ngIf="openGroup === 'compare'" class="algorithm-dropdown" id="compare-options" role="group" [attr.aria-label]="'对比算法' | t">
+        <button class="algorithm-option compare-toggle" [attr.aria-pressed]="store.compareMode()" (click)="store.toggleCompareMode()">
+          {{ '对比模式' | t }}<span class="toggle-track" [class.is-on]="store.compareMode()" aria-hidden="true"><span></span></span>
+        </button>
+        <ng-container *ngIf="store.compareMode()">
+          <button *ngFor="let item of compareSiblings()" class="algorithm-option" (click)="selectCompare(item.id)"
+            [attr.aria-pressed]="store.compareAlgo() === item.id">{{ item.label | t }}</button>
+          <p *ngIf="compareSiblings().length === 0" class="px-4 py-3 text-sm text-muted">{{ '当前分类暂无可对比算法' | t }}</p>
+        </ng-container>
       </div>
     </div>
   </div>
-</aside>
+</div>
