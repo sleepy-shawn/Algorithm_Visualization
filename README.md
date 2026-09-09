@@ -104,6 +104,7 @@ docs/    设计说明、交付记录与界面截图
 - [学习引导设计](docs/learning-guidance-system.md)：教学阶段与对比思路，含历史功能设计。
 - [版本差异](docs/base-differences.md) · [外部项目对比](docs/algorithm-visualizer-comparison.md)：项目范围与实现说明。
 - [插画素材与生成提示词](frontend/src/assets/illustrations/GARDEN-PROMPTS.md) · [字体来源与许可](frontend/src/assets/fonts/README.md)。
+- [算法执行轨迹与对比 API](docs/algorithm-trace-api.md)：后端保留接口的统一步骤协议与错误格式（前端暂未接入）。
 
 ---
 
