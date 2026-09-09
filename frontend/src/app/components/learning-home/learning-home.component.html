@@ -1,5 +1,6 @@
 <div class="page-content home-page">
-  <section class="home-hero">
+  <section class="home-hero illustrated-hero">
+    <img class="hero-art" src="assets/illustrations/algorithm-garden.png" width="1536" height="1024" alt="" fetchpriority="high">
     <div class="hero-copy">
       <p class="hero-count"><span class="math-type">{{ entryCount }}</span> {{ '个算法与数据结构演示' | t }}</p>
       <h2 class="display-title">{{ '看懂算法的' | t }}<br><span class="title-underline">{{ '每一步' | t }}<svg viewBox="0 0 240 14" aria-hidden="true"><path d="M3 9 Q 94 0 237 7 M19 13 Q 135 5 217 11" /></svg></span></h2>
@@ -8,6 +9,9 @@
         <button class="text-link" (click)="learn.emit('bubble-sort')">{{ '从冒泡排序开始' | t }} <app-ui-icon name="arrow-right" /></button>
       </div>
     </div>
+  </section>
+  <section class="home-lab">
+    <img class="explorer-art" src="assets/illustrations/algorithm-explorer.png" width="1024" height="1536" alt="" loading="lazy" decoding="async">
     <figure class="swap-playground" [attr.aria-label]="'冒泡排序的一次相邻交换' | t">
       <figcaption class="flex items-center justify-between gap-3 text-sm text-muted"><span>{{ '冒泡排序' | t }}</span><span class="math-type">28 &gt; 20</span></figcaption>
       <div class="swap-bars" role="img" [attr.aria-label]="(swapped ? '16、20、28、10、32，已交换，数组尚未排完' : '16、28、20、10、32，等待交换 28 和 20') | t">
@@ -37,7 +41,7 @@
     <h3 class="section-title mb-6">{{ '按分类查看' | t }}</h3>
     <div class="grid grid-cols-2 gap-x-6 sm:grid-cols-4">
       <button *ngFor="let group of groups" class="category-link flex items-center justify-between gap-2 border-b border-line py-4 text-left text-sm hover:text-accent-ink" (click)="browse.emit(group.category)">
-        <span class="inline-flex items-center gap-3"><app-ui-icon [name]="group.icon" />{{ (group.category === 'Web3D' ? '3D 数据结构' : group.category) | t }}</span><span class="math-type text-xs text-muted">{{ group.items.length }}</span>
+        <span class="inline-flex items-center gap-3"><span class="category-art" [attr.data-art]="group.icon"><app-ui-icon [name]="group.icon" /></span>{{ (group.category === 'Web3D' ? '3D 数据结构' : group.category) | t }}</span><span class="math-type text-xs text-muted">{{ group.items.length }}</span>
       </button>
     </div>
   </section>

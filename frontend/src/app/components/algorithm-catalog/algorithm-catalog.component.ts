@@ -15,7 +15,7 @@ import { AlgorithmId } from '../../models/algorithm.models';
 })
 export class AlgorithmCatalogComponent {
   readonly groups = ALGORITHM_GROUPS;
-  readonly entries = ALGORITHM_GROUPS.flatMap(group => group.items.map(item => ({ ...item, category: group.category })));
+  readonly entries = ALGORITHM_GROUPS.flatMap(group => group.items.map(item => ({ ...item, category: group.category, icon: group.icon })));
   readonly query = signal('');
   readonly category = signal('');
   @Input() set initialCategory(value: string) { this.category.set(value); }

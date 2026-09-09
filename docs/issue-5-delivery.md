@@ -149,3 +149,13 @@ npm run test:e2e
 | 390px | [展开菜单](screenshots/issue-5/top-navigation/menu-light-zh-390.png) | [展开菜单](screenshots/issue-5/top-navigation/menu-dark-en-390.png) |
 | 768px | [展开菜单](screenshots/issue-5/top-navigation/menu-light-zh-768.png) | [展开菜单](screenshots/issue-5/top-navigation/menu-dark-en-768.png) |
 | 1440px | [展开菜单](screenshots/issue-5/top-navigation/menu-light-zh-1440.png) | [展开菜单](screenshots/issue-5/top-navigation/menu-dark-en-1440.png) |
+
+## 2026-09-09 原创主题图与图标资源
+
+- 新增“云中算法花园”主题图：首页首屏与登录页采用同一幅粉彩天空、排序阶梯、树节点与迷宫插画；文字仍由页面渲染，支持中英文。
+- 新增透明背景机器人插画，用于首页交换示例与目录标题旁。原有三张算法卡片插画保留。
+- 首页分类与目录列表使用八类粉彩图标标记，复用本地 SVG 图标组件；播放按钮和学院标识保持原有语义。
+- 装饰图片使用空替代文本，主题图优先加载，下方插画延迟加载；图片不设置持续动画。深色模式下主题画面保留日光色调，页面其余区域使用深色主题。
+- 使用内置 image_gen 生成并保存原始 PNG：[主题图](../frontend/src/assets/illustrations/algorithm-garden.png)、[机器人](../frontend/src/assets/illustrations/algorithm-explorer.png)。[完整生成提示词](../frontend/src/assets/illustrations/GARDEN-PROMPTS.md)。两张素材共约 3 MB，均随应用本地托管。
+
+验证：生产构建、14 项单元测试、23 项浏览器测试通过。人工检查中文浅色首页、目录，以及英文深色首页和登录页；随后修正手机端机器人与数字间距、深色登录数字对比度，重新通过相关 7 项浏览器测试及生产构建。覆盖 390/768/1440px，现有页面截图已更新。
