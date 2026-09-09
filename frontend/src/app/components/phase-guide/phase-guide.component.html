@@ -1,6 +1,6 @@
 <div *ngIf="store.currentPhase() && phases().length > 0" class="phase-strip flex items-center gap-3 border-b border-line px-4 py-3 text-sm">
-  <span class="font-mono text-xs text-muted">{{ currentIdx() + 1 }} / {{ phases().length }}</span>
-  <span class="font-medium text-accent-ink">{{ store.phaseLabel() }}</span>
+  <span class="font-mono text-xs text-muted">{{ currentIdx() + 1 }} / {{ (phases().length) | t }}</span>
+  <span class="font-medium text-accent-ink">{{ (store.phaseLabel()) | t }}</span>
   <div class="ml-auto flex gap-1.5" aria-hidden="true">
     <span *ngFor="let p of phases(); let i = index" class="phase-dot" [class.is-complete]="i < currentIdx()" [class.is-current]="i === currentIdx()"></span>
   </div>

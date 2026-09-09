@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-export type UiIconName = 'input' | 'shuffle' | 'play' | 'pause' | 'first' | 'previous' | 'next' | 'last' | 'reset' | 'arrow-right' | 'arrow-left' | 'chevron-down' | 'close' | 'check' | 'sort' | 'search' | 'target' | 'graph' | 'grid' | 'backtrack' | 'branch' | 'cube';
+export type UiIconName = 'sun' | 'moon' | 'input' | 'shuffle' | 'play' | 'pause' | 'first' | 'previous' | 'next' | 'last' | 'reset' | 'arrow-right' | 'arrow-left' | 'chevron-down' | 'close' | 'check' | 'sort' | 'search' | 'target' | 'graph' | 'grid' | 'backtrack' | 'branch' | 'cube';
 
 @Component({
   selector: 'app-ui-icon',
@@ -11,6 +11,8 @@ export type UiIconName = 'input' | 'shuffle' | 'play' | 'pause' | 'first' | 'pre
 export class UiIconComponent {
   @Input() name: UiIconName = 'input';
   readonly paths: Record<UiIconName, string> = {
+    sun: 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8 M12 2v2 M12 20v2 M2 12h2 M20 12h2 M5 5l1.5 1.5 M17.5 17.5 19 19 M5 19l1.5-1.5 M17.5 6.5 19 5',
+    moon: 'M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z',
     'arrow-right': 'M4 12h16 M14 6l6 6-6 6',
     'arrow-left': 'M20 12H4 M10 6l-6 6 6 6',
     'chevron-down': 'M6 9l6 6 6-6',

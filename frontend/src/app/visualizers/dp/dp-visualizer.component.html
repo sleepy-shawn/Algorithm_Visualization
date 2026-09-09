@@ -27,33 +27,33 @@
       </table>
     </div>
 
-    <div class="mb-4 flex flex-wrap gap-4 text-xs text-muted" aria-label="背包表格图例">
-      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-active" aria-hidden="true"></span>正在计算</span>
-      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-success" aria-hidden="true"></span>选取物品</span>
-      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-compare" aria-hidden="true"></span>跳过物品</span>
-      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-swap" aria-hidden="true"></span>回溯路径</span>
+    <div class="mb-4 flex flex-wrap gap-4 text-xs text-muted" [attr.aria-label]="'背包表格图例' | t">
+      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-active" aria-hidden="true"></span>{{ '正在计算' | t }}</span>
+      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-success" aria-hidden="true"></span>{{ '选取物品' | t }}</span>
+      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-compare" aria-hidden="true"></span>{{ '跳过物品' | t }}</span>
+      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-swap" aria-hidden="true"></span>{{ '回溯路径' | t }}</span>
     </div>
 
     <!-- Info -->
     <div class="flex gap-3 mb-3">
       <div class="bg-subtle rounded-lg p-2 border border-line text-xs">
-        <div class="text-muted mb-1">当前决策</div>
-        <span *ngIf="s.decision === 'take'" class="inline-flex items-center gap-1 text-success font-medium"><app-ui-icon name="check" />选取物品 {{ s.currentItem }}</span>
-        <span *ngIf="s.decision === 'skip'" class="text-compare font-medium">↷ 跳过物品 {{ s.currentItem }}</span>
-        <span *ngIf="s.decision === 'compare'" class="text-compare font-medium">⚖ 比较中...</span>
-        <span *ngIf="s.decision === 'init'" class="text-active font-medium">初始化</span>
-        <span *ngIf="s.decision === null" class="text-muted">完成</span>
+        <div class="text-muted mb-1">{{ '当前决策' | t }}</div>
+        <span *ngIf="s.decision === 'take'" class="inline-flex items-center gap-1 text-success font-medium"><app-ui-icon name="check" />{{ '选取物品 {0}' | t:[(s.currentItem)] }}</span>
+        <span *ngIf="s.decision === 'skip'" class="text-compare font-medium">{{ '↷ 跳过物品 {0}' | t:[(s.currentItem)] }}</span>
+        <span *ngIf="s.decision === 'compare'" class="text-compare font-medium">{{ '⚖ 比较中...' | t }}</span>
+        <span *ngIf="s.decision === 'init'" class="text-active font-medium">{{ '初始化' | t }}</span>
+        <span *ngIf="s.decision === null" class="text-muted">{{ '完成' | t }}</span>
       </div>
       <div class="bg-subtle rounded-lg p-2 border border-line text-xs">
-        <div class="text-muted mb-1">最大价值</div>
+        <div class="text-muted mb-1">{{ '最大价值' | t }}</div>
         <div class="text-success font-bold text-lg">{{ s.totalValue }}</div>
       </div>
       <div *ngIf="s.selectedItems.length > 0" class="bg-subtle rounded-lg p-2 border border-line text-xs flex-1">
-        <div class="text-muted mb-1">已选物品</div>
+        <div class="text-muted mb-1">{{ '已选物品' | t }}</div>
         <div class="flex gap-1 flex-wrap">
           <span *ngFor="let idx of s.selectedItems"
             class="px-2 py-1 bg-success-soft text-success rounded">
-            物品{{ idx + 1 }}
+            {{ '物品{0}' | t:[(idx + 1)] }}
           </span>
         </div>
       </div>
@@ -62,30 +62,30 @@
     <!-- Recurrence relation panel -->
     <div class="mb-3 p-3 bg-surface rounded-lg border border-active text-xs">
       <div class="flex items-center gap-2 mb-2">
-        <span class="text-active font-semibold">转移方程</span>
-        <span class="text-muted">（0/1 背包）</span>
+        <span class="text-active font-semibold">{{ '转移方程' | t }}</span>
+        <span class="text-muted">{{ '（0/1 背包）' | t }}</span>
       </div>
       <!-- Generic formula -->
       <div class="font-mono text-ink mb-2 text-center leading-relaxed bg-subtle rounded px-3 py-2">
-        dp[i][w] = dp[i-1][w]，当 w &lt; wᵢ<br>
-        dp[i][w] = max(dp[i-1][w],&nbsp; dp[i-1][w-wᵢ] + vᵢ)，当 w ≥ wᵢ
+        {{ 'dp[i][w] = dp[i-1][w]，当 w < wᵢ' | t }}<br>
+        {{ 'dp[i][w] = max(dp[i-1][w],  dp[i-1][w-wᵢ] + vᵢ)，当 w ≥ wᵢ' | t }}
       </div>
       <!-- Current step instantiation -->
       <div class="font-mono text-compare text-center mt-1 leading-snug min-h-[1.2em]">
-        {{ recurrenceText() }}
+        {{ (recurrenceText()) | t }}
       </div>
       <!-- Current item info -->
       <div *ngIf="currentItemInfo() as item" class="flex flex-wrap gap-4 mt-2 justify-center text-xs text-muted">
-        <span>物品: <strong class="text-ink">{{ item.name }}</strong></span>
-        <span>重量 wᵢ = <strong class="text-active">{{ item.weight }}</strong></span>
-        <span>价值 vᵢ = <strong class="text-success">{{ item.value }}</strong></span>
-        <span>背包容量 W = <strong class="text-swap">{{ store.knapsackCap() }}</strong></span>
+        <span>{{ '物品:' | t }} <strong class="text-ink">{{  item.name  }}</strong></span>
+        <span>{{ '重量 wᵢ =' | t }} <strong class="text-active">{{ item.weight }}</strong></span>
+        <span>{{ '价值 vᵢ =' | t }} <strong class="text-success">{{ item.value }}</strong></span>
+        <span>{{ '背包容量 W =' | t }} <strong class="text-swap">{{ store.knapsackCap() }}</strong></span>
       </div>
     </div>
 
     <!-- Description -->
     <div class="p-3 bg-subtle rounded-lg border border-line flex-shrink-0">
-      <p class="text-sm text-ink">{{ s.description }}</p>
+      <p class="text-sm text-ink">{{ (s.description) | t }}</p>
 
     </div>
   </ng-container>

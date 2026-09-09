@@ -1,3 +1,4 @@
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import { Component, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +14,7 @@ interface RenderNode extends GraphNode { state: string; }
 @Component({
   selector: 'app-graph-visualizer',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [TranslatePipe, CommonModule, FormsModule],
   templateUrl: './graph-visualizer.component.html',
 })
 export class GraphVisualizerComponent {
@@ -76,8 +77,8 @@ export class GraphVisualizerComponent {
   }
 
   edgeColor(state: string): string {
-    const map: Record<string, string> = { exploring: 'rgb(var(--viz-compare))', tree: 'rgb(var(--viz-active))', path: 'rgb(var(--viz-success))', mst: 'rgb(var(--viz-success))' };
-    return map[state] ?? 'rgb(var(--viz-neutral))';
+    const map: Record<string, string> = { exploring: 'rgb(var(--compare))', tree: 'rgb(var(--active))', path: 'rgb(var(--success))', mst: 'rgb(var(--success))' };
+    return map[state] ?? 'rgb(var(--muted))';
   }
 
   edgeWidth(state: string): number {

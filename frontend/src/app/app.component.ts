@@ -1,3 +1,5 @@
+import { DisplayPreferencesComponent } from './components/display-preferences/display-preferences.component';
+import { TranslatePipe } from './i18n/translate.pipe';
 import { UiIconComponent } from './components/ui-icon/ui-icon.component';
 import { Component, computed, effect, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -24,7 +26,7 @@ import { Vr3dVisualizerComponent } from './visualizers/vr-3d/vr-3d-visualizer.co
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
+  imports: [TranslatePipe, DisplayPreferencesComponent,
     UiIconComponent,
     CommonModule,
     LearningHomeComponent,

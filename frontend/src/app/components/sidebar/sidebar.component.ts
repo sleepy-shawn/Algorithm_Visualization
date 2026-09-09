@@ -1,3 +1,4 @@
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import { UiIconComponent } from '../ui-icon/ui-icon.component';
 import { Component, computed, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -8,7 +9,7 @@ import { ALGORITHM_GROUPS } from '../../data/algorithm-catalog';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [UiIconComponent, CommonModule],
+  imports: [TranslatePipe, UiIconComponent, CommonModule],
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {

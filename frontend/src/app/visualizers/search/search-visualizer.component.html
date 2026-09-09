@@ -3,10 +3,10 @@
 
     <!-- Target -->
     <div class="flex items-center gap-3 text-sm">
-      <span class="text-muted">目标值:</span>
+      <span class="text-muted">{{ '目标值:' | t }}</span>
       <span class="px-3 py-1 rounded-lg bg-compare-soft text-compare font-bold font-mono text-lg">{{ s.target }}</span>
-      <span *ngIf="s.found === true"  class="inline-flex items-center gap-1 text-success font-medium"><app-ui-icon name="check" />已找到</span>
-      <span *ngIf="s.found === false" class="inline-flex items-center gap-1 text-danger font-medium"><app-ui-icon name="close" />未找到</span>
+      <span *ngIf="s.found === true"  class="inline-flex items-center gap-1 text-success font-medium"><app-ui-icon name="check" />{{ '已找到' | t }}</span>
+      <span *ngIf="s.found === false" class="inline-flex items-center gap-1 text-danger font-medium"><app-ui-icon name="close" />{{ '未找到' | t }}</span>
     </div>
 
     <!-- Array cells -->
@@ -34,19 +34,19 @@
 
     <!-- Description -->
     <div class="w-full max-w-xl p-3 bg-subtle rounded-lg border border-line">
-      <p class="text-sm text-ink text-center">{{ s.description }}</p>
+      <p class="text-sm text-ink text-center">{{ (s.description) | t }}</p>
       <div class="flex flex-wrap gap-4 mt-2 text-xs text-muted justify-center">
 
-        <span>当前范围: <strong class="text-active">[{{ s.left }}, {{ s.right }}]</strong></span>
+        <span>{{ '当前范围:' | t }} <strong class="text-active">[{{ s.left }}, {{ s.right }}]</strong></span>
       </div>
     </div>
 
     <!-- Legend -->
     <div class="flex flex-wrap gap-4 text-xs text-muted">
       <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-swap inline-block"></span>mid</span>
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-neutral inline-block"></span>当前范围</span>
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-compare inline-block"></span>L/R 边界</span>
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-success inline-block"></span>找到</span>
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-neutral inline-block"></span>{{ '当前范围' | t }}</span>
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-compare inline-block"></span>{{ 'L/R 边界' | t }}</span>
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-success inline-block"></span>{{ '找到' | t }}</span>
     </div>
   </ng-container>
 </div>

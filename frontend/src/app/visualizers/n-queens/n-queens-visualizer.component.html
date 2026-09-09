@@ -12,7 +12,7 @@
               class="w-12 h-12 shrink-0 flex items-center justify-center text-2xl viz-transition relative"
               [ngClass]="cellClass(r, c)">
               <span *ngIf="hasQueen(r, c)">♛</span>
-              <span *ngIf="isConflict(r, c) && !hasQueen(r, c)" class="text-danger text-sm" aria-label="冲突"><app-ui-icon name="close" /></span>
+              <span *ngIf="isConflict(r, c) && !hasQueen(r, c)" class="text-danger text-sm" [attr.aria-label]="'冲突' | t"><app-ui-icon name="close" /></span>
             </div>
           </div>
         </div>
@@ -21,7 +21,7 @@
       <!-- Stats -->
       <div class="w-full lg:w-44 shrink-0 flex flex-col gap-2 text-xs">
         <div class="bg-subtle rounded-lg p-3 border border-line">
-          <div class="text-muted mb-1">当前行</div>
+          <div class="text-muted mb-1">{{ '当前行' | t }}</div>
           <div class="text-ink font-bold text-lg">{{ s.currentRow }}</div>
         </div>
 
@@ -29,24 +29,24 @@
 
         <!-- Recent solutions -->
         <div *ngIf="s.solutions.length > 0" class="bg-subtle rounded-lg p-2 border border-line overflow-y-auto flex-1">
-          <div class="text-muted mb-1">已找到的解</div>
+          <div class="text-muted mb-1">{{ '已找到的解' | t }}</div>
           <div *ngFor="let sol of s.solutions; let si = index; trackBy: trackByNum"
             class="text-muted font-mono text-xs mb-1">
-            #{{ si + 1 }}: [{{ sol.join(',') }}]
+            #{{ si + 1 }}: [{{  sol.join(',')  }}]
           </div>
         </div>
       </div>
     </div>
 
-    <div class="mt-3 flex flex-wrap gap-4 text-xs text-muted" aria-label="棋盘图例">
-      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-success" aria-hidden="true"></span>放置皇后</span>
-      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-danger" aria-hidden="true"></span>位置冲突</span>
-      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-pivot" aria-hidden="true"></span>回溯移除</span>
+    <div class="mt-3 flex flex-wrap gap-4 text-xs text-muted" [attr.aria-label]="'棋盘图例' | t">
+      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-success" aria-hidden="true"></span>{{ '放置皇后' | t }}</span>
+      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-danger" aria-hidden="true"></span>{{ '位置冲突' | t }}</span>
+      <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-viz-pivot" aria-hidden="true"></span>{{ '回溯移除' | t }}</span>
     </div>
 
     <!-- Description -->
     <div class="flex-shrink-0 mt-2 p-3 bg-subtle rounded-lg border border-line">
-      <p class="text-sm text-ink">{{ s.description }}</p>
+      <p class="text-sm text-ink">{{ (s.description) | t }}</p>
     </div>
   </ng-container>
 </div>

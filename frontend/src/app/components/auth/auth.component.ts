@@ -1,3 +1,5 @@
+import { DisplayPreferencesComponent } from '../display-preferences/display-preferences.component';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import { UiIconComponent } from '../ui-icon/ui-icon.component';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -7,7 +9,7 @@ import { AuthStore } from '../../store/auth.store';
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [CommonModule, FormsModule, UiIconComponent],
+  imports: [TranslatePipe, DisplayPreferencesComponent, CommonModule, FormsModule, UiIconComponent],
   templateUrl: './auth.component.html',
 })
 export class AuthComponent {

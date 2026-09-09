@@ -225,3 +225,63 @@ button:active:not(:disabled) { filter: brightness(.96); }
   .feature-title { margin-top: 12px; }
   .hero-count { margin-bottom: 16px; }
 }
+
+/* Themes share the same semantic tokens, including chart fills and legends. */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --page: 30 30 28;
+  --surface: 38 39 36;
+  --subtle: 47 48 44;
+  --ink: 243 239 229;
+  --muted: 188 184 172;
+  --line: 72 73 66;
+  --accent: 225 176 131;
+  --accent-ink: 240 196 152;
+  --active: 156 199 235;
+  --success: 157 211 173;
+  --danger: 245 160 151;
+  --compare: 235 207 134;
+  --swap: 211 181 231;
+  --pivot: 143 205 206;
+  --viz-neutral: 53 75 94;
+  --viz-active: 63 93 116;
+  --viz-compare: 108 88 45;
+  --viz-swap: 89 67 104;
+  --viz-success: 55 86 64;
+  --viz-pivot: 111 78 47;
+  --viz-danger: 112 62 57;
+  --active-soft: 40 57 70;
+  --success-soft: 40 59 46;
+  --danger-soft: 69 43 40;
+  --compare-soft: 66 58 36;
+  --swap-soft: 59 45 69;
+}
+[data-theme='dark'] button.bg-accent, [data-theme='dark'] .button-primary { color: #382719; }
+[data-theme='dark'] .college-emblem { background: #fffefb; border-radius: 50%; }
+[data-theme='dark'] .icon-tooltip::after { background: #f3efe5; color: #262724; }
+[data-theme='dark'] .auth-equation { color: rgb(var(--ink)); }
+.navigation-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
+.navigation-row .main-nav { min-width: 0; }
+.display-preferences { display: inline-flex; align-items: center; gap: 4px; }
+.preference-button { display: inline-flex; align-items: center; justify-content: center; min-width: 36px; min-height: 36px; padding: 6px; color: rgb(var(--muted)); border-radius: 8px; }
+.preference-button:hover { background: rgb(var(--subtle)); color: rgb(var(--ink)); }
+.language-button { font: 12px/1.4 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+.auth-preferences { display: flex; justify-content: flex-end; position: absolute; top: 16px; right: 24px; z-index: 2; }
+.auth-layout { padding-top: 72px; }
+html[lang='en'] { --font-display: Georgia, 'Times New Roman', serif; }
+html[lang='en'] .display-title { font-size: clamp(38px, 4vw, 64px); letter-spacing: -.04em; overflow-wrap: break-word; }
+html[lang='en'] .feature-title, html[lang='en'] .catalog-title { font-size: 24px; }
+html[lang='en'] .category-link { overflow-wrap: anywhere; }
+html[lang='en'] .hand-note { font-size: 18px; }
+html[lang='en'] .input-config input.w-10 { min-width: 44px; }
+html[lang='en'] .control-progress { min-width: 120px; }
+@media (min-width: 1024px) {
+  .app-header { grid-template-columns: minmax(0, 1fr) auto auto; }
+  .navigation-row { grid-column: 2; grid-row: 1; gap: 16px; }
+  .navigation-row .main-nav { display: flex; }
+}
+@media (max-width: 767px) {
+  .main-nav .nav-button { padding-left: 8px; padding-right: 8px; font-size: 12px; }
+  html[lang='en'] .input-config > .flex { flex-wrap: wrap; }
+  html[lang='en'] .section-title { font-size: 26px; }
+}

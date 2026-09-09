@@ -4,15 +4,15 @@
 
 
         <span class="text-xs text-active">
-            {{ currentInfo.title }}
+            {{ (currentInfo.title) | t }}
         </span>
 
         <span class="text-xs text-muted">
-            {{ operationStatus }}
+            {{ (operationStatus) | t }}
         </span>
 
         <span class="ml-auto text-xs text-muted">
-          鼠标拖拽旋转，滚轮缩放，右键平移
+          {{ '鼠标拖拽旋转，滚轮缩放，右键平移' | t }}
         </span>
     </div>
 
@@ -32,15 +32,15 @@
                     <button
                             (click)="resetView()"
                             class="random-input-button text-xs">
-                        <app-ui-icon name="reset" /> 重置视角
+                        <app-ui-icon name="reset" /> {{ '重置视角' | t }}
                     </button>
                 </div>
             </section>
 
             <section class="p-4">
-              <h3 class="mb-3 text-sm font-medium">操作</h3>
+              <h3 class="mb-3 text-sm font-medium">{{ '操作' | t }}</h3>
               <div class="grid grid-cols-2 gap-2">
-                <button *ngFor="let op of currentInfo.operations" (click)="performOperation(op.name)" class="button-secondary text-xs"><app-ui-icon name="play" />{{ op.name }}</button>
+                <button *ngFor="let op of currentInfo.operations" (click)="performOperation(op.name)" class="button-secondary text-xs"><app-ui-icon name="play" />{{ op.name | t }}</button>
               </div>
             </section>
         </aside>

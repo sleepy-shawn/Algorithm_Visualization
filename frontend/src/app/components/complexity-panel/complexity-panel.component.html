@@ -1,22 +1,22 @@
 <div *ngIf="algoInfo() as info" class="px-4 pb-4 text-sm">
   <dl class="flex flex-wrap gap-x-6 gap-y-3">
-    <div *ngIf="store.compareMode()"><dt class="text-xs text-muted">总步数</dt><dd class="mt-1 font-mono text-ink">{{ source === 'primary' ? store.totalSteps() : store.compareTotalSteps() }}</dd></div>
-    <div><dt class="text-xs text-muted">时间复杂度</dt><dd class="mt-1 font-mono text-ink">{{ info.time }}</dd></div>
-    <div *ngIf="info.worstTime !== info.time"><dt class="text-xs text-muted">最差时间</dt><dd class="mt-1 font-mono text-ink">{{ info.worstTime }}</dd></div>
-    <div><dt class="text-xs text-muted">空间复杂度</dt><dd class="mt-1 font-mono text-ink">{{ info.space }}</dd></div>
+    <div *ngIf="store.compareMode()"><dt class="text-xs text-muted">{{ '总步数' | t }}</dt><dd class="mt-1 font-mono text-ink">{{ source === 'primary' ? store.totalSteps() : store.compareTotalSteps() }}</dd></div>
+    <div><dt class="text-xs text-muted">{{ '时间复杂度' | t }}</dt><dd class="mt-1 font-mono text-ink">{{ info.time }}</dd></div>
+    <div *ngIf="info.worstTime !== info.time"><dt class="text-xs text-muted">{{ '最差时间' | t }}</dt><dd class="mt-1 font-mono text-ink">{{ info.worstTime }}</dd></div>
+    <div><dt class="text-xs text-muted">{{ '空间复杂度' | t }}</dt><dd class="mt-1 font-mono text-ink">{{ info.space }}</dd></div>
   </dl>
   <ng-container *ngIf="metrics() as m">
     <dl class="mt-4 flex flex-wrap gap-x-6 gap-y-3 border-t border-line pt-4">
-      <div *ngFor="let item of m.items"><dt class="text-xs text-muted">{{ item.label }}</dt><dd class="mt-1 font-mono" [ngClass]="metricTextColor(item.color)">{{ item.value }}</dd></div>
+      <div *ngFor="let item of m.items"><dt class="text-xs text-muted">{{ (item.label) | t }}</dt><dd class="mt-1 font-mono" [ngClass]="metricTextColor(item.color)">{{ item.value }}</dd></div>
     </dl>
   </ng-container>
 </div>
 
 <div *ngIf="structureInfo() as info" class="px-4 pb-4 text-sm">
-  <p class="mb-4 text-muted">{{ info.definition }}</p>
+  <p class="mb-4 text-muted">{{ (info.definition) | t }}</p>
   <dl class="grid gap-4 sm:grid-cols-2">
-    <div *ngFor="let op of info.operations"><dt class="font-medium">{{ op.name }} <span class="ml-2 font-mono text-muted">{{ op.complexity }}</span></dt><dd class="mt-1 text-xs text-muted">{{ op.description }}</dd></div>
+    <div *ngFor="let op of info.operations"><dt class="font-medium">{{ op.name | t }} <span class="ml-2 font-mono text-muted">{{ op.complexity }}</span></dt><dd class="mt-1 text-xs text-muted">{{ (op.description) | t }}</dd></div>
   </dl>
-  <ul class="mt-4 list-inside list-disc text-muted"><li *ngFor="let feature of info.features">{{ feature }}</li></ul>
-  <p class="mt-4 text-xs text-muted">应用：{{ info.useCases.join('、') }}</p>
+  <ul class="mt-4 list-inside list-disc text-muted"><li *ngFor="let feature of info.features">{{ (feature) | t }}</li></ul>
+  <p class="mt-4 text-xs text-muted">{{ '应用：{0}' | t:[( info.useCases.join('、') )] }}</p>
 </div>

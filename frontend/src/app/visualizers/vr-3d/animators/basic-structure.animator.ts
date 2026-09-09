@@ -4,6 +4,10 @@ import { AnimationContext, StructureAnimator } from './structure-animator.interf
 type TraversalMode = 'preorder' | 'inorder' | 'postorder' | 'levelorder';
 
 export class BasicStructureAnimator implements StructureAnimator {
+  constructor(private readonly translate: (value: string) => string = value => value) {}
+  private ask(message: string, initial = ''): string | null { return window.prompt(this.translate(message), initial); }
+  private notify(message: string): void { window.alert(this.translate(message)); }
+
   private readonly delayMs = 520;
 
   async performOperation(operationName: string, ctx: AnimationContext): Promise<void> {
@@ -39,7 +43,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     }
 
     if (operationName === '查找') {
-      const target = prompt('请输入要查找的值', values[0] ?? '10')?.trim();
+      const target = this.ask('请输入要查找的值', values[0] ?? '10')?.trim();
       if (!target) return;
 
       ctx.announce?.(`顺序查找 ${target}`);
@@ -55,7 +59,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     }
 
     if (operationName === '插入') {
-      const value = prompt('请输入要插入的值', '25')?.trim();
+      const value = this.ask('请输入要插入的值', '25')?.trim();
       const index = this.askIndex('请输入插入下标', values.length + 1, values.length);
       if (!value || index === null) return;
 
@@ -92,7 +96,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     const values = [...ctx.data.values];
 
     if (operationName === '入栈') {
-      const value = prompt('请输入入栈元素', '60')?.trim();
+      const value = this.ask('请输入入栈元素', '60')?.trim();
       if (!value) return;
       ctx.announce?.(`${value} 压入栈顶`);
       values.push(value);
@@ -117,7 +121,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     const values = [...ctx.data.values];
 
     if (operationName === '入队') {
-      const value = prompt('请输入入队元素', '60')?.trim();
+      const value = this.ask('请输入入队元素', '60')?.trim();
       if (!value) return;
       ctx.announce?.(`${value} 从队尾入队`);
       values.push(value);
@@ -142,7 +146,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     const values = [...ctx.data.values];
 
     if (operationName === '查找') {
-      const target = prompt('请输入要查找的值', values[0] ?? 'A')?.trim();
+      const target = this.ask('请输入要查找的值', values[0] ?? 'A')?.trim();
       if (!target) return;
 
       for (let i = 0; i < values.length; i++) {
@@ -154,7 +158,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     }
 
     if (operationName === '头插') {
-      const value = prompt('请输入新头节点的值', 'X')?.trim();
+      const value = this.ask('请输入新头节点的值', 'X')?.trim();
       if (!value) return;
       ctx.announce?.(`新节点 ${value} 指向原头节点`);
       values.unshift(value);
@@ -163,7 +167,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     }
 
     if (operationName === '删除') {
-      const target = prompt('请输入要删除的值', values[0] ?? 'A')?.trim();
+      const target = this.ask('请输入要删除的值', values[0] ?? 'A')?.trim();
       if (!target) return;
 
       const index = values.indexOf(target);
@@ -197,7 +201,7 @@ export class BasicStructureAnimator implements StructureAnimator {
       return;
     }
 
-    const target = prompt(
+    const target = this.ask(
       `请输入要${operationName}的值`,
       operationName === '插入' ? '9' : values[0] ?? '8'
     )?.trim();
@@ -233,7 +237,7 @@ export class BasicStructureAnimator implements StructureAnimator {
   }
 
   private askTraversalMode(): TraversalMode | null {
-    const input = prompt(
+    const input = this.ask(
       '请选择遍历方式：\n1. 前序遍历（根-左-右）\n2. 中序遍历（左-根-右）\n3. 后序遍历（左-右-根）\n4. 层序遍历',
       '1'
     )?.trim();
@@ -260,7 +264,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     if (!input) return null;
     const mode = map[input.toLowerCase()] ?? map[input];
     if (!mode) {
-      alert('请输入 1、2、3、4，或输入前序/中序/后序/层序。');
+      this.notify('请输入 1、2、3、4，或输入前序/中序/后序/层序。');
       return null;
     }
     return mode;
@@ -327,7 +331,7 @@ export class BasicStructureAnimator implements StructureAnimator {
       index = cmp < 0 ? index * 2 + 1 : index * 2 + 2;
     }
 
-    alert('当前演示最多显示 63 个节点，无法继续插入。');
+    this.notify('当前演示最多显示 63 个节点，无法继续插入。');
     return null;
   }
 
@@ -387,9 +391,9 @@ export class BasicStructureAnimator implements StructureAnimator {
   }
 
   private askIndex(message: string, length: number, fallback = 0): number | null {
-    const value = Number(prompt(message, String(fallback)));
+    const value = Number(this.ask(message, String(fallback)));
     if (!Number.isInteger(value) || value < 0 || value >= length) {
-      alert(`请输入 0 到 ${length - 1} 之间的整数`);
+      this.notify(`请输入 0 到 ${length - 1} 之间的整数`);
       return null;
     }
     return value;

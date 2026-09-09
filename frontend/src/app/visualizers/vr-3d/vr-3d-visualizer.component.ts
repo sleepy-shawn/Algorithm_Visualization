@@ -1,3 +1,6 @@
+import { PreferencesService } from '../../i18n/preferences.service';
+import { inject } from '@angular/core';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import {
     Component,
     ElementRef,
@@ -32,10 +35,11 @@ interface StructureOption {
 @Component({
     selector: 'app-vr-3d-visualizer',
     standalone: true,
-    imports: [CommonModule, UiIconComponent],
+    imports: [TranslatePipe, CommonModule, UiIconComponent],
     templateUrl: './vr-3d-visualizer.component.html',
 })
 export class Vr3dVisualizerComponent implements AfterViewInit, OnDestroy {
+    private readonly preferences = inject(PreferencesService);
     @ViewChild('canvasContainer', { static: true })
     canvasContainer!: ElementRef<HTMLDivElement>;
 
@@ -246,23 +250,23 @@ export class Vr3dVisualizerComponent implements AfterViewInit, OnDestroy {
     private animatorsMap = new Map<StructureType, StructureAnimator>();
 
     private initAnimators(): void {
-        const basicAnimator = new BasicStructureAnimator();
+        const basicAnimator = new BasicStructureAnimator(value => this.preferences.t(value));
         this.animatorsMap.set('array', basicAnimator);
         this.animatorsMap.set('stack', basicAnimator);
         this.animatorsMap.set('queue', basicAnimator);
         this.animatorsMap.set('linked-list', basicAnimator);
         this.animatorsMap.set('binary-tree', basicAnimator);
-        this.animatorsMap.set('b-plus-tree', new BPlusTreeAnimator());
+        this.animatorsMap.set('b-plus-tree', new BPlusTreeAnimator(value => this.preferences.t(value)));
     }
 
     async onOperate(operationName: string): Promise<void> {
         if (this.isAnimating) {
-            alert('动画进行中，请稍后再试');
+            alert(this.preferences.t('动画进行中，请稍后再试'));
             return;
         }
         const animator = this.animatorsMap.get(this.selected());
         if (!animator) {
-            alert(`${this.selected()} 的操作动画尚未实现`);
+            alert(this.preferences.t(`${this.selected()} 的操作动画尚未实现`));
             return;
         }
 

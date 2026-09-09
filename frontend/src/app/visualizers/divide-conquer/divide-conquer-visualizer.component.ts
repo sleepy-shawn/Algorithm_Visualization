@@ -1,3 +1,4 @@
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import { Component, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlgorithmStore } from '../../store/algorithm.store';
@@ -6,7 +7,7 @@ import { DivideConquerStep, DivideConquerTreeNode } from '../../models/algorithm
 @Component({
   selector: 'app-divide-conquer-visualizer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [TranslatePipe, CommonModule],
   templateUrl: './divide-conquer-visualizer.component.html',
 })
 export class DivideConquerVisualizerComponent {

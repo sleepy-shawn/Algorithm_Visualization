@@ -19,17 +19,17 @@
 
     <!-- Description -->
     <div class="flex-shrink-0 mt-2 p-3 bg-subtle rounded-lg border border-line">
-      <p class="text-sm text-ink">{{ s.description }}</p>
+      <p class="text-sm text-ink">{{ (s.description) | t }}</p>
 
     </div>
 
     <!-- Legend -->
     <div class="flex flex-wrap gap-4 mt-2 text-xs text-muted justify-center">
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-neutral inline-block"></span>未排序</span>
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-compare inline-block"></span>比较中</span>
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-swap inline-block"></span>交换中</span>
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-pivot inline-block"></span>基准值</span>
-      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-success inline-block"></span>已排序</span>
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-neutral inline-block"></span>{{ '未排序' | t }}</span>
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-compare inline-block"></span>{{ '比较中' | t }}</span>
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-swap inline-block"></span>{{ '交换中' | t }}</span>
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-pivot inline-block"></span>{{ '基准值' | t }}</span>
+      <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-viz-success inline-block"></span>{{ '已排序' | t }}</span>
     </div>
   </ng-container>
 </div>

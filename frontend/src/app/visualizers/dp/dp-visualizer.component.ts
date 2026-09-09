@@ -1,3 +1,4 @@
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import { UiIconComponent } from '../../components/ui-icon/ui-icon.component';
 import { Component, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -7,7 +8,7 @@ import { DPStep } from '../../models/algorithm.models';
 @Component({
   selector: 'app-dp-visualizer',
   standalone: true,
-  imports: [UiIconComponent, CommonModule],
+  imports: [TranslatePipe, UiIconComponent, CommonModule],
   templateUrl: './dp-visualizer.component.html',
 })
 export class DpVisualizerComponent {

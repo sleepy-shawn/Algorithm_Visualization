@@ -1,3 +1,4 @@
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import { Component, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlgorithmStore } from '../../store/algorithm.store';
@@ -6,7 +7,7 @@ import { SortStep } from '../../models/algorithm.models';
 @Component({
   selector: 'app-sorting-visualizer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [TranslatePipe, CommonModule],
   templateUrl: './sorting-visualizer.component.html',
 })
 export class SortingVisualizerComponent {

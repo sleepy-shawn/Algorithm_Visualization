@@ -1,3 +1,4 @@
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import { UiIconComponent } from '../ui-icon/ui-icon.component';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -7,7 +8,7 @@ import { AlgorithmId } from '../../models/algorithm.models';
 @Component({
   selector: 'app-learning-home',
   standalone: true,
-  imports: [UiIconComponent, CommonModule],
+  imports: [TranslatePipe, UiIconComponent, CommonModule],
   templateUrl: './learning-home.component.html',
 })
 export class LearningHomeComponent {

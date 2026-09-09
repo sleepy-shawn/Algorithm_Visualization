@@ -3,35 +3,35 @@
   <!-- Run button -->
   <button
     (click)="store.compareMode() ? store.runBothAlgorithms() : store.runAlgorithm()"
-    [attr.aria-label]="store.compareMode() ? '运行对比' : '运行'"
+    [attr.aria-label]="(store.compareMode() ? '运行对比' : '运行') | t"
     [disabled]="store.isLoading() || store.compareIsLoading()"
     class="px-3 py-2 rounded bg-accent hover:bg-accent disabled:opacity-50 text-sm font-medium flex items-center gap-2">
-    <app-ui-icon name="play" /> 运行{{ store.compareMode() ? '对比' : '' }}
+    <app-ui-icon name="play" /> {{ '运行{0}' | t:[((store.compareMode() ? '对比' : '') | t)] }}
   </button>
 
   <div class="w-px h-5 bg-line mx-1" aria-hidden="true"></div>
 
   <!-- Playback controls -->
-  <div class="flex items-center gap-1" role="group" aria-label="逐步播放">
+  <div class="flex items-center gap-1" role="group" [attr.aria-label]="'逐步播放' | t">
   <button (click)="store.setCurrentStep(0)" [disabled]="!store.canBackward()"
-    class="icon-tooltip playback-button" data-tooltip="回到开始" aria-label="回到开始"><app-ui-icon name="first" /></button>
+    class="icon-tooltip playback-button" [attr.data-tooltip]="'回到开始' | t" [attr.aria-label]="'回到开始' | t"><app-ui-icon name="first" /></button>
 
   <button (click)="store.stepBackward()" [disabled]="!store.canBackward()"
-    class="icon-tooltip playback-button" data-tooltip="上一步" aria-label="上一步"><app-ui-icon name="previous" /></button>
+    class="icon-tooltip playback-button" [attr.data-tooltip]="'上一步' | t" [attr.aria-label]="'上一步' | t"><app-ui-icon name="previous" /></button>
 
-  <button (click)="store.togglePlay()" [attr.aria-label]="store.isPlaying() ? '暂停播放' : '开始播放'" [disabled]="store.steps().length === 0"
-    class="icon-tooltip playback-button bg-subtle" [attr.data-tooltip]="store.isPlaying() ? '暂停播放' : '开始播放'">
+  <button (click)="store.togglePlay()" [attr.aria-label]="(store.isPlaying() ? '暂停播放' : '开始播放') | t" [disabled]="store.steps().length === 0"
+    class="icon-tooltip playback-button bg-subtle" [attr.data-tooltip]="(store.isPlaying() ? '暂停播放' : '开始播放') | t">
     <app-ui-icon [name]="store.isPlaying() ? 'pause' : 'play'" />
   </button>
 
   <button (click)="store.stepForward()" [disabled]="!store.canForward()"
-    class="icon-tooltip playback-button" data-tooltip="下一步" aria-label="下一步"><app-ui-icon name="next" /></button>
+    class="icon-tooltip playback-button" [attr.data-tooltip]="'下一步' | t" [attr.aria-label]="'下一步' | t"><app-ui-icon name="next" /></button>
 
   <button (click)="store.setCurrentStep(store.totalSteps() - 1)" [disabled]="!store.canForward()"
-    class="icon-tooltip playback-button" data-tooltip="跳到最后" aria-label="跳到最后"><app-ui-icon name="last" /></button>
+    class="icon-tooltip playback-button" [attr.data-tooltip]="'跳到最后' | t" [attr.aria-label]="'跳到最后' | t"><app-ui-icon name="last" /></button>
   </div>
 
-  <button (click)="store.reset(); store.compareReset()" class="icon-tooltip playback-button ml-auto" aria-label="重置" data-tooltip="重置">
+  <button (click)="store.reset(); store.compareReset()" class="icon-tooltip playback-button ml-auto" [attr.aria-label]="'重置' | t" [attr.data-tooltip]="'重置' | t">
     <app-ui-icon name="reset" />
   </button>
 
@@ -41,7 +41,7 @@
       type="range"
       min="0"
       [max]="store.totalSteps() > 0 ? store.totalSteps() - 1 : 0"
-      aria-label="算法执行进度"
+      [attr.aria-label]="'算法执行进度' | t"
       [value]="store.currentStep()"
       (input)="onSliderChange($event)"
       [disabled]="store.steps().length === 0"

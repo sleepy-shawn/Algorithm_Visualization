@@ -1,3 +1,4 @@
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import { UiIconComponent } from '../ui-icon/ui-icon.component';
 import { Component, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -9,7 +10,7 @@ import { StructureType } from '../../visualizers/vr-3d/renderers/structure-rende
 @Component({
   selector: 'app-input-config',
   standalone: true,
-  imports: [UiIconComponent, CommonModule, FormsModule],
+  imports: [TranslatePipe, UiIconComponent, CommonModule, FormsModule],
   templateUrl: './input-config.component.html',
 })
 export class InputConfigComponent implements OnInit {

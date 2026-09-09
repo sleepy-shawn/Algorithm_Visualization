@@ -1,6 +1,6 @@
 # Issue #5：温润、简洁的前端体验
 
-对应 [#5：统一视觉规范与基础布局](https://github.com/sleepy-shawn/Algorithm_Visualization/issues/5)。更新日期：2026-09-08。
+对应 [#5：统一视觉规范与基础布局](https://github.com/sleepy-shawn/Algorithm_Visualization/issues/5)。更新日期：2026-09-09。
 
 ## 交付效果
 
@@ -67,6 +67,27 @@
 
 本轮生产构建与 12 项浏览器测试通过，图片解码成功；复核卡片在 [390px](screenshots/issue-5/home-cartoons-390.png)、[768px](screenshots/issue-5/home-cartoons-768.png)、[1440px](screenshots/issue-5/home-cartoons-1440.png) 下的清晰度、留白和入口可用性。
 
+## 明暗主题与中英文切换（2026-09-09）
+
+登录页右上角、登录后导航栏提供主题按钮及 EN / 中文切换。首次访问按系统明暗偏好显示，手动选择优先；主题和语言分别保存在本机，刷新和退出登录后仍保留。页面加载前应用已保存主题，避免先显示浅色；初始语言默认中文。
+
+深色主题使用炭灰背景、暖白正文和杏橙操作色。二维图形、状态色及图例同步切换，图的边使用语义文字色以保持对比度；3D 画布保留原有深色场景和粉彩模型。中文继续使用文楷标题，英文使用本机衬线标题。
+
+英文覆盖导航、首页、目录、表单、错误反馈、输入、播放、复杂度、阶段、图例、现有后端步骤及 3D 操作提示。算法 ID、筛选值、账户名称与用户输入保持原值；目录同时匹配中文、英文和 ID。切换不会重建算法、重置输入、播放位置、对比状态或详情展开状态。
+
+翻译集中于 `frontend/src/app/i18n`。现有后端动态说明用带参数的模板映射，保留实际数值和节点名称；遇到新增但尚未收录的后端消息时保留原文，避免丢失错误信息。新增算法或提示时应同步补充词条。未增加 UI 或翻译依赖，也未修改后端协议。
+
+验证：14 项单元测试通过；原有与新增的浏览器流程共 19 项通过（18 项完整回归，加 1 项 3D 弹窗/英文对比补充验证）。覆盖系统初始主题、记忆偏好、存储不可写、刷新、键盘操作、减少动态效果、运行状态保留、跨语言搜索、所有现有算法及三种屏幕尺寸。
+
+| 英文深色页面 | 390px | 768px | 1440px |
+| --- | --- | --- | --- |
+| 首页 | [查看](screenshots/issue-5/preferences/home-dark-en-390.png) | [查看](screenshots/issue-5/preferences/home-dark-en-768.png) | [查看](screenshots/issue-5/preferences/home-dark-en-1440.png) |
+| 目录 | [查看](screenshots/issue-5/preferences/catalog-dark-en-390.png) | [查看](screenshots/issue-5/preferences/catalog-dark-en-768.png) | [查看](screenshots/issue-5/preferences/catalog-dark-en-1440.png) |
+| 学习 | [查看](screenshots/issue-5/preferences/learning-dark-en-390.png) | [查看](screenshots/issue-5/preferences/learning-dark-en-768.png) | [查看](screenshots/issue-5/preferences/learning-dark-en-1440.png) |
+| 登录 | [查看](screenshots/issue-5/preferences/login-dark-en-390.png) | [查看](screenshots/issue-5/preferences/login-dark-en-768.png) | [查看](screenshots/issue-5/preferences/login-dark-en-1440.png) |
+
+另附[中文深色学习页](screenshots/issue-5/preferences/learning-dark-zh-1280.png)与[英文浅色学习页](screenshots/issue-5/preferences/learning-light-en-390.png)。各类图形的英文深色截图位于同一目录。
+
 ## 本地验证
 
 后端与数据库使用现有 Docker 配置，在仓库根目录启动：
@@ -87,7 +108,7 @@ npm run test:e2e
 
 预览：[本地前端](http://127.0.0.1:4200)。开发代理连接 8081 后端。浏览器测试使用本机 Chrome 和真实后端，会注册 `ui-week1-*` 测试账户；仅错误响应场景模拟 503。
 
-## 验收记录
+## 初版视觉验收记录
 
 生产构建通过；ChromeHeadless 单元测试 10/10 通过；真实后端浏览器流程 12/12 通过。截图复核发现并修复登录页遗留深色背景和 3D 画布宽度问题；相关登录、详情、对比及多尺寸图形用例在最终调整后再次验证。共保存 37 张本轮截图。截图以 1000px 视口高度拍摄；页面内部可纵向滚动，宽图在图形区域内滚动。
 

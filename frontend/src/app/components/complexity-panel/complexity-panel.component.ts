@@ -1,3 +1,4 @@
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import { Component, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { STRUCTURE_INFO } from '../../visualizers/vr-3d/data/structure-info';
@@ -42,7 +43,7 @@ const ALGO_INFO: Record<string, AlgoInfo> = {
 @Component({
   selector: 'app-complexity-panel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [TranslatePipe, CommonModule],
   templateUrl: './complexity-panel.component.html',
 })
 export class ComplexityPanelComponent {

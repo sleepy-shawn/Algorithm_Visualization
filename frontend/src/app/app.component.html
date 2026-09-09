@@ -3,34 +3,34 @@
 <div *ngIf="auth.isAuthenticated()" class="flex h-dvh min-h-0 flex-col bg-page text-ink">
   <header class="app-header z-20 shrink-0">
     <div class="header-identity-row">
-      <button class="brand-button flex min-w-0 items-center gap-3 text-left" (click)="navigate('home')" aria-label="算法可视化学习平台首页">
-        <span class="college-emblem"><img src="assets/branding/college-logo.png" width="514" height="84" alt="计算机与人工智能学院院徽"></span>
-        <span class="min-w-0"><span class="block truncate text-sm font-semibold">算法可视化学习平台</span></span>
+      <button class="brand-button flex min-w-0 items-center gap-3 text-left" (click)="navigate('home')" [attr.aria-label]="'算法可视化学习平台首页' | t">
+        <span class="college-emblem"><img src="assets/branding/college-logo.png" width="514" height="84" [attr.alt]="'计算机与人工智能学院院徽' | t"></span>
+        <span class="min-w-0"><span class="block truncate text-sm font-semibold">{{ '算法可视化学习平台' | t }}</span></span>
       </button>
       <div class="account-menu flex shrink-0 items-center gap-2">
-        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-subtle text-sm font-semibold text-accent-ink" aria-hidden="true">{{ auth.avatarInitial() }}</span>
-        <span class="hidden max-w-32 truncate text-sm sm:block" [title]="auth.displayName()">{{ auth.displayName() }}</span>
-        <button class="nav-button" (click)="logout()" [attr.aria-label]="'退出 ' + auth.displayName()">退出</button>
+        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-subtle text-sm font-semibold text-accent-ink" aria-hidden="true">{{  auth.avatarInitial()  }}</span>
+        <span class="hidden max-w-32 truncate text-sm sm:block" [title]="auth.displayName()">{{  auth.displayName()  }}</span>
+        <button class="nav-button" (click)="logout()" [attr.aria-label]="('退出' | t) + ' ' + auth.displayName()">{{ '退出' | t }}</button>
       </div>
     </div>
-    <nav class="main-nav flex max-w-full gap-1 overflow-x-auto" aria-label="主导航">
-      <button *ngFor="let tab of tabs" class="nav-button" [class.is-active]="store.activePanel() === tab.id" [attr.aria-current]="store.activePanel() === tab.id ? 'page' : null" (click)="tab.id === 'catalog' ? browse() : navigate(tab.id)">{{ tab.label }}</button>
-    </nav>
+    <div class="navigation-row"><nav class="main-nav flex max-w-full gap-1 overflow-x-auto" [attr.aria-label]="'主导航' | t">
+      <button *ngFor="let tab of tabs" class="nav-button" [class.is-active]="store.activePanel() === tab.id" [attr.aria-current]="store.activePanel() === tab.id ? 'page' : null" (click)="tab.id === 'catalog' ? browse() : navigate(tab.id)">{{ (tab.label) | t }}</button>
+    </nav><app-display-preferences /></div>
   </header>
   <div *ngIf="store.error() && store.activePanel() === 'visualizer'" role="alert" class="flex shrink-0 items-center justify-between gap-3 border-b border-danger/30 bg-danger-soft px-6 py-3 text-sm text-danger">
-    <span>{{ store.error() }}</span><button (click)="store.error.set(null)" class="shrink-0 underline">关闭</button>
+    <span>{{ (store.error()) | t }}</span><button (click)="store.error.set(null)" class="shrink-0 underline">{{ '关闭' | t }}</button>
   </div>
   <div class="flex min-h-0 flex-1">
     <app-sidebar *ngIf="store.activePanel() === 'visualizer'" class="hidden shrink-0 lg:block" />
-    <main #mainContent tabindex="-1" class="workspace min-w-0 flex-1 overflow-y-auto" aria-label="学习内容">
+    <main #mainContent tabindex="-1" class="workspace min-w-0 flex-1 overflow-y-auto" [attr.aria-label]="'学习内容' | t">
       <app-learning-home *ngIf="store.activePanel() === 'home'" (browse)="browse($event)" (learn)="learn($event)" />
       <app-algorithm-catalog *ngIf="store.activePanel() === 'catalog'" [initialCategory]="catalogCategory" (learn)="learn($event)" />
       <!-- Visualizer -->
       <ng-container *ngIf="store.activePanel() === 'visualizer'">
 
         <div class="flex flex-wrap items-center justify-between gap-4 border-b border-line bg-surface px-6 py-6" *ngIf="selectedEntry() as entry">
-          <div><button class="mb-3 inline-flex items-center gap-2 text-sm text-accent-ink" (click)="browse()"><app-ui-icon name="arrow-left" />算法目录</button><h2 class="learning-title">{{ entry.label }}</h2><p class="mt-1 text-sm text-muted">{{ entry.category === 'Web3D' ? '3D 数据结构' : entry.category }}</p></div>
-          <button #navigationTrigger class="button-secondary lg:hidden" aria-haspopup="dialog" [attr.aria-expanded]="mobileNavigationOpen" aria-controls="mobile-algorithms" (click)="openNavigation()">选择算法</button>
+          <div><button class="mb-3 inline-flex items-center gap-2 text-sm text-accent-ink" (click)="browse()"><app-ui-icon name="arrow-left" />{{ '算法目录' | t }}</button><h2 class="learning-title">{{ (entry.label) | t }}</h2><p class="mt-1 text-sm text-muted">{{ (entry.category === 'Web3D' ? '3D 数据结构' : entry.category) | t }}</p></div>
+          <button #navigationTrigger class="button-secondary lg:hidden" aria-haspopup="dialog" [attr.aria-expanded]="mobileNavigationOpen" aria-controls="mobile-algorithms" (click)="openNavigation()">{{ '选择算法' | t }}</button>
         </div>
         <!-- Control Panel -->
         <app-control-panel />
@@ -43,14 +43,14 @@
 
         <section class="algorithm-details border-b border-line bg-surface">
           <button class="details-toggle" id="algorithm-details-toggle" aria-controls="algorithm-details-content" [attr.aria-expanded]="detailsOpen" (click)="detailsOpen = !detailsOpen">
-            算法详情 <app-ui-icon name="chevron-down" [class.rotate-180]="detailsOpen" />
+            {{ '算法详情' | t }} <app-ui-icon name="chevron-down" [class.rotate-180]="detailsOpen" />
           </button>
           <div id="algorithm-details-content" class="details-reveal" [class.is-open]="detailsOpen" [attr.inert]="detailsOpen ? null : ''" [attr.aria-hidden]="!detailsOpen">
             <div class="details-inner" role="region" aria-labelledby="algorithm-details-toggle">
               <app-complexity-panel *ngIf="!store.compareMode()" />
               <div *ngIf="store.compareMode()" class="grid gap-4 md:grid-cols-2">
-                <section><h3 class="px-4 pb-3 text-sm font-medium">{{ selectedEntry()?.label }}</h3><app-complexity-panel /></section>
-                <section><h3 class="px-4 pb-3 text-sm font-medium">{{ compareEntryLabel() }}</h3><app-complexity-panel source="compare" /></section>
+                <section><h3 class="px-4 pb-3 text-sm font-medium">{{ (selectedEntry()?.label) | t }}</h3><app-complexity-panel /></section>
+                <section><h3 class="px-4 pb-3 text-sm font-medium">{{ (compareEntryLabel()) | t }}</h3><app-complexity-panel source="compare" /></section>
               </div>
             </div>
           </div>
@@ -59,14 +59,14 @@
         <div *ngIf="store.isLoading()" class="flex-1 min-h-0 flex items-center justify-center">
           <div class="flex flex-col items-center gap-3 text-muted">
             <div class="w-8 h-8 border-2 border-active border-t-transparent rounded-full animate-spin"></div>
-            <span class="text-sm">计算中…</span>
+            <span class="text-sm">{{ '计算中…' | t }}</span>
           </div>
         </div>
 
         <div *ngIf="!store.isLoading() && store.steps().length === 0" class="min-h-80 flex items-center justify-center p-8">
           <div class="text-center text-muted px-4">
             <span class="mb-4 inline-flex text-accent-ink" aria-hidden="true"><app-ui-icon name="play" /></span>
-            <p class="text-lg font-medium text-muted mb-1">输入数据后，点击运行</p>
+            <p class="text-lg font-medium text-muted mb-1">{{ '输入数据后，点击运行' | t }}</p>
 
           </div>
         </div>
@@ -88,7 +88,7 @@
         <div *ngIf="!store.isLoading() && store.steps().length > 0 && store.compareMode()" class="compare-layout">
           <div class="min-w-0 border-b border-line md:border-r flex flex-col">
             <div class="px-3 py-2 bg-subtle border-b border-line text-xs text-active font-medium text-center flex-shrink-0">
-              {{ selectedEntry()?.label }}
+              {{ (selectedEntry()?.label) | t }}
             </div>
             <div class="compare-visualization">
               <app-sorting-visualizer *ngIf="store.category() === 'sorting'" [source]="'primary'" />
@@ -100,17 +100,17 @@
           </div>
 
           <div class="min-w-0 flex flex-col">
-            <div *ngIf="store.compareError()" role="alert" class="bg-danger-soft p-4 text-sm text-danger">{{ store.compareError() }}</div>
+            <div *ngIf="store.compareError()" role="alert" class="bg-danger-soft p-4 text-sm text-danger">{{ store.compareError() | t }}</div>
             <div class="px-3 py-2 bg-subtle border-b border-line text-xs text-swap font-medium text-center flex-shrink-0">
-              {{ compareEntryLabel() }}
+              {{ (compareEntryLabel()) | t }}
             </div>
             <div *ngIf="store.compareSteps().length === 0 && !store.compareIsLoading()" class="flex-1 min-h-0 flex items-center justify-center text-muted text-sm">
-              点击“运行”开始对比
+              {{ '点击“运行”开始对比' | t }}
             </div>
             <div *ngIf="store.compareIsLoading()" class="flex-1 min-h-0 flex items-center justify-center">
               <div class="flex flex-col items-center gap-2 text-muted text-xs">
                 <div class="w-6 h-6 border-2 border-swap border-t-transparent rounded-full animate-spin"></div>
-                <span>计算中...</span>
+                <span>{{ '计算中...' | t }}</span>
               </div>
             </div>
             <div *ngIf="store.compareSteps().length > 0" class="compare-visualization">
@@ -126,8 +126,8 @@
     </main>
   </div>
   <div *ngIf="mobileNavigationOpen" class="drawer-backdrop fixed inset-0 z-50 bg-ink/30 lg:hidden" (click)="closeNavigation()">
-    <section #mobileNavigation id="mobile-algorithms" role="dialog" aria-modal="true" aria-label="选择算法" class="drawer-panel flex h-full w-72 max-w-[85vw] flex-col bg-surface shadow-xl" (click)="$event.stopPropagation()">
-      <div class="flex items-center justify-between border-b border-line px-4 py-3"><h2 class="font-semibold">选择算法</h2><button class="playback-button icon-tooltip" data-tooltip="关闭算法导航" (click)="closeNavigation()" aria-label="关闭算法导航"><app-ui-icon name="close" /></button></div>
+    <section #mobileNavigation id="mobile-algorithms" role="dialog" aria-modal="true" [attr.aria-label]="'选择算法' | t" class="drawer-panel flex h-full w-72 max-w-[85vw] flex-col bg-surface shadow-xl" (click)="$event.stopPropagation()">
+      <div class="flex items-center justify-between border-b border-line px-4 py-3"><h2 class="font-semibold">{{ '选择算法' | t }}</h2><button class="playback-button icon-tooltip" [attr.data-tooltip]="'关闭算法导航' | t" (click)="closeNavigation()" [attr.aria-label]="'关闭算法导航' | t"><app-ui-icon name="close" /></button></div>
       <app-sidebar class="min-h-0 flex-1" (selected)="closeNavigation()" />
     </section>
   </div>

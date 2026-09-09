@@ -1,3 +1,5 @@
+import { ENGLISH } from '../../i18n/translations';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import { UiIconComponent } from '../ui-icon/ui-icon.component';
 import { Component, EventEmitter, Input, Output, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -8,7 +10,7 @@ import { AlgorithmId } from '../../models/algorithm.models';
 @Component({
   selector: 'app-algorithm-catalog',
   standalone: true,
-  imports: [UiIconComponent, CommonModule, FormsModule],
+  imports: [TranslatePipe, UiIconComponent, CommonModule, FormsModule],
   templateUrl: './algorithm-catalog.component.html',
 })
 export class AlgorithmCatalogComponent {
@@ -21,7 +23,7 @@ export class AlgorithmCatalogComponent {
   readonly filtered = computed(() => {
     const query = this.query().trim().toLocaleLowerCase();
     return this.entries.filter(item => (!this.category() || item.category === this.category())
-      && (!query || `${item.label} ${item.id}`.toLocaleLowerCase().includes(query)));
+      && (!query || `${item.label} ${(ENGLISH[item.label] ?? item.label)} ${item.id}`.toLocaleLowerCase().includes(query)));
   });
   clear(): void { this.query.set(''); this.category.set(''); }
 }
