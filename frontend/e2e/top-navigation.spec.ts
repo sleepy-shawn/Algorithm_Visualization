@@ -1,0 +1,51 @@
+import { test, expect } from '@playwright/test';
+import { mkdir } from 'node:fs/promises';
+import { resolve } from 'node:path';
+
+for (const width of [390, 768, 1440]) {
+  test(`top navigation opens, dismisses and selects at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({width, height: 1000});
+    await page.goto('/');
+    await page.evaluate(() => localStorage.setItem('algorithm-viz-session', JSON.stringify({id: 1, username: 'Navigation review', displayName: ''})));
+    await page.reload();
+    await page.getByRole('navigation').getByRole('button', {name:'学习', exact:true}).click();
+    const directory = resolve('../docs/screenshots/issue-5/top-navigation');
+    await mkdir(directory, {recursive:true});
+    const sort = page.getByRole('button', {name:'排序', exact:true});
+    await sort.click();
+    await expect(sort).toHaveAttribute('aria-expanded','true');
+    const menu = page.locator('.algorithm-dropdown');
+    await expect(menu).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
+    const bounds = await menu.boundingBox();
+    expect(bounds!.x).toBeGreaterThanOrEqual(0);
+    expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(width);
+    const bar = await page.locator('.algorithm-navigation').boundingBox();
+    const heading = await page.locator('.learning-heading').boundingBox();
+    expect(bar!.y + bar!.height).toBeLessThanOrEqual(heading!.y + 1);
+    await page.screenshot({path:resolve(directory, `menu-light-zh-${width}.png`), animations:'disabled'});
+    await page.keyboard.press('Tab');
+    await expect(menu.getByRole('button').first()).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(sort).toBeFocused();
+    await expect(menu).toHaveCount(0);
+    await sort.click();
+    await page.getByRole('button', {name:'搜索', exact:true}).click();
+    await expect(sort).toHaveAttribute('aria-expanded','false');
+    await page.getByRole('button', {name:'二分查找', exact:true}).click();
+    await expect(page.getByRole('heading', {name:'二分查找', exact:true})).toBeVisible();
+    await expect(menu).toHaveCount(0);
+    await sort.click();
+    await page.locator('.learning-heading').click({position:{x:2,y:2}});
+    await expect(menu).toHaveCount(0);
+    await page.getByRole('button', {name:'Switch to English', exact:true}).click();
+    await page.getByRole('button', {name:'Switch to dark theme', exact:true}).click();
+    await page.getByRole('button', {name:'Sort', exact:true}).click();
+    await page.screenshot({path:resolve(directory, `menu-dark-en-${width}.png`), animations:'disabled'});
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Shift+Tab');
+    await expect(menu).toHaveCount(0);
+  });
+}

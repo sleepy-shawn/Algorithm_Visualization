@@ -1,3 +1,5 @@
+import { TranslatePipe } from '../../i18n/translate.pipe';
+import { UiIconComponent } from '../../components/ui-icon/ui-icon.component';
 import { Component, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlgorithmStore } from '../../store/algorithm.store';
@@ -6,7 +8,7 @@ import { NQueensStep } from '../../models/algorithm.models';
 @Component({
   selector: 'app-n-queens-visualizer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [TranslatePipe, UiIconComponent, CommonModule],
   templateUrl: './n-queens-visualizer.component.html',
 })
 export class NQueensVisualizerComponent {
@@ -55,10 +57,10 @@ export class NQueensVisualizerComponent {
 
   cellClass(row: number, col: number): string {
     const isDark = (row + col) % 2 === 1;
-    if (this.isConflict(row, col)) return 'bg-red-700/60';
-    if (this.isPlacing(row, col))  return 'bg-green-600/60';
-    if (this.isRemoving(row, col)) return 'bg-red-600/60';
-    return isDark ? 'bg-slate-700' : 'bg-slate-800';
+    if (this.isConflict(row, col)) return 'bg-viz-danger';
+    if (this.isPlacing(row, col))  return 'bg-viz-success';
+    if (this.isRemoving(row, col)) return 'bg-viz-pivot';
+    return isDark ? 'bg-subtle' : 'bg-surface';
   }
 
   trackByNum(i: number) { return i; }

@@ -4,6 +4,10 @@ import { AnimationContext, StructureAnimator } from './structure-animator.interf
 type TraversalMode = 'preorder' | 'inorder' | 'postorder' | 'levelorder';
 
 export class BasicStructureAnimator implements StructureAnimator {
+  constructor(private readonly translate: (value: string) => string = value => value) {}
+  private ask(message: string, initial = ''): string | null { return window.prompt(this.translate(message), initial); }
+  private notify(message: string): void { window.alert(this.translate(message)); }
+
   private readonly delayMs = 520;
 
   async performOperation(operationName: string, ctx: AnimationContext): Promise<void> {
@@ -34,17 +38,17 @@ export class BasicStructureAnimator implements StructureAnimator {
     if (operationName === '访问') {
       const index = this.askIndex('请输入要访问的下标', values.length);
       if (index === null) return;
-      await this.highlightByIndex(ctx, index, 0xfacc15, `访问下标 ${index}，时间复杂度 O(1)`);
+      await this.highlightByIndex(ctx, index, 0xfff0be, `访问下标 ${index}，时间复杂度 O(1)`);
       return;
     }
 
     if (operationName === '查找') {
-      const target = prompt('请输入要查找的值', values[0] ?? '10')?.trim();
+      const target = this.ask('请输入要查找的值', values[0] ?? '10')?.trim();
       if (!target) return;
 
       ctx.announce?.(`顺序查找 ${target}`);
       for (let i = 0; i < values.length; i++) {
-        await this.highlightByIndex(ctx, i, values[i] === target ? 0x22c55e : 0xfacc15);
+        await this.highlightByIndex(ctx, i, values[i] === target ? 0xe3efdf : 0xfff0be);
         if (values[i] === target) {
           ctx.announce?.(`找到 ${target}，位置为 ${i}`);
           return;
@@ -55,12 +59,12 @@ export class BasicStructureAnimator implements StructureAnimator {
     }
 
     if (operationName === '插入') {
-      const value = prompt('请输入要插入的值', '25')?.trim();
+      const value = this.ask('请输入要插入的值', '25')?.trim();
       const index = this.askIndex('请输入插入下标', values.length + 1, values.length);
       if (!value || index === null) return;
 
       ctx.announce?.(`在下标 ${index} 插入 ${value}，后续元素右移`);
-      await this.pulseFromIndex(ctx, index, 0x38bdf8);
+      await this.pulseFromIndex(ctx, index, 0xc9dff1);
       values.splice(index, 0, value);
       ctx.updateData({ values });
       return;
@@ -70,7 +74,7 @@ export class BasicStructureAnimator implements StructureAnimator {
       const index = this.askIndex('请输入要删除的下标', values.length);
       if (index === null) return;
 
-      await this.highlightByIndex(ctx, index, 0xef4444, `删除下标 ${index}，后续元素左移`);
+      await this.highlightByIndex(ctx, index, 0xf6d5cf, `删除下标 ${index}，后续元素左移`);
       values.splice(index, 1);
       ctx.updateData({ values });
       return;
@@ -81,8 +85,8 @@ export class BasicStructureAnimator implements StructureAnimator {
       const second = this.askIndex('请输入第二个下标', values.length);
       if (first === null || second === null) return;
 
-      await this.highlightByIndex(ctx, first, 0xf97316);
-      await this.highlightByIndex(ctx, second, 0xf97316, `交换 ${first} 与 ${second}`);
+      await this.highlightByIndex(ctx, first, 0xf8d6af);
+      await this.highlightByIndex(ctx, second, 0xf8d6af, `交换 ${first} 与 ${second}`);
       [values[first], values[second]] = [values[second], values[first]];
       ctx.updateData({ values });
     }
@@ -92,7 +96,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     const values = [...ctx.data.values];
 
     if (operationName === '入栈') {
-      const value = prompt('请输入入栈元素', '60')?.trim();
+      const value = this.ask('请输入入栈元素', '60')?.trim();
       if (!value) return;
       ctx.announce?.(`${value} 压入栈顶`);
       values.push(value);
@@ -102,14 +106,14 @@ export class BasicStructureAnimator implements StructureAnimator {
 
     if (operationName === '出栈') {
       if (values.length === 0) return;
-      await this.highlightByIndex(ctx, values.length - 1, 0xef4444, `弹出栈顶元素 ${values.at(-1)}`);
+      await this.highlightByIndex(ctx, values.length - 1, 0xf6d5cf, `弹出栈顶元素 ${values.at(-1)}`);
       values.pop();
       ctx.updateData({ values });
       return;
     }
 
     if (operationName === '查看栈顶') {
-      await this.highlightByIndex(ctx, values.length - 1, 0xfacc15, `栈顶元素是 ${values.at(-1)}`);
+      await this.highlightByIndex(ctx, values.length - 1, 0xfff0be, `栈顶元素是 ${values.at(-1)}`);
     }
   }
 
@@ -117,7 +121,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     const values = [...ctx.data.values];
 
     if (operationName === '入队') {
-      const value = prompt('请输入入队元素', '60')?.trim();
+      const value = this.ask('请输入入队元素', '60')?.trim();
       if (!value) return;
       ctx.announce?.(`${value} 从队尾入队`);
       values.push(value);
@@ -127,14 +131,14 @@ export class BasicStructureAnimator implements StructureAnimator {
 
     if (operationName === '出队') {
       if (values.length === 0) return;
-      await this.highlightByIndex(ctx, 0, 0xef4444, `队头元素 ${values[0]} 出队`);
+      await this.highlightByIndex(ctx, 0, 0xf6d5cf, `队头元素 ${values[0]} 出队`);
       values.shift();
       ctx.updateData({ values });
       return;
     }
 
     if (operationName === '查看队头') {
-      await this.highlightByIndex(ctx, 0, 0xfacc15, `队头元素是 ${values[0]}`);
+      await this.highlightByIndex(ctx, 0, 0xfff0be, `队头元素是 ${values[0]}`);
     }
   }
 
@@ -142,11 +146,11 @@ export class BasicStructureAnimator implements StructureAnimator {
     const values = [...ctx.data.values];
 
     if (operationName === '查找') {
-      const target = prompt('请输入要查找的值', values[0] ?? 'A')?.trim();
+      const target = this.ask('请输入要查找的值', values[0] ?? 'A')?.trim();
       if (!target) return;
 
       for (let i = 0; i < values.length; i++) {
-        await this.highlightByIndex(ctx, i, values[i] === target ? 0x22c55e : 0xfacc15, `访问节点 ${values[i]}`);
+        await this.highlightByIndex(ctx, i, values[i] === target ? 0xe3efdf : 0xfff0be, `访问节点 ${values[i]}`);
         if (values[i] === target) return;
       }
       ctx.announce?.(`链表中不存在 ${target}`);
@@ -154,7 +158,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     }
 
     if (operationName === '头插') {
-      const value = prompt('请输入新头节点的值', 'X')?.trim();
+      const value = this.ask('请输入新头节点的值', 'X')?.trim();
       if (!value) return;
       ctx.announce?.(`新节点 ${value} 指向原头节点`);
       values.unshift(value);
@@ -163,7 +167,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     }
 
     if (operationName === '删除') {
-      const target = prompt('请输入要删除的值', values[0] ?? 'A')?.trim();
+      const target = this.ask('请输入要删除的值', values[0] ?? 'A')?.trim();
       if (!target) return;
 
       const index = values.indexOf(target);
@@ -172,7 +176,7 @@ export class BasicStructureAnimator implements StructureAnimator {
         return;
       }
 
-      await this.highlightByIndex(ctx, index, 0xef4444, `删除节点 ${target} 并重连指针`);
+      await this.highlightByIndex(ctx, index, 0xf6d5cf, `删除节点 ${target} 并重连指针`);
       values.splice(index, 1);
       ctx.updateData({ values });
     }
@@ -191,13 +195,13 @@ export class BasicStructureAnimator implements StructureAnimator {
 
       ctx.announce?.(`${label}遍历：${result}`);
       for (const index of order) {
-        await this.highlightByIndex(ctx, index, 0xfacc15, `${label}访问节点 ${values[index]}`);
+        await this.highlightByIndex(ctx, index, 0xfff0be, `${label}访问节点 ${values[index]}`);
       }
       ctx.announce?.(`${label}遍历完成：${result}`);
       return;
     }
 
-    const target = prompt(
+    const target = this.ask(
       `请输入要${operationName}的值`,
       operationName === '插入' ? '9' : values[0] ?? '8'
     )?.trim();
@@ -207,7 +211,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     for (const index of path) {
       if (!values[index]) continue;
 
-      await this.highlightByIndex(ctx, index, values[index] === target ? 0x22c55e : 0xfacc15, `比较节点 ${values[index]}`);
+      await this.highlightByIndex(ctx, index, values[index] === target ? 0xe3efdf : 0xfff0be, `比较节点 ${values[index]}`);
       if (values[index] === target && operationName === '查找') {
         ctx.announce?.(`找到节点 ${target}`);
         return;
@@ -233,7 +237,7 @@ export class BasicStructureAnimator implements StructureAnimator {
   }
 
   private askTraversalMode(): TraversalMode | null {
-    const input = prompt(
+    const input = this.ask(
       '请选择遍历方式：\n1. 前序遍历（根-左-右）\n2. 中序遍历（左-根-右）\n3. 后序遍历（左-右-根）\n4. 层序遍历',
       '1'
     )?.trim();
@@ -260,7 +264,7 @@ export class BasicStructureAnimator implements StructureAnimator {
     if (!input) return null;
     const mode = map[input.toLowerCase()] ?? map[input];
     if (!mode) {
-      alert('请输入 1、2、3、4，或输入前序/中序/后序/层序。');
+      this.notify('请输入 1、2、3、4，或输入前序/中序/后序/层序。');
       return null;
     }
     return mode;
@@ -327,7 +331,7 @@ export class BasicStructureAnimator implements StructureAnimator {
       index = cmp < 0 ? index * 2 + 1 : index * 2 + 2;
     }
 
-    alert('当前演示最多显示 63 个节点，无法继续插入。');
+    this.notify('当前演示最多显示 63 个节点，无法继续插入。');
     return null;
   }
 
@@ -377,7 +381,7 @@ export class BasicStructureAnimator implements StructureAnimator {
   }
 
   private restoreNodeColor(node: THREE.Group): void {
-    const originalColor = Number(node.userData?.['originalColor'] ?? 0x3b82f6);
+    const originalColor = Number(node.userData?.['originalColor'] ?? 0xc9dff1);
     this.setNodeColor(node, originalColor);
 
     const mesh = node.children.find(child => (child as THREE.Mesh).isMesh) as THREE.Mesh | undefined;
@@ -387,9 +391,9 @@ export class BasicStructureAnimator implements StructureAnimator {
   }
 
   private askIndex(message: string, length: number, fallback = 0): number | null {
-    const value = Number(prompt(message, String(fallback)));
+    const value = Number(this.ask(message, String(fallback)));
     if (!Number.isInteger(value) || value < 0 || value >= length) {
-      alert(`请输入 0 到 ${length - 1} 之间的整数`);
+      this.notify(`请输入 0 到 ${length - 1} 之间的整数`);
       return null;
     }
     return value;

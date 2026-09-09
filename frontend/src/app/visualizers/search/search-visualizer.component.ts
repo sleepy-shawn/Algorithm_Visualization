@@ -1,3 +1,5 @@
+import { TranslatePipe } from '../../i18n/translate.pipe';
+import { UiIconComponent } from '../../components/ui-icon/ui-icon.component';
 import { Component, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlgorithmStore } from '../../store/algorithm.store';
@@ -6,7 +8,7 @@ import { SearchStep } from '../../models/algorithm.models';
 @Component({
   selector: 'app-search-visualizer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [TranslatePipe, UiIconComponent, CommonModule],
   templateUrl: './search-visualizer.component.html',
 })
 export class SearchVisualizerComponent {
@@ -23,14 +25,14 @@ export class SearchVisualizerComponent {
 
   cellColor(index: number): string {
     const s = this.step();
-    if (!s) return 'bg-slate-700';
-    if (s.found && index === s.mid) return 'bg-green-600';
-    if (index === s.mid)   return 'bg-purple-600';
-    if (index === s.left || index === s.right) return 'bg-yellow-600/60';
-    if (s.eliminated === 'left'  && index < s.mid)  return 'bg-slate-800 opacity-40';
-    if (s.eliminated === 'right' && index > s.mid)  return 'bg-slate-800 opacity-40';
-    if (index >= s.left && index <= s.right) return 'bg-blue-700/60';
-    return 'bg-slate-700 opacity-30';
+    if (!s) return 'bg-subtle';
+    if (s.found && index === s.mid) return 'bg-viz-success text-ink';
+    if (index === s.mid)   return 'bg-viz-swap text-ink';
+    if (index === s.left || index === s.right) return 'bg-viz-compare';
+    if (s.eliminated === 'left'  && index < s.mid)  return 'bg-subtle opacity-40';
+    if (s.eliminated === 'right' && index > s.mid)  return 'bg-subtle opacity-40';
+    if (index >= s.left && index <= s.right) return 'bg-viz-neutral';
+    return 'bg-subtle opacity-30';
   }
 
   trackByIndex(i: number) { return i; }

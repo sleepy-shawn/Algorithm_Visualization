@@ -1,3 +1,4 @@
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import { Component, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +14,7 @@ interface RenderNode extends GraphNode { state: string; }
 @Component({
   selector: 'app-graph-visualizer',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [TranslatePipe, CommonModule, FormsModule],
   templateUrl: './graph-visualizer.component.html',
 })
 export class GraphVisualizerComponent {
@@ -68,16 +69,16 @@ export class GraphVisualizerComponent {
 
   nodeColor(state: string): string {
     const map: Record<string, string> = {
-      start: '#3b82f6', end: '#f59e0b', current: '#a855f7',
-      visiting: '#a855f7', 'in-queue': '#f59e0b', visited: '#10b981',
-      path: '#22c55e', mst: '#10b981',
+      start: 'rgb(var(--viz-active))', end: 'rgb(var(--viz-compare))', current: 'rgb(var(--viz-active))',
+      visiting: 'rgb(var(--viz-active))', 'in-queue': 'rgb(var(--viz-compare))', visited: 'rgb(var(--viz-success))',
+      path: 'rgb(var(--viz-success))', mst: 'rgb(var(--viz-success))',
     };
-    return map[state] ?? '#1e293b';
+    return map[state] ?? 'rgb(var(--viz-neutral))';
   }
 
   edgeColor(state: string): string {
-    const map: Record<string, string> = { exploring: '#f59e0b', tree: '#3b82f6', path: '#22c55e', mst: '#10b981' };
-    return map[state] ?? '#334155';
+    const map: Record<string, string> = { exploring: 'rgb(var(--compare))', tree: 'rgb(var(--active))', path: 'rgb(var(--success))', mst: 'rgb(var(--success))' };
+    return map[state] ?? 'rgb(var(--muted))';
   }
 
   edgeWidth(state: string): number {

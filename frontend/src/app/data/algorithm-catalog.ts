@@ -1,3 +1,4 @@
+import type { UiIconName } from '../components/ui-icon/ui-icon.component';
 import { AlgorithmId } from '../models/algorithm.models';
 
 export interface AlgorithmCatalogEntry {
@@ -8,14 +9,14 @@ export interface AlgorithmCatalogEntry {
 
 export interface AlgorithmCatalogGroup {
   category: string;
-  icon: string;
+  icon: UiIconName;
   items: AlgorithmCatalogEntry[];
 }
 
 export const ALGORITHM_GROUPS: AlgorithmCatalogGroup[] = [
   {
     category: '排序算法',
-    icon: 'Sort',
+    icon: 'sort',
     items: [
       { id: 'quick-sort', label: '快速排序', complexity: 'O(n log n)' },
       { id: 'merge-sort', label: '归并排序', complexity: 'O(n log n)' },
@@ -26,7 +27,7 @@ export const ALGORITHM_GROUPS: AlgorithmCatalogGroup[] = [
   },
   {
     category: '搜索算法',
-    icon: 'Search',
+    icon: 'search',
     items: [
       { id: 'binary-search', label: '二分查找', complexity: 'O(log n)' },
       { id: 'bfs', label: 'BFS 广度优先', complexity: 'O(V+E)' },
@@ -35,12 +36,12 @@ export const ALGORITHM_GROUPS: AlgorithmCatalogGroup[] = [
   },
   {
     category: '贪心算法',
-    icon: 'Greedy',
+    icon: 'target',
     items: [{ id: 'astar', label: 'A* 启发式搜索', complexity: 'O(E log V)' }],
   },
   {
     category: '图算法',
-    icon: 'Graph',
+    icon: 'graph',
     items: [
       { id: 'dijkstra', label: 'Dijkstra 最短路', complexity: 'O((V+E)logV)' },
       { id: 'prim', label: 'Prim 最小生成树', complexity: 'O(E log V)' },
@@ -49,22 +50,22 @@ export const ALGORITHM_GROUPS: AlgorithmCatalogGroup[] = [
   },
   {
     category: '动态规划',
-    icon: 'DP',
+    icon: 'grid',
     items: [{ id: 'knapsack', label: '0/1 背包', complexity: 'O(nW)' }],
   },
   {
     category: '回溯算法',
-    icon: 'Backtrack',
+    icon: 'backtrack',
     items: [{ id: 'n-queens', label: 'N 皇后', complexity: 'O(n!)' }],
   },
   {
     category: '分治算法',
-    icon: 'Divide',
+    icon: 'branch',
     items: [{ id: 'karatsuba', label: '大整数乘法 Karatsuba', complexity: 'O(n^1.585)' }],
   },
   {
     category: 'Web3D',
-    icon: '3D',
+    icon: 'cube',
     items: [{ id: 'data-structure-3d', label: '3D 数据结构学习', complexity: 'Three.js' }],
   },
 ];

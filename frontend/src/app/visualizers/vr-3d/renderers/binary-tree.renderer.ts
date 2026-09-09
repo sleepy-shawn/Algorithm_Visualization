@@ -55,12 +55,12 @@ export class BinaryTreeRenderer {
         });
 
         nodes.forEach(node => {
-            const sphere = ThreeObjectFactory.createSphere(node.v, 0xa855f7);
+            const sphere = ThreeObjectFactory.createSphere(node.v, 0xe4d7ec);
             sphere.userData = {
                 structureType: 'binary-tree',
                 value: String(node.v),
                 index: node.index,
-                originalColor: 0xa855f7,
+                originalColor: 0xe4d7ec,
             };
             sphere.position.set(node.x, node.y, node.z);
             ctx.addObject(sphere);

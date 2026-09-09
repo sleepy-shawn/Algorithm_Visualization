@@ -1,155 +1,116 @@
-<div class="relative min-h-screen overflow-hidden bg-slate-950 text-white flex">
-  <img
-    src="assets/login-bg.png"
-    alt="背景"
-    class="absolute inset-0 h-full w-full object-cover">
-  <div class="absolute inset-0 bg-slate-950/55"></div>
-  <div class="absolute inset-0 bg-gradient-to-r from-slate-950/75 via-slate-950/35 to-slate-950/80"></div>
+<div class="auth-preferences"><app-display-preferences /></div>
+<main class="auth-layout">
+  <section class="auth-intro illustrated-hero">
+    <img class="hero-art" src="assets/illustrations/algorithm-garden.png" width="1536" height="1024" alt="" fetchpriority="high">
+    <div class="mb-8 flex items-center gap-3"><span class="college-emblem college-emblem-large"><img src="assets/branding/college-logo.png" width="514" height="84" [attr.alt]="'计算机与人工智能学院院徽' | t"></span><h1 class="text-base font-semibold">{{ '算法可视化学习平台' | t }}</h1></div>
 
-  <section class="relative z-10 hidden lg:flex w-[46%] px-12 py-10 flex-col justify-between">
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-xl font-bold">A</div>
-      <div>
-        <h1 class="text-lg font-bold leading-none drop-shadow">算法可视化学习平台</h1>
-        <p class="text-xs text-slate-300 mt-1">Algorithm Visualization</p>
-      </div>
+    <h2 class="display-title">{{ '看懂算法的' | t }}<br><span class="title-underline">{{ '每一步' | t }}<svg viewBox="0 0 240 14" aria-hidden="true"><path d="M3 9 Q 94 0 237 7 M19 13 Q 135 5 217 11" /></svg></span></h2>
+    <div class="auth-equation" role="img" [attr.aria-label]="'一次相邻交换：3、1、2 变成 1、3、2' | t">
+      <span>3</span><span>1</span><span>2</span><span class="equation-arrow" aria-hidden="true"><app-ui-icon name="arrow-right" /></span><span>1</span><span>3</span><span>2</span>
     </div>
 
-    <div class="max-w-2xl">
-      <h2 class="text-7xl font-bold leading-tight drop-shadow-lg">算法可视化学习平台</h2>
-      
-    </div>
 
-    <div class="grid grid-cols-3 gap-3 text-xs">
-      
-    </div>
   </section>
+  <section class="auth-form" aria-labelledby="auth-title">
+    <h2 id="auth-title" class="section-title">{{ (mode === 'login' ? '欢迎回来' : '创建账号') | t }}</h2>
 
-  <main class="relative z-10 flex-1 flex items-center justify-center px-5 py-8">
-    <div class="w-full max-w-md">
-      <div class="lg:hidden flex items-center gap-3 mb-8">
-        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-xl font-bold">A</div>
-        <div>
-          <h1 class="text-lg font-bold leading-none">算法可视化学习平台</h1>
-          <p class="text-xs text-slate-500 mt-1">Algorithm Visualization</p>
-        </div>
-      </div>
-
-      <div class="bg-slate-900/90 border border-slate-700 rounded-lg p-6 shadow-xl shadow-black/30 backdrop-blur">
-        <div class="flex bg-slate-800 rounded-lg p-1 mb-6">
-          <button
-            type="button"
-            (click)="switchMode('login')"
-            [class]="mode === 'login'
-              ? 'flex-1 py-2 rounded-md bg-blue-600 text-white text-sm font-medium'
-              : 'flex-1 py-2 rounded-md text-slate-400 hover:text-white text-sm font-medium'">
-            登录
-          </button>
-          <button
-            type="button"
-            (click)="switchMode('register')"
-            [class]="mode === 'register'
-              ? 'flex-1 py-2 rounded-md bg-blue-600 text-white text-sm font-medium'
-              : 'flex-1 py-2 rounded-md text-slate-400 hover:text-white text-sm font-medium'">
-            注册
-          </button>
-        </div>
-
+    <div class="my-6 flex rounded-md bg-subtle p-1" role="group" [attr.aria-label]="'账户操作' | t">
+      <button class="flex-1 rounded px-3 py-2 text-sm" [class.bg-surface]="mode === 'login'" [class.text-accent-ink]="mode === 'login'" [attr.aria-pressed]="mode === 'login'" (click)="switchMode('login')">{{ '登录' | t }}</button>
+      <button class="flex-1 rounded px-3 py-2 text-sm" [class.bg-surface]="mode === 'register'" [class.text-accent-ink]="mode === 'register'" [attr.aria-pressed]="mode === 'register'" (click)="switchMode('register')">{{ '注册' | t }}</button>
+    </div>
         <form *ngIf="mode === 'login'" (ngSubmit)="submitLogin()" class="space-y-4">
-          <div *ngIf="auth.success()" class="text-sm text-emerald-300 bg-emerald-950/60 border border-emerald-800 rounded px-3 py-2">
-            {{ auth.success() }}
+          <div *ngIf="auth.success()" role="status" class="text-sm text-success bg-success-soft border border-success rounded px-3 py-2">
+            {{ (auth.success()) | t }}
           </div>
 
           <div>
-            <label class="block text-sm text-slate-400 mb-1.5">用户名</label>
+            <label for="loginUsername" class="block text-sm text-muted mb-2">{{ '用户名' | t }}</label>
             <input
-              name="loginUsername"
+              id="loginUsername" name="loginUsername"
               type="text"
               autocomplete="username"
               [(ngModel)]="loginUsername"
-              class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2.5 text-white focus:outline-none focus:border-blue-500"
-              placeholder="请输入用户名">
+              class="w-full bg-subtle border border-line rounded px-3 py-3 text-ink focus:outline-none focus:border-active"
+              [attr.placeholder]="'请输入用户名' | t">
           </div>
 
           <div>
-            <label class="block text-sm text-slate-400 mb-1.5">密码</label>
+            <label for="loginPassword" class="block text-sm text-muted mb-2">{{ '密码' | t }}</label>
             <input
-              name="loginPassword"
+              id="loginPassword" name="loginPassword"
               type="password"
               autocomplete="current-password"
               [(ngModel)]="loginPassword"
-              class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2.5 text-white focus:outline-none focus:border-blue-500"
-              placeholder="请输入密码">
+              class="w-full bg-subtle border border-line rounded px-3 py-3 text-ink focus:outline-none focus:border-active"
+              [attr.placeholder]="'请输入密码' | t">
           </div>
 
-          <div *ngIf="auth.error()" class="text-sm text-red-300 bg-red-950/60 border border-red-800 rounded px-3 py-2">
-            {{ auth.error() }}
+          <div *ngIf="auth.error()" role="alert" class="text-sm text-danger bg-danger-soft border border-danger rounded px-3 py-2">
+            {{ (auth.error()) | t }}
           </div>
 
           <button
             type="submit"
             [disabled]="auth.isLoading()"
-            class="w-full py-2.5 rounded bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-semibold">
-            {{ auth.isLoading() ? '正在登录...' : '登录平台' }}
+            class="button-primary w-full">
+            {{ (auth.isLoading() ? '正在登录...' : '登录') | t }}
           </button>
         </form>
 
         <form *ngIf="mode === 'register'" (ngSubmit)="submitRegister()" class="space-y-4">
           <div>
-            <label class="block text-sm text-slate-400 mb-1.5">用户名</label>
+            <label for="registerUsername" class="block text-sm text-muted mb-2">{{ '用户名' | t }}</label>
             <input
-              name="registerUsername"
+              id="registerUsername" name="registerUsername"
               type="text"
               autocomplete="username"
               [(ngModel)]="registerUsername"
-              class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2.5 text-white focus:outline-none focus:border-blue-500"
-              placeholder="至少 3 个字符">
+              class="w-full bg-subtle border border-line rounded px-3 py-3 text-ink focus:outline-none focus:border-active"
+              [attr.placeholder]="'必填，最多 50 个字符' | t">
           </div>
 
           <div>
-            <label class="block text-sm text-slate-400 mb-1.5">显示名称</label>
+            <label for="registerDisplayName" class="block text-sm text-muted mb-2">{{ '显示名称' | t }}</label>
             <input
-              name="registerDisplayName"
+              id="registerDisplayName" name="registerDisplayName"
               type="text"
               [(ngModel)]="registerDisplayName"
-              class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2.5 text-white focus:outline-none focus:border-blue-500"
-              placeholder="用于页面右上角显示">
+              class="w-full bg-subtle border border-line rounded px-3 py-3 text-ink focus:outline-none focus:border-active"
+              [attr.placeholder]="'用于页面右上角显示' | t">
           </div>
 
           <div>
-            <label class="block text-sm text-slate-400 mb-1.5">密码</label>
+            <label for="registerPassword" class="block text-sm text-muted mb-2">{{ '密码' | t }}</label>
             <input
-              name="registerPassword"
+              id="registerPassword" name="registerPassword"
               type="password"
               autocomplete="new-password"
               [(ngModel)]="registerPassword"
-              class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2.5 text-white focus:outline-none focus:border-blue-500"
-              placeholder="至少 6 个字符">
+              class="w-full bg-subtle border border-line rounded px-3 py-3 text-ink focus:outline-none focus:border-active"
+              [attr.placeholder]="'至少 6 个字符' | t">
           </div>
 
           <div>
-            <label class="block text-sm text-slate-400 mb-1.5">确认密码</label>
+            <label for="registerConfirmPassword" class="block text-sm text-muted mb-2">{{ '确认密码' | t }}</label>
             <input
-              name="registerConfirmPassword"
+              id="registerConfirmPassword" name="registerConfirmPassword"
               type="password"
               autocomplete="new-password"
               [(ngModel)]="registerConfirmPassword"
-              class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2.5 text-white focus:outline-none focus:border-blue-500"
-              placeholder="再次输入密码">
+              class="w-full bg-subtle border border-line rounded px-3 py-3 text-ink focus:outline-none focus:border-active"
+              [attr.placeholder]="'再次输入密码' | t">
           </div>
 
-          <div *ngIf="auth.error()" class="text-sm text-red-300 bg-red-950/60 border border-red-800 rounded px-3 py-2">
-            {{ auth.error() }}
+          <div *ngIf="auth.error()" role="alert" class="text-sm text-danger bg-danger-soft border border-danger rounded px-3 py-2">
+            {{ (auth.error()) | t }}
           </div>
 
           <button
             type="submit"
             [disabled]="auth.isLoading()"
-            class="w-full py-2.5 rounded bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-semibold">
-            {{ auth.isLoading() ? '正在创建...' : '创建账号' }}
+            class="button-primary w-full">
+            {{ (auth.isLoading() ? '正在创建...' : '创建账号') | t }}
           </button>
         </form>
-      </div>
-    </div>
-  </main>
-</div>
+  </section>
+</main>

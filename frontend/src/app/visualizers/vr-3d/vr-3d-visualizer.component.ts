@@ -1,3 +1,6 @@
+import { PreferencesService } from '../../i18n/preferences.service';
+import { inject } from '@angular/core';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import {
     Component,
     ElementRef,
@@ -22,6 +25,7 @@ import { AlgorithmStore } from '../../store/algorithm.store';
 import { BPlusTreeAnimator } from './animators/b-plus-tree.animator';
 import { StructureAnimator, AnimationContext } from './animators/structure-animator.interface';
 import { BasicStructureAnimator } from './animators/basic-structure.animator';
+import { UiIconComponent } from '../../components/ui-icon/ui-icon.component';
 
 interface StructureOption {
     type: StructureType;
@@ -31,15 +35,16 @@ interface StructureOption {
 @Component({
     selector: 'app-vr-3d-visualizer',
     standalone: true,
-    imports: [CommonModule],
+    imports: [TranslatePipe, CommonModule, UiIconComponent],
     templateUrl: './vr-3d-visualizer.component.html',
 })
 export class Vr3dVisualizerComponent implements AfterViewInit, OnDestroy {
+    private readonly preferences = inject(PreferencesService);
     @ViewChild('canvasContainer', { static: true })
     canvasContainer!: ElementRef<HTMLDivElement>;
 
     selected = computed(() => this.store.vr3dStructure());
-    operationStatus = '选择一个结构操作，系统会在 3D 场景中高亮关键步骤。';
+    operationStatus = '选择操作开始演示';
     readonly structureOptions: StructureOption[] = [
         { type: 'array', label: '数组' },
         { type: 'stack', label: '栈' },
@@ -101,7 +106,7 @@ export class Vr3dVisualizerComponent implements AfterViewInit, OnDestroy {
 
     selectStructure(type: StructureType): void {
         this.store.setVr3dStructure(type);
-        this.operationStatus = '已切换结构，可以运行操作动画。';
+        this.operationStatus = '选择操作开始演示';
     }
 
     randomData(): void {
@@ -118,7 +123,7 @@ export class Vr3dVisualizerComponent implements AfterViewInit, OnDestroy {
         const container = this.canvasContainer.nativeElement;
 
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x020617);
+        this.scene.background = new THREE.Color(0x302e2a);
 
         this.camera = new THREE.PerspectiveCamera(
             60,
@@ -188,6 +193,8 @@ export class Vr3dVisualizerComponent implements AfterViewInit, OnDestroy {
             this.controls.target.set(0, 2.4, 0);
         }
 
+        this.camera.zoom = Math.min(1, this.camera.aspect * 1.5);
+        this.camera.updateProjectionMatrix();
         this.controls.update();
     }
 
@@ -235,6 +242,7 @@ export class Vr3dVisualizerComponent implements AfterViewInit, OnDestroy {
     private handleResize = (): void => {
         const container = this.canvasContainer.nativeElement;
         this.camera.aspect = container.clientWidth / container.clientHeight;
+        this.camera.zoom = Math.min(1, this.camera.aspect * 1.5);
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(container.clientWidth, container.clientHeight);
     };
@@ -242,23 +250,23 @@ export class Vr3dVisualizerComponent implements AfterViewInit, OnDestroy {
     private animatorsMap = new Map<StructureType, StructureAnimator>();
 
     private initAnimators(): void {
-        const basicAnimator = new BasicStructureAnimator();
+        const basicAnimator = new BasicStructureAnimator(value => this.preferences.t(value));
         this.animatorsMap.set('array', basicAnimator);
         this.animatorsMap.set('stack', basicAnimator);
         this.animatorsMap.set('queue', basicAnimator);
         this.animatorsMap.set('linked-list', basicAnimator);
         this.animatorsMap.set('binary-tree', basicAnimator);
-        this.animatorsMap.set('b-plus-tree', new BPlusTreeAnimator());
+        this.animatorsMap.set('b-plus-tree', new BPlusTreeAnimator(value => this.preferences.t(value)));
     }
 
     async onOperate(operationName: string): Promise<void> {
         if (this.isAnimating) {
-            alert('动画进行中，请稍后再试');
+            alert(this.preferences.t('动画进行中，请稍后再试'));
             return;
         }
         const animator = this.animatorsMap.get(this.selected());
         if (!animator) {
-            alert(`${this.selected()} 的操作动画尚未实现`);
+            alert(this.preferences.t(`${this.selected()} 的操作动画尚未实现`));
             return;
         }
 

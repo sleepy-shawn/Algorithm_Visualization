@@ -10,12 +10,12 @@ export class LinkedListRenderer {
         values.forEach((value, i) => {
             const x = (i - center) * 3;
 
-            const node = ThreeObjectFactory.createSphere(String(value), 0x38bdf8);
+            const node = ThreeObjectFactory.createSphere(String(value), 0xc9dff1);
             node.userData = {
                 structureType: 'linked-list',
                 value: String(value),
                 index: i,
-                originalColor: 0x38bdf8,
+                originalColor: 0xc9dff1,
             };
             node.position.set(x, 1.5, 0);
             ctx.addObject(node);
@@ -25,7 +25,7 @@ export class LinkedListRenderer {
                 const arrow = ThreeObjectFactory.createArrow(
                     new THREE.Vector3(x + 0.8, 1.5, 0),
                     new THREE.Vector3(nextX - 0.8, 1.5, 0),
-                    0xfacc15
+                    0xfff0be
                 );
                 ctx.addObject(arrow);
             }

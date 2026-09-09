@@ -7,7 +7,7 @@ export class QueueRenderer {
         const center = (values.length - 1) / 2;
 
         values.forEach((value, i) => {
-            const color = i === 0 ? 0xf97316 : i === values.length - 1 ? 0x8b5cf6 : 0x06b6d4;
+            const color = i === 0 ? 0xf8d6af : i === values.length - 1 ? 0xe4d7ec : 0xdfeaf5;
             const cube = ThreeObjectFactory.createBox(
                 String(value),
                 color

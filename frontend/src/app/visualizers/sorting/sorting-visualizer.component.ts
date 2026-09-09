@@ -1,3 +1,4 @@
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import { Component, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlgorithmStore } from '../../store/algorithm.store';
@@ -6,7 +7,7 @@ import { SortStep } from '../../models/algorithm.models';
 @Component({
   selector: 'app-sorting-visualizer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [TranslatePipe, CommonModule],
   templateUrl: './sorting-visualizer.component.html',
 })
 export class SortingVisualizerComponent {
@@ -30,12 +31,12 @@ export class SortingVisualizerComponent {
 
   barColor(index: number): string {
     const s = this.step();
-    if (!s) return '#3b82f6';
-    if (s.sorted?.includes(index)) return '#10b981';
-    if (s.swapping?.includes(index)) return '#ef4444';
-    if (s.comparing?.includes(index)) return '#f59e0b';
-    if (s.pivot === index) return '#a855f7';
-    return '#3b82f6';
+    if (!s) return 'rgb(var(--viz-neutral))';
+    if (s.sorted?.includes(index)) return 'rgb(var(--viz-success))';
+    if (s.swapping?.includes(index)) return 'rgb(var(--viz-swap))';
+    if (s.comparing?.includes(index)) return 'rgb(var(--viz-compare))';
+    if (s.pivot === index) return 'rgb(var(--viz-pivot))';
+    return 'rgb(var(--viz-neutral))';
   }
 
   trackByIndex(i: number) { return i; }

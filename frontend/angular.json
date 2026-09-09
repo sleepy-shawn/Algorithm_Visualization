@@ -51,6 +51,7 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": { "proxyConfig": "proxy.conf.json" },
           "configurations": {
             "production": { "buildTarget": "algorithm-viz-frontend:build:production" },
             "development": { "buildTarget": "algorithm-viz-frontend:build:development" }

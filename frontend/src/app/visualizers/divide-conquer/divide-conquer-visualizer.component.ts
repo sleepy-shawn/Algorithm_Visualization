@@ -1,3 +1,4 @@
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import { Component, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlgorithmStore } from '../../store/algorithm.store';
@@ -6,7 +7,7 @@ import { DivideConquerStep, DivideConquerTreeNode } from '../../models/algorithm
 @Component({
   selector: 'app-divide-conquer-visualizer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [TranslatePipe, CommonModule],
   templateUrl: './divide-conquer-visualizer.component.html',
 })
 export class DivideConquerVisualizerComponent {
@@ -44,12 +45,12 @@ export class DivideConquerVisualizerComponent {
 
   nodeClass(node: DivideConquerTreeNode): string {
     if (node.state === 'current') {
-      return 'border-yellow-400 bg-yellow-500/20 text-yellow-100 shadow-yellow-500/30';
+      return 'border-active bg-viz-pivot text-ink shadow-sm';
     }
     if (node.state === 'done') {
-      return 'border-emerald-400 bg-emerald-500/15 text-emerald-100';
+      return 'border-line bg-viz-success text-ink';
     }
-    return 'border-slate-600 bg-slate-800 text-slate-300';
+    return 'border-line bg-subtle text-ink';
   }
 
   phaseLabel(phase?: string): string {

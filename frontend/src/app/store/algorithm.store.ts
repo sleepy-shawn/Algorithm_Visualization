@@ -1,13 +1,12 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { AlgorithmService } from '../services/algorithm.service';
 import {
+  ActivePanel,
   AlgorithmCategory,
   AlgorithmId,
   AnyStep,
   GraphData,
   KnapsackItem,
-  AssessmentConfig,
-  AssessmentQuestion,
 } from '../models/algorithm.models';
 import {
   CustomStructureData,
@@ -229,11 +228,10 @@ export class AlgorithmStore {
   steps = signal<AnyStep[]>([]);
   currentStep = signal(0);
   isPlaying = signal(false);
-  speed = signal(500);
+  private readonly playbackIntervalMs = 500;
   isLoading = signal(false);
   error = signal<string | null>(null);
-  activePanel = signal<'visualizer' | 'history' | 'assessment' | 'competition'>('visualizer');
-  aiDialogOpen = signal(false);
+  activePanel = signal<ActivePanel>('home');
 
   sortArray = signal<number[]>([64, 34, 25, 12, 22, 11, 90]);
   searchArray = signal<number[]>([1, 3, 5, 7, 9, 11, 13, 15, 17, 19]);
@@ -256,11 +254,6 @@ export class AlgorithmStore {
   compareIsPlaying = signal(false);
   compareIsLoading = signal(false);
   compareError = signal<string | null>(null);
-
-  // Assessment config
-  assessmentConfig = signal<AssessmentConfig | null>(null);
-  assessmentQuestions = signal<AssessmentQuestion[]>([]);
-  overallFeedback = signal('');
 
   currentStepData = computed(() => this.steps()[this.currentStep()] ?? null);
   totalSteps = computed(() => this.steps().length);
@@ -297,12 +290,23 @@ export class AlgorithmStore {
     return config.labels[this.currentPhase()] ?? this.currentPhase();
   });
 
+  private runVersion = 0;
+  private compareRunVersion = 0;
+
   private playTimer: ReturnType<typeof setInterval> | null = null;
   private comparePlayTimer: ReturnType<typeof setInterval> | null = null;
 
   constructor(private svc: AlgorithmService) {}
 
   setAlgorithm(id: AlgorithmId): void {
+    this.invalidatePendingRuns();
+    this.stopPlay();
+    this.stopComparePlay();
+    this.error.set(null);
+    this.compareError.set(null);
+    this.compareSteps.set([]);
+    this.compareCurrentStep.set(0);
+    if (this.getCategoryForAlgo(id) !== this.category()) this.compareMode.set(false);
     this.selectedAlgo.set(id);
     this.category.set(ALGORITHM_CATEGORY[id] ?? 'sorting');
     this.steps.set([]);
@@ -314,6 +318,7 @@ export class AlgorithmStore {
   }
 
   runAlgorithm(): void {
+    const version = ++this.runVersion;
     this.stopPlay();
     this.isLoading.set(true);
     this.error.set(null);
@@ -332,12 +337,14 @@ export class AlgorithmStore {
       algo,
       cat,
       steps => {
+        if (version !== this.runVersion) return;
         this.steps.set(steps);
         this.currentStep.set(0);
         this.isLoading.set(false);
       },
       err => {
-        this.error.set('请求失败，请确认后端服务已启动（http://localhost:8080）');
+        if (version !== this.runVersion) return;
+        this.error.set('暂时无法运行算法，请稍后重试。');
         this.isLoading.set(false);
         console.error(err);
       }
@@ -345,6 +352,7 @@ export class AlgorithmStore {
   }
 
   runCompareAlgorithm(): void {
+    const version = ++this.compareRunVersion;
     this.stopComparePlay();
     this.compareIsLoading.set(true);
     this.compareError.set(null);
@@ -356,11 +364,13 @@ export class AlgorithmStore {
       algo,
       cat,
       steps => {
+        if (version !== this.compareRunVersion) return;
         this.compareSteps.set(steps);
         this.compareCurrentStep.set(0);
         this.compareIsLoading.set(false);
       },
       err => {
+        if (version !== this.compareRunVersion) return;
         this.compareError.set('对比算法请求失败');
         this.compareIsLoading.set(false);
         console.error(err);
@@ -408,7 +418,7 @@ export class AlgorithmStore {
       } else {
         this.stopPlay();
       }
-    }, this.speed());
+    }, this.playbackIntervalMs);
   }
 
   stopPlay(): void {
@@ -428,7 +438,7 @@ export class AlgorithmStore {
       } else {
         this.stopComparePlay();
       }
-    }, this.speed());
+    }, this.playbackIntervalMs);
   }
 
   stopComparePlay(): void {
@@ -446,18 +456,6 @@ export class AlgorithmStore {
     } else {
       this.startPlay();
       if (this.compareMode() && this.compareSteps().length > 0) this.startComparePlay();
-    }
-  }
-
-  setSpeed(s: number): void {
-    this.speed.set(s);
-    if (this.isPlaying()) {
-      this.stopPlay();
-      this.startPlay();
-    }
-    if (this.compareIsPlaying()) {
-      this.stopComparePlay();
-      this.startComparePlay();
     }
   }
 
@@ -565,7 +563,12 @@ export class AlgorithmStore {
     return Array.from({ length: values.length }, (_, index) => values[index] ?? '');
   }
 
-  setActivePanel(p: 'visualizer' | 'history' | 'assessment' | 'competition'): void {
+  setActivePanel(p: ActivePanel): void {
+    if (p !== 'visualizer') {
+      this.invalidatePendingRuns();
+      this.stopPlay();
+      this.stopComparePlay();
+    }
     this.activePanel.set(p);
   }
 
@@ -589,16 +592,9 @@ export class AlgorithmStore {
     }
   }
 
-  openAiComplexityDialog(): void {
-    this.activePanel.set('visualizer');
-    this.aiDialogOpen.set(true);
-  }
-
-  closeAiComplexityDialog(): void {
-    this.aiDialogOpen.set(false);
-  }
-
   reset(): void {
+    ++this.runVersion;
+    this.isLoading.set(false);
     this.stopPlay();
     this.steps.set([]);
     this.currentStep.set(0);
@@ -606,10 +602,19 @@ export class AlgorithmStore {
   }
 
   compareReset(): void {
+    ++this.compareRunVersion;
+    this.compareIsLoading.set(false);
     this.stopComparePlay();
     this.compareSteps.set([]);
     this.compareCurrentStep.set(0);
     this.compareError.set(null);
+  }
+
+  private invalidatePendingRuns(): void {
+    ++this.runVersion;
+    ++this.compareRunVersion;
+    this.isLoading.set(false);
+    this.compareIsLoading.set(false);
   }
 
   private dispatchRun(

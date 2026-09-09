@@ -1,10 +1,10 @@
 <div class="flex-1 flex flex-col p-4 overflow-hidden">
   <ng-container *ngIf="{ current: step() } as view">
 
-    <div class="flex gap-4 flex-1 min-h-0">
+    <div class="graph-layout gap-4 flex-1 min-h-0">
 
       <!-- SVG Graph -->
-      <div class="flex-1 bg-slate-900/50 rounded-xl border border-slate-700 overflow-hidden">
+      <div class="graph-canvas min-w-0 bg-surface rounded-xl border border-line overflow-auto">
         <svg width="100%" height="100%" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet"
           (click)="clearSelection()">
           <rect x="0" y="0" width="600" height="320" fill="transparent"></rect>
@@ -22,14 +22,14 @@
             <line
               [attr.x1]="e.x1" [attr.y1]="e.y1"
               [attr.x2]="e.x2" [attr.y2]="e.y2"
-              [attr.stroke]="isEdgeSelected(e.index) ? '#f8fafc' : edgeColor(e.state)"
+              [attr.stroke]="isEdgeSelected(e.index) ? 'rgb(var(--ink))' : edgeColor(e.state)"
               [attr.stroke-width]="isEdgeSelected(e.index) ? edgeWidth(e.state) + 2 : edgeWidth(e.state)"
               stroke-linecap="round"
-              style="transition: stroke 0.3s ease, stroke-width 0.2s ease" />
+              class="node-transition" />
             <text *ngIf="store.graphData().weighted"
               [attr.x]="e.midX" [attr.y]="e.midY - 5"
               text-anchor="middle"
-              [attr.fill]="isEdgeSelected(e.index) ? '#f8fafc' : '#94a3b8'"
+              [attr.fill]="isEdgeSelected(e.index) ? 'rgb(var(--ink))' : 'rgb(var(--muted))'"
               font-size="10" font-family="monospace">
               {{ e.weight }}
             </text>
@@ -42,12 +42,12 @@
             <circle
               [attr.cx]="n.x" [attr.cy]="n.y" r="20"
               [attr.fill]="nodeColor(n.state)"
-              [attr.stroke]="isNodeSelected(n.id) ? '#f8fafc' : '#1e293b'"
+              [attr.stroke]="isNodeSelected(n.id) ? 'rgb(var(--ink))' : 'rgb(var(--line))'"
               [attr.stroke-width]="isNodeSelected(n.id) ? 4 : 2"
-              style="transition: fill 0.3s ease, stroke 0.2s ease, stroke-width 0.2s ease" />
+              class="node-transition" />
             <text
               [attr.x]="n.x" [attr.y]="n.y + 4"
-              text-anchor="middle" fill="white"
+              text-anchor="middle" fill="rgb(var(--ink))"
               font-size="13" font-weight="bold" font-family="sans-serif"
               pointer-events="none">
               {{ n.label }}
@@ -55,7 +55,7 @@
             <!-- Distance label -->
             <text *ngIf="view.current?.distances?.[n.id] !== undefined && view.current!.distances[n.id] < 1e8"
               [attr.x]="n.x" [attr.y]="n.y + 34"
-              text-anchor="middle" fill="#60a5fa" font-size="10" font-family="monospace"
+              text-anchor="middle" fill="rgb(var(--active))" font-size="10" font-family="monospace"
               pointer-events="none">
               {{ view.current!.distances[n.id] }}
             </text>
@@ -64,30 +64,30 @@
       </div>
 
       <!-- Graph editor and side info -->
-      <div class="w-72 flex flex-col gap-2 text-xs overflow-y-auto pr-1">
-        <div class="bg-slate-800 rounded-lg p-3 border border-slate-700">
-          <div class="text-slate-300 font-semibold mb-2">图编辑</div>
+      <div class="graph-info w-72 flex flex-col gap-2 text-xs overflow-y-auto pr-1">
+        <div class="bg-subtle rounded-lg p-3 border border-line">
+          <div class="text-ink font-semibold mb-2">{{ '图编辑' | t }}</div>
 
           <div class="grid grid-cols-[1fr_auto] gap-2 items-center">
             <input
               type="text"
-              [(ngModel)]="newNodeId"
+              [attr.aria-label]="'新节点名称' | t" [(ngModel)]="newNodeId"
               (keyup.enter)="addNode()"
-              placeholder="新节点，如 G"
-              class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500">
+              [attr.placeholder]="'新节点，如 G' | t"
+              class="bg-subtle border border-line rounded px-2 py-1 text-ink focus:outline-none focus:border-active">
             <button (click)="addNode()"
-              class="px-2 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white font-medium">添加节点</button>
+              class="px-2 py-1 bg-accent hover:bg-accent rounded text-on-color font-medium">{{ '添加节点' | t }}</button>
           </div>
 
           <div class="grid grid-cols-2 gap-2 mt-2">
-            <select [(ngModel)]="newEdgeFrom"
-              class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500">
-              <option value="">起点</option>
+            <select [attr.aria-label]="'新边起点' | t" [(ngModel)]="newEdgeFrom"
+              class="bg-subtle border border-line rounded px-2 py-1 text-ink focus:outline-none focus:border-active">
+              <option value="">{{ '起点' | t }}</option>
               <option *ngFor="let n of nodes()" [value]="n.id">{{ n.label }}</option>
             </select>
-            <select [(ngModel)]="newEdgeTo"
-              class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500">
-              <option value="">终点</option>
+            <select [attr.aria-label]="'新边终点' | t" [(ngModel)]="newEdgeTo"
+              class="bg-subtle border border-line rounded px-2 py-1 text-ink focus:outline-none focus:border-active">
+              <option value="">{{ '终点' | t }}</option>
               <option *ngFor="let n of nodes()" [value]="n.id">{{ n.label }}</option>
             </select>
           </div>
@@ -96,106 +96,95 @@
               type="number"
               min="1"
               step="1"
-              [(ngModel)]="newEdgeWeight"
+              [attr.aria-label]="'新边权重' | t" [(ngModel)]="newEdgeWeight"
               (keyup.enter)="addEdge()"
-              placeholder="权重"
-              class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500">
+              [attr.placeholder]="'权重' | t"
+              class="bg-subtle border border-line rounded px-2 py-1 text-ink focus:outline-none focus:border-active">
             <button (click)="addEdge()"
-              class="px-2 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white font-medium">添加边</button>
+              class="px-2 py-1 bg-accent hover:bg-accent rounded text-on-color font-medium">{{ '添加边' | t }}</button>
           </div>
 
-          <p *ngIf="editorMessage" class="mt-2 text-slate-400">{{ editorMessage }}</p>
+          <p *ngIf="editorMessage" class="mt-2 text-muted">{{ editorMessage | t }}</p>
         </div>
 
-        <div *ngIf="selectedNodeId" class="bg-slate-800 rounded-lg p-3 border border-blue-500/60">
-          <div class="text-slate-300 font-semibold mb-2">编辑节点</div>
-          <label class="block text-slate-500 mb-1">节点名称</label>
+        <div *ngIf="selectedNodeId" class="bg-subtle rounded-lg p-3 border border-active">
+          <div class="text-ink font-semibold mb-2">{{ '编辑节点' | t }}</div>
+          <label class="block text-muted mb-1">{{ '节点名称' | t }}</label>
           <input
             type="text"
-            [(ngModel)]="editNodeId"
-            class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500">
+            [attr.aria-label]="'节点名称' | t" [(ngModel)]="editNodeId"
+            class="w-full bg-subtle border border-line rounded px-2 py-1 text-ink focus:outline-none focus:border-active">
 
-          <label class="block text-slate-500 mb-1 mt-2">显示标签</label>
+          <label class="block text-muted mb-1 mt-2">{{ '显示标签' | t }}</label>
           <input
             type="text"
-            [(ngModel)]="editNodeLabel"
-            class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500">
+            [attr.aria-label]="'节点显示标签' | t" [(ngModel)]="editNodeLabel"
+            class="w-full bg-subtle border border-line rounded px-2 py-1 text-ink focus:outline-none focus:border-active">
 
           <div class="flex gap-2 mt-3">
             <button (click)="updateNode()"
-              class="flex-1 px-2 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white font-medium">保存</button>
+              class="flex-1 px-2 py-1 bg-accent hover:bg-accent rounded text-on-color font-medium">{{ '保存' | t }}</button>
             <button (click)="deleteNode()"
-              class="flex-1 px-2 py-1 bg-red-600 hover:bg-red-500 rounded text-white font-medium">删除</button>
+              class="flex-1 px-2 py-1 bg-danger hover:bg-danger rounded text-on-color font-medium">{{ '删除' | t }}</button>
           </div>
         </div>
 
-        <div *ngIf="selectedEdgeIndex !== null" class="bg-slate-800 rounded-lg p-3 border border-blue-500/60">
-          <div class="text-slate-300 font-semibold mb-2">编辑边</div>
+        <div *ngIf="selectedEdgeIndex !== null" class="bg-subtle rounded-lg p-3 border border-active">
+          <div class="text-ink font-semibold mb-2">{{ '编辑边' | t }}</div>
           <div class="grid grid-cols-2 gap-2">
-            <select [(ngModel)]="editEdgeFrom"
-              class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500">
+            <select [attr.aria-label]="'边起点' | t" [(ngModel)]="editEdgeFrom"
+              class="bg-subtle border border-line rounded px-2 py-1 text-ink focus:outline-none focus:border-active">
               <option *ngFor="let n of nodes()" [value]="n.id">{{ n.label }}</option>
             </select>
-            <select [(ngModel)]="editEdgeTo"
-              class="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500">
+            <select [attr.aria-label]="'边终点' | t" [(ngModel)]="editEdgeTo"
+              class="bg-subtle border border-line rounded px-2 py-1 text-ink focus:outline-none focus:border-active">
               <option *ngFor="let n of nodes()" [value]="n.id">{{ n.label }}</option>
             </select>
           </div>
-          <label class="block text-slate-500 mb-1 mt-2">权重</label>
+          <label class="block text-muted mb-1 mt-2">{{ '权重' | t }}</label>
           <input
             type="number"
             min="1"
             step="1"
-            [(ngModel)]="editEdgeWeight"
-            class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500">
+            [attr.aria-label]="'边权重' | t" [(ngModel)]="editEdgeWeight"
+            class="w-full bg-subtle border border-line rounded px-2 py-1 text-ink focus:outline-none focus:border-active">
 
           <div class="flex gap-2 mt-3">
             <button (click)="updateEdge()"
-              class="flex-1 px-2 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white font-medium">保存</button>
+              class="flex-1 px-2 py-1 bg-accent hover:bg-accent rounded text-on-color font-medium">{{ '保存' | t }}</button>
             <button (click)="deleteEdge()"
-              class="flex-1 px-2 py-1 bg-red-600 hover:bg-red-500 rounded text-white font-medium">删除</button>
+              class="flex-1 px-2 py-1 bg-danger hover:bg-danger rounded text-on-color font-medium">{{ '删除' | t }}</button>
           </div>
         </div>
 
-        <div *ngIf="(view.current?.queue?.length ?? 0) > 0" class="bg-slate-800 rounded-lg p-2 border border-slate-700">
-          <div class="text-slate-500 mb-1">队列</div>
+        <div *ngIf="(view.current?.queue?.length ?? 0) > 0" class="bg-subtle rounded-lg p-2 border border-line">
+          <div class="text-muted mb-1">{{ '队列' | t }}</div>
           <div class="flex flex-wrap gap-1">
-            <span *ngFor="let n of view.current?.queue" class="px-1.5 py-0.5 bg-yellow-600/30 text-yellow-400 rounded font-mono">{{ n }}</span>
+            <span *ngFor="let n of view.current?.queue" class="px-2 py-1 bg-compare-soft text-compare rounded font-mono">{{ n }}</span>
           </div>
         </div>
-        <div *ngIf="(view.current?.stack?.length ?? 0) > 0" class="bg-slate-800 rounded-lg p-2 border border-slate-700">
-          <div class="text-slate-500 mb-1">栈</div>
+        <div *ngIf="(view.current?.stack?.length ?? 0) > 0" class="bg-subtle rounded-lg p-2 border border-line">
+          <div class="text-muted mb-1">{{ '栈' | t }}</div>
           <div class="flex flex-wrap gap-1">
-            <span *ngFor="let n of view.current?.stack" class="px-1.5 py-0.5 bg-purple-600/30 text-purple-400 rounded font-mono">{{ n }}</span>
+            <span *ngFor="let n of view.current?.stack" class="px-2 py-1 bg-swap-soft text-swap rounded font-mono">{{ n }}</span>
           </div>
         </div>
-        <div *ngIf="(view.current?.path?.length ?? 0) > 0" class="bg-slate-800 rounded-lg p-2 border border-slate-700">
-          <div class="text-slate-500 mb-1">路径</div>
-          <div class="text-green-400 font-mono">{{ view.current?.path?.join(' -> ') }}</div>
-          <div *ngIf="(view.current?.pathLength ?? 0) > 0" class="text-slate-500 mt-1">总长: {{ view.current?.pathLength }}</div>
+        <div *ngIf="(view.current?.path?.length ?? 0) > 0" class="bg-subtle rounded-lg p-2 border border-line">
+          <div class="text-muted mb-1">{{ '路径' | t }}</div>
+          <div class="text-success font-mono">{{  view.current?.path?.join(' -> ')  }}</div>
+          <div *ngIf="(view.current?.pathLength ?? 0) > 0" class="text-muted mt-1">{{ '总长: {0}' | t:[(view.current?.pathLength)] }}</div>
         </div>
-        <div *ngIf="view.current?.mstCost !== undefined" class="bg-slate-800 rounded-lg p-2 border border-slate-700">
-          <div class="text-slate-500 mb-1">MST 权重</div>
-          <div class="text-green-400 font-mono">{{ view.current?.mstCost }}</div>
+        <div *ngIf="view.current?.mstCost !== undefined" class="bg-subtle rounded-lg p-2 border border-line">
+          <div class="text-muted mb-1">{{ 'MST 权重' | t }}</div>
+          <div class="text-success font-mono">{{ view.current?.mstCost }}</div>
         </div>
-        <div class="bg-slate-800 rounded-lg p-2 border border-slate-700">
-          <div class="text-slate-500 mb-1">统计</div>
-          <div class="text-slate-300">
-            已访问: {{ step()?.visitedCount ?? 0 }} / {{ store.graphData().nodes.length }}
-            <span class="text-blue-400 ml-1">({{ visitedRatio() }}%)</span>
-          </div>
-          <div class="w-full bg-slate-700 rounded-full h-1.5 mt-1">
-            <div class="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
-              [style.width.%]="visitedRatio()"></div>
-          </div>
-          <div class="text-slate-300 mt-1.5">比较次数: {{ step()?.comparisons ?? 0 }}</div>
-        </div>
+
       </div>
     </div>
 
     <!-- Description -->
-    <div class="flex-shrink-0 mt-2 p-3 bg-slate-800/60 rounded-lg border border-slate-700">
-      <p class="text-sm text-slate-200">{{ view.current?.description ?? '编辑图后点击运行，查看算法执行过程。' }}</p>
+    <div class="flex-shrink-0 mt-2 p-3 bg-subtle rounded-lg border border-line">
+      <p class="text-sm text-ink">{{ (view.current?.description ?? '编辑图后点击运行，查看算法执行过程。') | t }}</p>
     </div>
   </ng-container>
 </div>

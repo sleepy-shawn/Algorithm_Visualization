@@ -11,6 +11,10 @@ interface BPlusSceneNode {
 }
 
 export class BPlusTreeAnimator implements StructureAnimator {
+  constructor(private readonly translate: (value: string) => string = value => value) {}
+  private ask(message: string, initial = ''): string | null { return window.prompt(this.translate(message), initial); }
+  private notify(message: string): void { window.alert(this.translate(message)); }
+
     private readonly leafCapacity = 3;
     private readonly normalDelay = 650;
     private readonly shortDelay = 350;
@@ -21,22 +25,22 @@ export class BPlusTreeAnimator implements StructureAnimator {
                 await this.animateSearch(ctx);
                 break;
             case '插入': {
-                const insertValue = prompt('请输入要插入的值（数字或字符串）', '25');
+                const insertValue = this.ask('请输入要插入的值（数字或字符串）', '25');
                 if (insertValue?.trim()) {
                     await this.animateInsert(ctx, insertValue.trim());
                 }
                 break;
             }
             case '删除': {
-                const deleteValue = prompt('请输入要删除的值', '30');
+                const deleteValue = this.ask('请输入要删除的值', '30');
                 if (deleteValue?.trim()) {
                     await this.animateDelete(ctx, deleteValue.trim());
                 }
                 break;
             }
             case '范围查找': {
-                const start = prompt('起始值', '20');
-                const end = prompt('结束值', '60');
+                const start = this.ask('起始值', '20');
+                const end = this.ask('结束值', '60');
                 if (start?.trim() && end?.trim()) {
                     await this.animateRangeQuery(ctx, start.trim(), end.trim());
                 }
@@ -48,7 +52,7 @@ export class BPlusTreeAnimator implements StructureAnimator {
     }
 
     private async animateSearch(ctx: AnimationContext): Promise<void> {
-        const target = prompt('请输入要查找的值', '50');
+        const target = this.ask('请输入要查找的值', '50');
         if (!target?.trim()) {
             return;
         }
@@ -58,14 +62,14 @@ export class BPlusTreeAnimator implements StructureAnimator {
         const path = this.findSearchPath(nodes, value);
 
         if (path.length === 0) {
-            alert('当前场景中没有可演示的 B+ 树节点');
+            this.notify('当前场景中没有可演示的 B+ 树节点');
             return;
         }
 
-        await this.showFloatingLabel(ctx, `查找 ${value}：从根节点开始`, 0x38bdf8);
+        await this.showFloatingLabel(ctx, `查找 ${value}：从根节点开始`, 0xc9dff1);
 
         for (const node of path) {
-            this.highlightNode(node.group, 0xfacc15, 1.1);
+            this.highlightNode(node.group, 0xfff0be, 1.1);
             await this.showNodeMessage(ctx, node, node.isLeaf ? '到达叶子节点' : '比较索引，选择子树');
             await this.delay(this.normalDelay);
             this.clearHighlight(node.group);
@@ -74,7 +78,7 @@ export class BPlusTreeAnimator implements StructureAnimator {
         const leaf = path[path.length - 1];
         const found = leaf.keys.some(key => this.compareValues(key, value) === 0);
 
-        this.highlightNode(leaf.group, found ? 0x22c55e : 0xef4444, 1.2);
+        this.highlightNode(leaf.group, found ? 0xe3efdf : 0xf6d5cf, 1.2);
         await this.showNodeMessage(
             ctx,
             leaf,
@@ -83,7 +87,7 @@ export class BPlusTreeAnimator implements StructureAnimator {
         await this.delay(900);
         this.clearHighlight(leaf.group);
 
-        alert(found ? `查找完成：找到 ${value}` : `查找完成：未找到 ${value}`);
+        this.notify(found ? `查找完成：找到 ${value}` : `查找完成：未找到 ${value}`);
     }
 
     private async animateInsert(ctx: AnimationContext, value: string): Promise<void> {
@@ -95,14 +99,14 @@ export class BPlusTreeAnimator implements StructureAnimator {
             return;
         }
 
-        const token = this.createKeyToken(value, 0x22c55e);
+        const token = this.createKeyToken(value, 0xe3efdf);
         ctx.addTemporaryObject(token);
 
-        await this.showFloatingLabel(ctx, `插入 ${value}：先查找目标叶子节点`, 0x22c55e);
+        await this.showFloatingLabel(ctx, `插入 ${value}：先查找目标叶子节点`, 0xe3efdf);
 
         for (const node of path) {
             await this.moveObject(token, node.position.clone().add(new THREE.Vector3(0, 1.15, 0)), 420);
-            this.highlightNode(node.group, 0x22c55e, 1.0);
+            this.highlightNode(node.group, 0xe3efdf, 1.0);
             await this.delay(this.shortDelay);
             this.clearHighlight(node.group);
         }
@@ -112,7 +116,7 @@ export class BPlusTreeAnimator implements StructureAnimator {
         const insertedLeafKeys = this.sortedUnique([...currentLeafKeys, value]);
         const willSplit = insertedLeafKeys.length > this.leafCapacity;
 
-        this.highlightNode(targetLeaf.group, willSplit ? 0xf97316 : 0x22c55e, 1.2);
+        this.highlightNode(targetLeaf.group, willSplit ? 0xf8d6af : 0xe3efdf, 1.2);
         await this.showNodeMessage(
             ctx,
             targetLeaf,
@@ -131,8 +135,8 @@ export class BPlusTreeAnimator implements StructureAnimator {
         const newValues = this.sortedUnique([...ctx.data.values, value]);
         ctx.updateData({ values: newValues });
 
-        await this.showFloatingLabel(ctx, `插入完成：${value} 已加入 B+ 树`, 0x22c55e);
-        alert(`${value}已插入`);
+        await this.showFloatingLabel(ctx, `插入完成：${value} 已加入 B+ 树`, 0xe3efdf);
+        this.notify(`${value}已插入`);
         await this.delay(700);
     }
 
@@ -144,10 +148,10 @@ export class BPlusTreeAnimator implements StructureAnimator {
             return;
         }
 
-        await this.showFloatingLabel(ctx, `删除 ${value}：先定位所在叶子节点`, 0xef4444);
+        await this.showFloatingLabel(ctx, `删除 ${value}：先定位所在叶子节点`, 0xf6d5cf);
 
         for (const node of path) {
-            this.highlightNode(node.group, 0xfacc15, 1.0);
+            this.highlightNode(node.group, 0xfff0be, 1.0);
             await this.showNodeMessage(ctx, node, node.isLeaf ? '检查叶子节点' : '沿索引向下查找');
             await this.delay(this.normalDelay);
             this.clearHighlight(node.group);
@@ -157,24 +161,24 @@ export class BPlusTreeAnimator implements StructureAnimator {
         const exists = leaf.keys.some(key => this.compareValues(key, value) === 0);
 
         if (!exists) {
-            this.highlightNode(leaf.group, 0xef4444, 1.1);
+            this.highlightNode(leaf.group, 0xf6d5cf, 1.1);
             await this.showNodeMessage(ctx, leaf, `未找到 ${value}，无需删除`);
             await this.delay(900);
             this.clearHighlight(leaf.group);
-            alert(`删除失败：${value} 不存在`);
+            this.notify(`删除失败：${value} 不存在`);
             return;
         }
 
         const remainingLeafKeys = leaf.keys.filter(key => this.compareValues(key, value) !== 0);
         const mayNeedRebalance = remainingLeafKeys.length > 0 && remainingLeafKeys.length < Math.ceil(this.leafCapacity / 2);
 
-        this.highlightNode(leaf.group, 0xef4444, 1.2);
+        this.highlightNode(leaf.group, 0xf6d5cf, 1.2);
         await this.showNodeMessage(ctx, leaf, `删除关键字 ${value}`);
         await this.delay(800);
 
         if (mayNeedRebalance) {
             await this.showNodeMessage(ctx, leaf, '叶子节点关键字偏少，演示借位 / 合并调整');
-            await this.pulseNode(leaf.group, 0xf97316, 3);
+            await this.pulseNode(leaf.group, 0xf8d6af, 3);
         }
 
         this.clearHighlight(leaf.group);
@@ -182,8 +186,8 @@ export class BPlusTreeAnimator implements StructureAnimator {
         const newValues = ctx.data.values.filter(item => this.compareValues(item, value) !== 0);
         ctx.updateData({ values: this.sortValues(newValues) });
 
-        await this.showFloatingLabel(ctx, `删除完成：${value} 已移除`, 0xef4444);
-        alert(`已删除${value}`);
+        await this.showFloatingLabel(ctx, `删除完成：${value} 已移除`, 0xf6d5cf);
+        this.notify(`已删除${value}`);
         await this.delay(700);
     }
 
@@ -204,11 +208,11 @@ export class BPlusTreeAnimator implements StructureAnimator {
         await this.showFloatingLabel(
             ctx,
             `范围查询 [${normalizedStart}, ${normalizedEnd}]：先定位起始叶子`,
-            0x38bdf8
+            0xc9dff1
         );
 
         for (const node of path) {
-            this.highlightNode(node.group, 0xfacc15, 1.0);
+            this.highlightNode(node.group, 0xfff0be, 1.0);
             await this.delay(this.normalDelay);
             this.clearHighlight(node.group);
         }
@@ -222,20 +226,20 @@ export class BPlusTreeAnimator implements StructureAnimator {
 
         if (matchedLeaves.length === 0) {
             const leaf = path[path.length - 1];
-            this.highlightNode(leaf.group, 0xef4444, 1.1);
+            this.highlightNode(leaf.group, 0xf6d5cf, 1.1);
             await this.showNodeMessage(ctx, leaf, '范围内没有匹配关键字');
             await this.delay(900);
             this.clearHighlight(leaf.group);
-            alert(`范围查询完成：没有找到 ${normalizedStart} ~ ${normalizedEnd} 的数据`);
+            this.notify(`范围查询完成：没有找到 ${normalizedStart} ~ ${normalizedEnd} 的数据`);
             return;
         }
 
-        await this.showFloatingLabel(ctx, '沿叶子链表向右顺序扫描', 0x22d3ee);
+        await this.showFloatingLabel(ctx, '沿叶子链表向右顺序扫描', 0xdfeaf5);
 
         for (let i = 0; i < matchedLeaves.length; i++) {
             const leaf = matchedLeaves[i];
 
-            this.highlightNode(leaf.group, 0x22d3ee, 1.1);
+            this.highlightNode(leaf.group, 0xdfeaf5, 1.1);
             await this.showNodeMessage(ctx, leaf, `命中：${leaf.keys.join(', ')}`);
 
             if (i < matchedLeaves.length - 1) {
@@ -253,7 +257,7 @@ export class BPlusTreeAnimator implements StructureAnimator {
                 this.compareValues(key, normalizedEnd) <= 0
             );
 
-        alert(`范围查询完成：${result.join(', ') || '无结果'}`);
+        this.notify(`范围查询完成：${result.join(', ') || '无结果'}`);
     }
 
     private async animateLeafSplit(
@@ -267,10 +271,10 @@ export class BPlusTreeAnimator implements StructureAnimator {
         const promotedKey = rightKeys[0];
 
         await this.showNodeMessage(ctx, leaf, `分裂为 [${leftKeys.join(', ')}] 和 [${rightKeys.join(', ')}]`);
-        await this.pulseNode(leaf.group, 0xf97316, 3);
+        await this.pulseNode(leaf.group, 0xf8d6af, 3);
 
-        const leftGhost = this.createGhostBox(leftKeys.join(' | '), 0x10b981);
-        const rightGhost = this.createGhostBox(rightKeys.join(' | '), 0x10b981);
+        const leftGhost = this.createGhostBox(leftKeys.join(' | '), 0xe3efdf);
+        const rightGhost = this.createGhostBox(rightKeys.join(' | '), 0xe3efdf);
 
         leftGhost.position.copy(leaf.position);
         rightGhost.position.copy(leaf.position);
@@ -283,12 +287,12 @@ export class BPlusTreeAnimator implements StructureAnimator {
             this.moveObject(rightGhost, leaf.position.clone().add(new THREE.Vector3(2.1, -1.2, 0.5)), 550),
         ]);
 
-        const promoteToken = this.createKeyToken(`上提 ${promotedKey}`, 0xfacc15);
+        const promoteToken = this.createKeyToken(`上提 ${promotedKey}`, 0xfff0be);
         promoteToken.position.copy(rightGhost.position).add(new THREE.Vector3(0, 1.1, 0));
         ctx.addTemporaryObject(promoteToken);
 
         await this.moveObject(promoteToken, leaf.position.clone().add(new THREE.Vector3(0, 2.1, 0)), 600);
-        await this.showFloatingLabel(ctx, `将 ${promotedKey} 复制到父索引节点`, 0xfacc15);
+        await this.showFloatingLabel(ctx, `将 ${promotedKey} 复制到父索引节点`, 0xfff0be);
         await this.delay(700);
     }
 
@@ -301,7 +305,7 @@ export class BPlusTreeAnimator implements StructureAnimator {
             new THREE.Vector3().subVectors(to.position, from.position).normalize(),
             from.position.clone().add(new THREE.Vector3(1.8, -0.85, 0)),
             Math.max(0.8, from.position.distanceTo(to.position) - 3.2),
-            0x22d3ee,
+            0xdfeaf5,
             0.35,
             0.2
         );
@@ -567,7 +571,7 @@ export class BPlusTreeAnimator implements StructureAnimator {
         context.font = 'bold 42px sans-serif';
         context.textAlign = 'center';
         context.textBaseline = 'middle';
-        context.fillText(text, canvas.width / 2, canvas.height / 2);
+        context.fillText(this.translate(text), canvas.width / 2, canvas.height / 2);
 
         const texture = new THREE.CanvasTexture(canvas);
         texture.needsUpdate = true;
@@ -617,7 +621,7 @@ export class BPlusTreeAnimator implements StructureAnimator {
         return new Promise(resolve => {
             const tick = () => {
                 const elapsed = performance.now() - startedAt;
-                const t = Math.min(1, elapsed / durationMs);
+                const t = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : Math.min(1, elapsed / durationMs);
                 const eased = 1 - Math.pow(1 - t, 3);
 
                 object.position.lerpVectors(start, target, eased);

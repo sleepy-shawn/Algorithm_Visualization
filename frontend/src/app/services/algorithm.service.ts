@@ -4,9 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import {
   AlgorithmResponse, SortStep, SearchStep, GraphStep, DPStep, NQueensStep,
-  GraphData, KnapsackItem, RunHistory, DivideConquerStep,
-  AlgorithmComplexityAnalysis, AlgorithmComplexityRequest,
-  AssessmentConfig, AssessmentQuestion, AnswerEvaluationResponse,
+  GraphData, KnapsackItem, DivideConquerStep,
 } from '../models/algorithm.models';
 
 @Injectable({ providedIn: 'root' })
@@ -39,32 +37,4 @@ export class AlgorithmService {
     return this.http.post<AlgorithmResponse<DivideConquerStep>>(`${this.base}/divide-conquer`, { algorithm, x, y });
   }
 
-  analyzeAlgorithmComplexity(request: AlgorithmComplexityRequest): Observable<AlgorithmComplexityAnalysis> {
-    return this.http.post<AlgorithmComplexityAnalysis>(`${this.base}/algorithm-complexity`, request);
-  }
-
-  getHistory(category?: string): Observable<RunHistory[]> {
-    const params = category ? `?category=${category}` : '';
-    return this.http.get<RunHistory[]>(`${this.base}/history${params}`);
-  }
-
-  deleteHistory(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.base}/history/${id}`);
-  }
-
-  verifyStep(algorithm: string, params: Record<string, unknown>, targetStepIndex: number): Observable<{ stepData: unknown }> {
-    return this.http.post<{ stepData: unknown }>(`${this.base}/verify-step`, { algorithm, params, targetStepIndex });
-  }
-
-  checkAssessmentHealth(): Observable<{ aiAvailable: boolean; mode: string; message: string }> {
-    return this.http.get<{ aiAvailable: boolean; mode: string; message: string }>(`${this.base}/assessment/health`);
-  }
-
-  generateAssessment(config: AssessmentConfig): Observable<AssessmentQuestion[]> {
-    return this.http.post<AssessmentQuestion[]>(`${this.base}/assessment/generate`, config);
-  }
-
-  evaluateAnswer(question: AssessmentQuestion, userAnswer: string): Observable<AnswerEvaluationResponse> {
-    return this.http.post<AnswerEvaluationResponse>(`${this.base}/assessment/evaluate`, { question, userAnswer });
-  }
 }
