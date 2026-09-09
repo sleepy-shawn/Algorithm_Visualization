@@ -100,6 +100,8 @@ docs/    设计说明、交付记录与界面截图
 
 ## 项目文档
 
+- [小组 UML 图册](docs/uml/README.md)：基于最新主分支的类图、时序图，以及 PNG / SVG / Mermaid 源码。
+
 - [前端交付与验证](docs/issue-5-delivery.md)：界面规范、主题、语言、交互和截图。
 - [学习引导设计](docs/learning-guidance-system.md)：教学阶段与对比思路，含历史功能设计。
 - [版本差异](docs/base-differences.md) · [外部项目对比](docs/algorithm-visualizer-comparison.md)：项目范围与实现说明。

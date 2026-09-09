@@ -1,0 +1,66 @@
+---
+title: 02 · 数据实体类图
+---
+classDiagram
+ direction LR
+ class ProblemCategory {
+  -Long id
+  -String name
+  -String slug
+  -String icon
+  -Integer orderIndex
+ }
+ class Problem {
+  -Long id
+  -String slug
+  -String title
+  -String difficulty
+  -String description
+  -String tags
+  -String visualizerType
+  -String timeComplexity
+  -String spaceComplexity
+ }
+ class ProblemSolution {
+  -Long id
+  -String approachName
+  -String description
+  -String code
+  -String timeComplexity
+  -String spaceComplexity
+ }
+ class AppUser {
+  -Long id
+  -String username
+  -String displayName
+  -String passwordHash
+  -String passwordSalt
+ }
+ class ChatSession {
+  -Long id
+  -String title
+  -LocalDateTime createdAt
+ }
+ class ChatMessage {
+  -Long id
+  -String role
+  -String content
+  -LocalDateTime createdAt
+ }
+ class RunHistory {
+  -Long id
+  -String category
+  -String algorithm
+  -String inputData
+  -Integer stepCount
+  -Integer comparisons
+  -Integer swaps
+  -Long executionTimeMs
+ }
+ Problem "0..*" --> "1" ProblemCategory : category / category_id
+ ProblemSolution "0..*" --> "1" Problem : problem / problem_id
+ ChatSession "0..*" --> "0..1" AppUser : user / user_id
+ ChatSession "1" *-- "0..*" ChatMessage : messages / session_id
+ note for RunHistory "没有 userId 或用户关联；不能画成个人学习记录"
+ note for ChatSession "后端保留；当前网页没有聊天入口"
+ note for Problem "字段为节选；题库只提供查询，没有提交判题实体"

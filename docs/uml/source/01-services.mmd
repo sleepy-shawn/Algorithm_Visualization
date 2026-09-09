@@ -1,0 +1,65 @@
+---
+title: 01 · 核心服务类图
+---
+classDiagram
+ direction TB
+ class AppComponent {
+  +navigate(panel)
+  +learn(id)
+ }
+ class AlgorithmStore {
+  +selectedAlgo
+  +steps
+  +currentStep
+  +runBothAlgorithms()
+  +startPlay()
+  +reset()
+ }
+ class AlgorithmService {
+  +runSort(algorithm, array)
+  +runSearch(algorithm, array, target)
+  +runGraph(algorithm, graph, startId, endId)
+ }
+ class AlgorithmController {
+  +sort(req)
+  +search(req)
+  +graph(req)
+ }
+ class SortingService {
+  +generateSteps(algorithm, array)
+ }
+ class SearchService {
+  +generateSteps(algorithm, array, target)
+ }
+ class AlgorithmTraceController {
+  +trace(request)
+  +compare(request)
+  +supportedAlgorithms()
+ }
+ class AlgorithmTraceService {
+  +trace(request)
+  +compare(request)
+ }
+ class ProblemController {
+  +categories()
+  +problems(category, difficulty, visualizerType)
+  +problemDetail(slug)
+ }
+ class ProblemService {
+  +listCategories()
+  +listProblems(categorySlug, difficulty, visualizerType)
+  +getProblem(slug)
+  +listSolutions(problemId)
+ }
+ AppComponent --> AlgorithmStore : 注入
+ AlgorithmStore --> AlgorithmService : 请求步骤
+ AlgorithmService ..> AlgorithmController : HTTP 现有可视化接口
+ AlgorithmController --> SortingService
+ AlgorithmController --> SearchService
+ AlgorithmTraceController --> AlgorithmTraceService
+ AlgorithmTraceService --> SortingService : 复用
+ AlgorithmTraceService --> SearchService : 复用
+ ProblemController --> ProblemService
+ note for AlgorithmController "另有 graph / dp / backtracking / divide-conquer 等方法，图中节选"
+ note for AlgorithmTraceController "PR 9 已合并；网页尚未调用 trace / compare"
+ note for ProblemController "PR 10 已合并；网页目录仍使用本地算法清单"

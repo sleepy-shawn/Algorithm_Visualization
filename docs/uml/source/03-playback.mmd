@@ -1,0 +1,41 @@
+---
+title: 03 · 网页运行与播放时序图
+---
+sequenceDiagram
+ autonumber
+ actor U as 学习者
+ participant C as ControlPanelComponent
+ participant S as AlgorithmStore
+ participant A as AlgorithmService
+ participant B as AlgorithmController
+ participant E as SortingService
+ participant H as RunHistoryRepository
+ participant V as SortingVisualizerComponent
+ U->>C: 点击运行（排序示例）
+ C->>S: runBothAlgorithms()
+ S->>S: runAlgorithm()：停止播放，增加请求版本
+ par 主算法请求
+  S->>A: runSort(algorithm, array)
+  A->>B: POST /api/algorithms/sort
+  B->>E: generateSteps(algorithm, array)
+  E-->>B: List of SortStep
+  B->>H: save(运行记录)
+  H-->>B: 已保存
+  B-->>A: steps + stepCount + 指标
+  A-->>S: Observable 返回步骤
+  S->>S: 仅接收当前请求版本，currentStep = 0
+  S-->>V: Signals 更新当前步骤
+ and 对比请求（仅开启对比时）
+  S->>A: runSort(对比算法, 相同输入)
+  Note over A,H: 另一次旧接口请求，独立生成步骤并保存历史
+  A-->>S: compareSteps（响应顺序不保证）
+ end
+ Note over S,B: 当前对比不调用 /compare
+ U->>C: 开始播放
+ C->>S: startPlay()；对比启用时也启动对比计时器
+ loop 每 500ms，直到末步或暂停
+  S->>S: 更新步骤索引
+  S-->>V: 更新图形、说明与统计
+ end
+ Note over S,V: 播放和单步使用本地步骤，不逐步请求后端
+ Note over S,V: 3D 入口使用前端 Three.js，不走此排序请求链

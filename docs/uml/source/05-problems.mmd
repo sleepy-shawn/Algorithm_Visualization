@@ -1,0 +1,27 @@
+---
+title: 05 · Hot100 题目详情时序图
+---
+sequenceDiagram
+ autonumber
+ actor C as API 调用者（题库网页待接入）
+ participant P as ProblemController
+ participant S as ProblemService
+ participant R as ProblemRepository
+ participant T as ProblemSolutionRepository
+ C->>P: GET /api/problems/{slug}
+ P->>S: getProblem(slug)
+ S->>R: findBySlug(slug)
+ R-->>S: Optional of Problem
+ S-->>P: Problem 或 null
+ alt 题目不存在
+  P-->>C: HTTP 404
+ else 题目存在
+  P->>S: listSolutions(problem.id)
+  S->>T: findByProblemIdOrderByOrderIndexAsc(id)
+  T-->>S: 题解列表
+  S-->>P: solutions
+  P-->>C: HTTP 200：problem + solutions
+ end
+ Note over C,T: 题目和题解通过 JPA 存在 MySQL；关联分类随题目查询
+ Note over C,S: 列表接口 /api/problems 另支持筛选<br/>当前优先级 category > difficulty > visualizerType，非组合筛选
+ Note over C,S: /api/categories 返回分类；本轮没有提交代码、判题或学习进度接口

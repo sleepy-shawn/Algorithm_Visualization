@@ -1,0 +1,37 @@
+---
+title: 04 · 统一轨迹对比时序图
+---
+sequenceDiagram
+ autonumber
+ actor C as API 调用者（尚非现有网页）
+ participant R as AlgorithmTraceController
+ participant S as AlgorithmTraceService
+ participant A as SortingService
+ participant E as AlgorithmTraceExceptionHandler
+ C->>R: POST /api/algorithms/compare<br/>algorithms + array
+ R->>S: compare(request)
+ S->>S: 校验数组、数量、名称、重复与支持范围
+ alt 输入不合法
+  S-->>E: AlgorithmTraceException
+  E-->>C: HTTP 400 + AlgorithmApiError
+ else 排序与查找混合
+  S-->>R: comparable=false + 说明 + 空结果
+  R-->>C: HTTP 200
+ else 同类排序算法
+  loop 对每个排序算法，顺序执行
+   S->>S: trace(request)，校验参数
+   S->>A: generateSteps(algorithm, array)
+   A-->>S: SortStep 列表
+   S->>S: 转换统一轨迹、累计指标、复杂度<br/>并检查各算法排序结果一致
+  end
+  alt 结果一致
+   S-->>R: comparable=true + results + 注意事项
+   R-->>C: HTTP 200 + AlgorithmComparisonResponse
+  else 算法执行异常或结果不一致
+   S-->>E: LOGIC_ERROR
+   E-->>C: HTTP 500 + AlgorithmApiError
+  end
+ end
+ Note over C,E: @Valid 或 JSON 解析失败也由专属处理器返回 400
+ Note over S,A: 单独 /trace 支持 5 种排序和二分查找；无运行历史写入
+ Note over C,S: 耗时含轨迹生成，不代表严格性能基准
