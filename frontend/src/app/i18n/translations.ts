@@ -75,7 +75,7 @@ export const ENGLISH: Record<string, string> = {
   "显示名称": "Display name",
   "请输入用户名": "Enter your username",
   "请输入密码": "Enter your password",
-  "至少 3 个字符": "At least 3 characters",
+  "必填，最多 50 个字符": "Required, up to 50 characters",
   "至少 6 个字符": "At least 6 characters",
   "用于页面右上角显示": "Shown in your account menu",
   "再次输入密码": "Enter your password again",
@@ -608,7 +608,7 @@ export const ENGLISH: Record<string, string> = {
   "上提 {0}": "Promote {0}",
   "将 {0} 复制到父索引节点": "Copy {0} to the parent index node.",
   "请选择遍历方式：\n1. 前序遍历（根-左-右）\n2. 中序遍历（左-根-右）\n3. 后序遍历（左-右-根）\n4. 层序遍历": "Choose a traversal:\n1. Preorder (root-left-right)\n2. Inorder (left-root-right)\n3. Postorder (left-right-root)\n4. Level order",
-  "用户名长度应为 3-50 个字符。": "Username must contain 3–50 characters.",
+  "用户名不能超过 50 个字符。": "Username must not exceed 50 characters.",
   "密码至少需要 6 个字符。": "Password must contain at least 6 characters.",
   "该用户名已被注册。": "This username is already registered.",
   "用户名或密码不正确。": "Incorrect username or password."

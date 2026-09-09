@@ -30,8 +30,8 @@ public class AuthService {
         if (username.isBlank() || password.isBlank()) {
             throw new IllegalArgumentException("请完整填写注册信息。");
         }
-        if (username.length() < 3 || username.length() > 50) {
-            throw new IllegalArgumentException("用户名长度应为 3-50 个字符。");
+        if (username.length() > 50) {
+            throw new IllegalArgumentException("用户名不能超过 50 个字符。");
         }
         if (password.length() < 6) {
             throw new IllegalArgumentException("密码至少需要 6 个字符。");
