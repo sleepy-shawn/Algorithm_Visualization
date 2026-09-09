@@ -95,7 +95,7 @@
 | 端点 | 请求体字段 | 说明 |
 |------|-----------|------|
 | `sort` | `algorithm`, `array: number[]` | algorithm ∈ quick-sort/merge-sort/bubble-sort/heap-sort/insertion-sort |
-| `search` | `algorithm`, `array: number[]`, `target: number` | algorithm ∈ binary-search/bfs/dfs（数组上搜索）|
+| `search` | `algorithm`, `array: number[]`, `target: number` | algorithm = binary-search（仅支持二分查找；BFS/DFS 请走 `graph` 端点）|
 | `graph` | `algorithm`, `graph: GraphData`, `startId`, `endId` | algorithm ∈ dijkstra/bfs/dfs/prim/kruskal/astar |
 | `dp` | `algorithm`, `items: Item[]`, `capacity` | algorithm = knapsack |
 | `backtracking` | `algorithm`, `n` | algorithm = n-queens |
@@ -197,7 +197,7 @@
 ## 7. WebSocket：`/ws/signal`
 
 - 原始 WebSocket（非 STOMP），仅用于 **WebRTC 信令**（竞赛房间内 P2P 连接协商）。
-- nginx 已配置 `/ws/` 反代 + upgrade 头（deploy/nginx/nginx.conf）。
+- nginx 已配置 `/ws/` 反代 + upgrade 头（实际打包进镜像的是 `frontend/nginx.conf`，随 `frontend/Dockerfile` 构建；`deploy/nginx/nginx.conf` 是旧副本，内容已不一致，勿再引用）。
 - **不是**通用实时聊天通道 —— 前端竞赛若需房间内文字聊天，走 WebRTC DataChannel。
 
 ---
@@ -220,3 +220,4 @@
 | 版本 | 日期 | 说明 |
 |------|------|------|
 | v0 | 2026-09-03 | 首次盘点，覆盖 4 Controller 全部端点与 DTO 字段（不含组员新增的 Hot100/轨迹接口，待其合入后升 v1）|
+| v0.1 | 2026-09-09 | 按 PR #6 review 修正：`/search` 仅支持 binary-search（BFS/DFS 走 `/graph`）；nginx 配置路径更正为实际打包用的 `frontend/nginx.conf` |
